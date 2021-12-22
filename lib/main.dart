@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'package:my_web/pages/all_pages.dart';
 
+const webTitle = 'Ricky Cheuk';
+
 void main() {
   runApp(MyApp());
 }
@@ -21,12 +23,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My Web',
+      title: webTitle,
       debugShowCheckedModeBanner: false,
       theme: lightThemeData(context),
       darkTheme: darkThemeData(context),
       themeMode: _themeMode,
-      home: const Page(title: 'My Web'),
+      home: const Page(title: webTitle),
     );
   }
 
@@ -59,7 +61,7 @@ class _PageState extends State<Page> {
   List<Widget> tabPages = [
     HomePage(),
     EmojiWallPage(),
-    ContactPage(),
+    // ContactPage(),
   ];
 
   @override
@@ -97,7 +99,7 @@ class _PageState extends State<Page> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _pageIndex,
         onTap: onTabTapped,
-        elevation: 0.0,
+        elevation: 50.0,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_outlined),
@@ -105,9 +107,9 @@ class _PageState extends State<Page> {
           BottomNavigationBarItem(
               icon: Icon(Icons.sentiment_satisfied_alt),
               label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.email_outlined),
-              label: ''),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.email_outlined),
+          //     label: ''),
         ],
       ),
     );

@@ -3,12 +3,15 @@ import 'package:my_web/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final List<String> links = <String>[
-  'https://www.google.com/',
-  'https://twitter.com/home'
+  'https://www.linkedin.com/in/rickycheuk/',
+  'https://github.com/rickycheuk',
+  'https://twitter.com/ThlipperyT',
+  'https://www.instagram.com/thlipperythnake/?hl=en'
 ];
-final List<String> websiteNames = <String>['Google', 'Twitter'];
-final List<IconData> icons = <IconData>[Icons.web, Icons.web];
-const description = '''Software Engineer\nXXX''';
+final List<String> websiteNames = <String>['Linkedin','GitHub', 'Twitter', 'Instagram'];
+final List<IconData> icons = <IconData>[Icons.web, Icons.web, Icons.web, Icons.web];
+const my_name = 'Ricky Cheuk';
+const description = '''Software Engineer''';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,9 +35,13 @@ class HomePage extends StatelessWidget {
             CircleAvatar(
                 minRadius: 20,
                 maxRadius: 60,
-                backgroundImage: NetworkImage(
-                    'https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg')),
+                backgroundImage: AssetImage('assets/images/rickycheuk.jpg')),
             Spacer(),
+            Text(
+              my_name,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18),
+            ),
             Text(
               description,
               textAlign: TextAlign.center,
