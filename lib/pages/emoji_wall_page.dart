@@ -7,7 +7,7 @@ class EmojiWallPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: kSecondaryColor,
+      color: Colors.transparent,
       child: Center(child: Text("EmojiWallPage")),
     );
   }

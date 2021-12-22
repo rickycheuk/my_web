@@ -78,7 +78,7 @@ class _PageState extends State<Page> {
         elevation: 0.0,
         actions: [
           IconButton(
-            icon: Icon(_themeMode == ThemeMode.light? Icons.dark_mode : Icons.wb_sunny_outlined),
+            icon: Icon(_themeMode == ThemeMode.light? Icons.dark_mode : Icons.wb_sunny_outlined, color: _themeMode == ThemeMode.light? kSecondaryColor : kContentColorDarkTheme),
             onPressed: () {
               MyApp.of(context)?._themeMode == ThemeMode.light?
                 MyApp.of(context)?.changeTheme(ThemeMode.dark): MyApp.of(context)?.changeTheme(ThemeMode.light);
@@ -88,6 +88,11 @@ class _PageState extends State<Page> {
             },
           ),
         ],
+      ),
+      body: PageView(
+        children: tabPages,
+        onPageChanged: onPageChanged,
+        controller: _pageController,
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _pageIndex,
@@ -104,11 +109,6 @@ class _PageState extends State<Page> {
               icon: Icon(Icons.email_outlined),
               label: ''),
         ],
-      ),
-      body: PageView(
-        children: tabPages,
-        onPageChanged: onPageChanged,
-        controller: _pageController,
       ),
     );
   }
