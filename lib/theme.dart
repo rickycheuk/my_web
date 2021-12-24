@@ -7,10 +7,7 @@ ThemeData lightThemeData(BuildContext context) {
     primaryColor: kPrimaryColor,
     scaffoldBackgroundColor: kContentColorDarkTheme,
     appBarTheme: const AppBarTheme(
-      centerTitle: false,
-      elevation: 0,
-      backgroundColor: kPrimaryColor
-    ),
+        centerTitle: false, elevation: 0, backgroundColor: Colors.transparent),
     iconTheme: const IconThemeData(color: kContentColorLightTheme),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
         .apply(bodyColor: kContentColorLightTheme),
@@ -36,10 +33,7 @@ ThemeData darkThemeData(BuildContext context) {
     primaryColor: kPrimaryColor,
     scaffoldBackgroundColor: kSecondaryColor,
     appBarTheme: const AppBarTheme(
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: kContentColorLightTheme
-    ),
+        centerTitle: false, elevation: 0, backgroundColor: Colors.transparent),
     iconTheme: const IconThemeData(color: kContentColorDarkTheme),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
         .apply(bodyColor: kContentColorDarkTheme),
@@ -57,4 +51,3 @@ ThemeData darkThemeData(BuildContext context) {
     ),
   );
 }
-

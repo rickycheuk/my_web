@@ -1,7 +1,8 @@
-import 'package:my_web/theme.dart';
 import 'package:flutter/material.dart';
-import 'constants.dart';
 import 'package:my_web/pages/all_pages.dart';
+import 'package:my_web/theme.dart';
+
+import 'constants.dart';
 
 const webTitle = 'Ricky Cheuk';
 
@@ -72,47 +73,14 @@ class _PageState extends State<Page> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeMode? _themeMode = MyApp.of(context)?._themeMode;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        // centerTitle: true,
-        elevation: 0.0,
-        actions: [
-          IconButton(
-            icon: Icon(_themeMode == ThemeMode.light? Icons.dark_mode : Icons.wb_sunny_outlined, color: _themeMode == ThemeMode.light? kSecondaryColor : kContentColorDarkTheme),
-            onPressed: () {
-              MyApp.of(context)?._themeMode == ThemeMode.light?
-                MyApp.of(context)?.changeTheme(ThemeMode.dark): MyApp.of(context)?.changeTheme(ThemeMode.light);
-              setState(() {
-                _themeMode = MyApp.of(context)?._themeMode;
-              });
-            },
-          ),
-        ],
-      ),
-      body: PageView(
-        children: tabPages,
-        onPageChanged: onPageChanged,
-        controller: _pageController,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _pageIndex,
-        onTap: onTabTapped,
-        elevation: 50.0,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined),
-              label: ''),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.sentiment_satisfied_alt),
-              label: ''),
-          // BottomNavigationBarItem(
-          //     icon: Icon(Icons.email_outlined),
-          //     label: ''),
-        ],
-      ),
-    );
+        appBar: _buildAppBar(),
+        body: PageView(
+          children: tabPages,
+          onPageChanged: onPageChanged,
+          controller: _pageController,
+        ),
+        bottomNavigationBar: _buildBottomNavigationBar());
   }
 
   void onPageChanged(int page) {
@@ -124,5 +92,83 @@ class _PageState extends State<Page> {
   void onTabTapped(int index) {
     _pageController.animateToPage(index,
         duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              kGradient1,
+              kGradient2,
+              kGradient1,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.topRight,
+            stops: [0.0, 0.5, 1],
+            tileMode: TileMode.clamp,
+          ),
+        ),
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
+          child: BottomNavigationBar(
+            currentIndex: _pageIndex,
+            onTap: onTabTapped,
+            elevation: 50.0,
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            items: const [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined), label: 'Home'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.sentiment_satisfied_alt),
+                  label: 'Emoji Wall'),
+            ],
+          ),
+        ));
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    ThemeMode? _themeMode = MyApp.of(context)?._themeMode;
+    return PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  _themeMode == ThemeMode.light ? kGradient1 : Colors.black,
+                  _themeMode == ThemeMode.light ? kGradient2 : Colors.black,
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                stops: const [0.0, 1],
+                tileMode: TileMode.clamp,
+              ),
+            ),
+            child: AppBar(
+              title: Text(widget.title),
+              // centerTitle: true,
+              elevation: 0.0,
+              bottomOpacity: 0.5,
+              actions: [
+                IconButton(
+                  icon: Icon(
+                      _themeMode == ThemeMode.light
+                          ? Icons.dark_mode
+                          : Icons.wb_sunny_outlined,
+                      color: _themeMode == ThemeMode.light
+                          ? kSecondaryColor
+                          : kContentColorDarkTheme),
+                  onPressed: () {
+                    MyApp.of(context)?._themeMode == ThemeMode.light
+                        ? MyApp.of(context)?.changeTheme(ThemeMode.dark)
+                        : MyApp.of(context)?.changeTheme(ThemeMode.light);
+                    setState(() {
+                      _themeMode = MyApp.of(context)?._themeMode;
+                    });
+                  },
+                ),
+              ],
+            )));
   }
 }
