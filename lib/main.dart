@@ -8,15 +8,29 @@ import 'package:my_web/theme.dart';
 import 'constants.dart';
 import 'firebase_options.dart';
 
-const webTitle = 'Ricky Cheuk';
 final _fireStore = FirebaseFirestore.instance;
+const profileId = 'Tiqrj06AHigcHiytJPf1';
+String webTitle = 'Ricky Cheuk';
+String description = 'Software Engineer';
+String userName = 'Ricky Cheuk';
 List<Widget> tabPages = [
-  HomePage(
-    links: [],
-    websiteNames: [],
-    icons: [],
-  ),
   EmojiWallPage(),
+  HomePage(
+    userName: userName,
+    description: description,
+    links: const [
+      'https://www.linkedin.com/in/rickycheuk/',
+      'https://github.com/rickycheuk',
+      'https://twitter.com/ThlipperyT',
+      'https://www.instagram.com/thlipperythnake/?hl=en'
+    ],
+    websiteNames: const ['Linkedin', 'GitHub', 'Twitter', 'Instagram'],
+    icons: const [
+      Icons.web,
+      Icons.web,
+      Icons.web,
+      Icons.web],
+  ),
   // ContactPage(),
 ];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
@@ -41,6 +55,12 @@ class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
 
   @override
+  void initState() {
+    super.initState();
+    // getData();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: webTitle,
@@ -48,7 +68,7 @@ class _MyAppState extends State<MyApp> {
       theme: lightThemeData(context),
       darkTheme: darkThemeData(context),
       themeMode: _themeMode,
-      home: const Page(title: webTitle),
+      home: Page(title: webTitle),
     );
   }
 
@@ -56,6 +76,50 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _themeMode = themeMode;
     });
+  }
+
+  Future<void> getData() async {
+    List _links = [];
+    List _websiteNames = [];
+    List _icons = [];
+    QuerySnapshot querySnapshot = await _fireStore.collection('urls').get();
+    DocumentSnapshot profileSnapshot =
+        await _fireStore.collection('profile').doc(profileId).get();
+    final allData =
+        querySnapshot.docs.map((doc) => doc.data()).toList() as List;
+    for (var d in allData) {
+      _links.add(d['link']);
+      _websiteNames.add(d['name']);
+      switch (d['icon'].toLowerCase()) {
+        case 'linkedin':
+          {
+            _icons.add(Icons.account_circle_outlined);
+          }
+          break;
+        default:
+          {
+            _icons.add(Icons.web);
+          }
+          break;
+      }
+    }
+    setState(() {
+      webTitle = profileSnapshot['name'];
+      userName = profileSnapshot['name'];
+      description = profileSnapshot['description'];
+      tabPages = [
+        HomePage(
+            userName: userName,
+            description: description,
+            links: _links,
+            websiteNames: _websiteNames,
+            icons: _icons),
+        EmojiWallPage(),
+        // ContactPage(),
+      ];
+    });
+    print(webTitle);
+    print(_links);
   }
 }
 
@@ -76,40 +140,6 @@ class _PageState extends State<Page> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _pageIndex);
-    getData();
-  }
-
-  Future<void> getData() async {
-    List _links = [];
-    List _websiteNames = [];
-    List _icons = [];
-    QuerySnapshot querySnapshot = await _fireStore.collection('urls').get();
-    final allData =
-        querySnapshot.docs.map((doc) => doc.data()).toList() as List;
-    for (var d in allData) {
-      _links.add(d['link']);
-      _websiteNames.add(d['name']);
-      switch (d['icon'].toLowerCase()) {
-        case 'linkedin':
-          {
-            _icons.add(Icons.account_circle_outlined);
-          }
-          break;
-        default:
-          {
-            _icons.add(Icons.web);
-          }
-          break;
-      }
-    }
-    setState(() {
-      tabPages = [
-        HomePage(links: _links, websiteNames: _websiteNames, icons: _icons),
-        EmojiWallPage(),
-        // ContactPage(),
-      ];
-    });
-    print(_links);
   }
 
   @override
@@ -203,9 +233,7 @@ class _PageState extends State<Page> {
                       _themeMode == ThemeMode.light
                           ? Icons.dark_mode
                           : Icons.wb_sunny_outlined,
-                      color: _themeMode == ThemeMode.light
-                          ? kSecondaryColor
-                          : kContentColorDarkTheme),
+                      color: kContentColorDarkTheme),
                   onPressed: () {
                     MyApp.of(context)?._themeMode == ThemeMode.light
                         ? MyApp.of(context)?.changeTheme(ThemeMode.dark)

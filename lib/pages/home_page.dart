@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:my_web/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-const my_name = 'Ricky Cheuk';
-const description = '''Software Engineer''';
+// const my_name = 'Ricky Cheuk';
+// const description = '''Software Engineer''';
 
 class HomePage extends StatelessWidget {
   const HomePage(
       {Key? key,
+      required this.userName,
+      required this.description,
       required this.links,
       required this.websiteNames,
-      required this.icons})
+      required this.icons, })
       : super(key: key);
+  final String userName;
+  final String description;
   final List links;
   final List websiteNames;
   final List icons;
@@ -50,9 +54,9 @@ class HomePage extends StatelessWidget {
               ),
               Expanded(
                 child: Column(
-                  children: const [
+                  children: [
                     Text(
-                      my_name,
+                      userName,
                       textAlign: TextAlign.center,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
