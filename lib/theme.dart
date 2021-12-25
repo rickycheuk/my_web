@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_web/constants.dart';
 
-// This is our  main focus
-// Let's apply light and dark theme on our app
-// Now let's add dark theme on our app
-
 ThemeData lightThemeData(BuildContext context) {
   return ThemeData.light().copyWith(
     primaryColor: kPrimaryColor,
-    scaffoldBackgroundColor: Colors.white,
-    appBarTheme: appBarTheme,
+    scaffoldBackgroundColor: kContentColorDarkTheme,
+    appBarTheme: const AppBarTheme(
+        centerTitle: false, elevation: 0, backgroundColor: Colors.transparent),
     iconTheme: const IconThemeData(color: kContentColorLightTheme),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
         .apply(bodyColor: kContentColorLightTheme),
@@ -20,7 +17,7 @@ ThemeData lightThemeData(BuildContext context) {
       error: kErrorColor,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Colors.white,
+      backgroundColor: kContentColorDarkTheme,
       selectedItemColor: kContentColorLightTheme.withOpacity(0.7),
       unselectedItemColor: kContentColorLightTheme.withOpacity(0.32),
       selectedIconTheme: const IconThemeData(color: kPrimaryColor),
@@ -30,12 +27,13 @@ ThemeData lightThemeData(BuildContext context) {
 }
 
 ThemeData darkThemeData(BuildContext context) {
-  // Bydefault flutter provie us light and dark theme
+  // By default flutter provides us light and dark theme
   // we just modify it as our need
   return ThemeData.dark().copyWith(
     primaryColor: kPrimaryColor,
-    scaffoldBackgroundColor: kContentColorLightTheme,
-    appBarTheme: appBarTheme,
+    scaffoldBackgroundColor: kSecondaryColor,
+    appBarTheme: const AppBarTheme(
+        centerTitle: false, elevation: 0, backgroundColor: Colors.transparent),
     iconTheme: const IconThemeData(color: kContentColorDarkTheme),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
         .apply(bodyColor: kContentColorDarkTheme),
@@ -45,7 +43,7 @@ ThemeData darkThemeData(BuildContext context) {
       error: kErrorColor,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: kContentColorLightTheme,
+      backgroundColor: kSecondaryColor,
       selectedItemColor: Colors.white70,
       unselectedItemColor: kContentColorDarkTheme.withOpacity(0.32),
       selectedIconTheme: const IconThemeData(color: kPrimaryColor),
@@ -53,5 +51,3 @@ ThemeData darkThemeData(BuildContext context) {
     ),
   );
 }
-
-final appBarTheme = AppBarTheme(centerTitle: false, elevation: 0);
