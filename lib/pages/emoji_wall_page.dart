@@ -132,7 +132,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                               width: MediaQuery.of(context).size.width / 1.5,
                                               height: MediaQuery.of(context).size.height / 1.5,
                                               child: GridView.count(
-                                                crossAxisCount: 8,
+                                                crossAxisCount: (MediaQuery.of(context).size.width/60).round(),
                                                 padding: const EdgeInsets.all(1.0),
                                                 children: List.generate(emojiList.length, (index) {
                                                   return Container(
