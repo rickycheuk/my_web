@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
 
@@ -18,6 +19,8 @@ List<Widget> tabPages = [
   EmojiWallPage(),
   // ContactPage(),
 ];
+var _brightness = SchedulerBinding.instance!.window.platformBrightness;
+bool isDarkMode = _brightness == Brightness.dark;
 
 Future<void> main() async {
   await Firebase.initializeApp(
@@ -35,7 +38,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +89,7 @@ class _PageState extends State<Page> {
     for (var d in allData) {
       _links.add(d['link']);
       _websiteNames.add(d['name']);
-      switch ( d['icon'].toLowerCase() ) {
+      switch (d['icon'].toLowerCase()) {
         case 'linkedin':
           {
             _icons.add(Icons.account_circle_outlined);
@@ -101,15 +104,12 @@ class _PageState extends State<Page> {
     }
     setState(() {
       tabPages = [
-        HomePage(
-          links: _links,
-          websiteNames: _websiteNames,
-          icons: _icons
-        ),
+        HomePage(links: _links, websiteNames: _websiteNames, icons: _icons),
         EmojiWallPage(),
         // ContactPage(),
       ];
     });
+    print(_links);
   }
 
   @override
