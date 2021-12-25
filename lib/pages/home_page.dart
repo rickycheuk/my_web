@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: CircleAvatar(
                       minRadius: 10,
                       maxRadius: 150,
@@ -72,24 +72,32 @@ class HomePage extends StatelessWidget {
               width: isScreenWide
                   ? MediaQuery.of(context).size.width
                   : MediaQuery.of(context).size.width,
-              child: Center(
+              child: Align(
+                  alignment: isScreenWide
+                      ? const Alignment(0, 0.0)
+                      : const Alignment(0, -1.0),
                   child: ListView.builder(
-                      scrollDirection: Axis.vertical,//isScreenWide ? Axis.horizontal : Axis.vertical,
+                      scrollDirection: Axis.vertical,
+                      //isScreenWide ? Axis.horizontal : Axis.vertical,
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(10),
                       itemCount: links.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Align(
-                            alignment: Alignment(0, -1.0),
+                            alignment: const Alignment(0, -1.0),
                             child: Container(
                                 height: 50,
-                                width: min(MediaQuery.of(context).size.width, 600),
+                                width:
+                                    min(MediaQuery.of(context).size.width, 600),
                                 margin: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
                                   border:
                                       Border.all(color: kGradient1, width: 3),
-                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.7),
                                 ),
                                 child: TextButton.icon(
                                     onPressed: () => launch(links[index]),
@@ -97,7 +105,8 @@ class HomePage extends StatelessWidget {
                                         color: kSecondaryColor),
                                     label: Text(websiteNames[index],
                                         style: const TextStyle(
-                                            color: kSecondaryColor, fontWeight: FontWeight.bold)))));
+                                            color: kSecondaryColor,
+                                            fontWeight: FontWeight.bold)))));
                       }))),
         ),
       ],
