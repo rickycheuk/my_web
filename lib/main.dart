@@ -1,12 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
 
 import 'constants.dart';
+import 'firebase_options.dart';
 
 const webTitle = 'Ricky Cheuk';
+final _fireStore = FirebaseFirestore.instance;
+List<Widget> tabPages = [
+  HomePage(
+    links: [],
+    websiteNames: [],
+    icons: [],
+  ),
+  EmojiWallPage(),
+  // ContactPage(),
+];
 
-void main() {
+Future<void> main() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -57,13 +73,44 @@ class _PageState extends State<Page> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _pageIndex);
+    getData();
   }
 
-  List<Widget> tabPages = [
-    HomePage(),
-    EmojiWallPage(),
-    // ContactPage(),
-  ];
+  Future<void> getData() async {
+    List _links = [];
+    List _websiteNames = [];
+    List _icons = [];
+    QuerySnapshot querySnapshot = await _fireStore.collection('urls').get();
+    final allData =
+        querySnapshot.docs.map((doc) => doc.data()).toList() as List;
+    for (var d in allData) {
+      _links.add(d['link']);
+      _websiteNames.add(d['name']);
+      switch ( d['icon'].toLowerCase() ) {
+        case 'linkedin':
+          {
+            _icons.add(Icons.account_circle_outlined);
+          }
+          break;
+        default:
+          {
+            _icons.add(Icons.web);
+          }
+          break;
+      }
+    }
+    setState(() {
+      tabPages = [
+        HomePage(
+          links: _links,
+          websiteNames: _websiteNames,
+          icons: _icons
+        ),
+        EmojiWallPage(),
+        // ContactPage(),
+      ];
+    });
+  }
 
   @override
   void dispose() {

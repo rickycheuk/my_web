@@ -39,6 +39,8 @@ dependencies:
   url_launcher: ^6.0.17
   flutter_rounded_progress_bar: ^0.2.0
   animated_text_kit: ^4.2.1
+  cloud_firestore: ^3.1.5
+  firebase_core: ^1.10.6
 
 dev_dependencies:
   flutter_test:

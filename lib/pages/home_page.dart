@@ -2,23 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:my_web/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final List<String> links = <String>[
-  'https://www.linkedin.com/in/rickycheuk/',
-  'https://github.com/rickycheuk',
-  'https://twitter.com/ThlipperyT',
-  'https://www.instagram.com/thlipperythnake/?hl=en'
-];
-final List<String> websiteNames = <String>['Linkedin','GitHub', 'Twitter', 'Instagram'];
-final List<IconData> icons = <IconData>[
-  Icons.web,
-  Icons.web,
-  Icons.web,
-  Icons.web];
 const my_name = 'Ricky Cheuk';
 const description = '''Software Engineer''';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key, required this.links, required this.websiteNames, required this.icons}) : super(key: key);
+  final List links;
+  final List websiteNames;
+  final List icons;
 
   @override
   Widget build(BuildContext context) {
