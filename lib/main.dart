@@ -14,7 +14,6 @@ String webTitle = 'Ricky Cheuk';
 String description = 'Software Engineer';
 String userName = 'Ricky Cheuk';
 List<Widget> tabPages = [
-  EmojiWallPage(),
   HomePage(
     userName: userName,
     description: description,
@@ -31,6 +30,7 @@ List<Widget> tabPages = [
       Icons.web,
       Icons.web],
   ),
+  EmojiWallPage(),
   // ContactPage(),
 ];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
