@@ -254,7 +254,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                   style: TextStyle(fontSize: 15),
                                 ),
                                 Text(
-                                  '  - Press on button on top right.',
+                                  '  - Press the button on top right.',
                                   style: TextStyle(fontSize: 12),
                                 ),
                                 Text(
