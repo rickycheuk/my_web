@@ -93,6 +93,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                           TypewriterAnimatedText(
                             description,
                             speed: const Duration(milliseconds: 100),
+                            textStyle: const TextStyle(color: Colors.white),
                           ),
                         ]),
                       ],
