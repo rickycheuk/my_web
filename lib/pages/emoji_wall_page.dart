@@ -99,80 +99,19 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                       ],
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: SizedBox(
-                      width: 45,
-                      height: 45,
-                      child: TextButton(
-                        child: Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              _currentEmoji,
-                              style: const TextStyle(color: Colors.white, fontSize: 20),
-                            )),
-                        style: ButtonStyle(
-                            alignment: Alignment.center,
-                            backgroundColor: MaterialStateProperty.all(kGradient1.withOpacity(0.8)),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(60.0), side: const BorderSide(color: Colors.white, width: 3)))),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  scrollable: true,
-                                  alignment: Alignment.center,
-                                  title: const Text(
-                                    'Add Your Emoji',
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  content: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Form(
-                                      child: Column(
-                                        children: <Widget>[
-                                          SizedBox(
-                                              width: MediaQuery.of(context).size.width / 1.5,
-                                              height: MediaQuery.of(context).size.height / 1.5,
-                                              child: GridView.count(
-                                                crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
-                                                padding: const EdgeInsets.all(1.0),
-                                                children: List.generate(emojiList.length, (index) {
-                                                  return Container(
-                                                    padding: const EdgeInsets.all(3.0),
-                                                    child: TextButton(
-                                                      onPressed: () {
-                                                        onEmojiChanged(emojiList[index]);
-                                                        _fireStore
-                                                            .collection('emojis')
-                                                            .doc(_userId)
-                                                            .set({'emoji': emojiList[index]}, SetOptions(merge: true));
-                                                        getEmojiData();
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text(
-                                                        emojiList[index],
-                                                        style: const TextStyle(fontSize: 20),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
-                                              ))
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              });
-                        },
-                      ),
+                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    Container(
+                      alignment: Alignment.centerRight,
+                      child: SizedBox(width: 45, height: 45, child: addEmojiButton()),
                     ),
-                  ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Container(alignment: Alignment.centerRight, child: SizedBox(width: 45, height: 45, child: helpButton())),
+                  ])
                 ]),
               ),
             ),
-
             Flexible(
               child: Container(
                 alignment: Alignment.topCenter,
@@ -190,42 +129,155 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                 ),
               ),
             ),
-            // Spacer(),
-            // const Center(
-            //     child: Text(
-            //   "Emoji Wall 😊",
-            //   style: TextStyle(fontSize: 22),
-            // )),
-            // Spacer(),
-            // Center(
-            //     child: AnimatedTextKit(repeatForever: true, animatedTexts: [
-            //   TypewriterAnimatedText(
-            //     "In Progress...",
-            //     speed: const Duration(milliseconds: 100),
-            //   ),
-            // ])),
-            // Container(
-            //     padding: const EdgeInsets.all(20),
-            //     child: IconRoundedProgressBar(
-            //         milliseconds: 1000,
-            //         widthIconSection: 70,
-            //         percent: 33,
-            //         icon: const Padding(
-            //             padding: EdgeInsets.all(8),
-            //             child: Icon(Icons.wifi_protected_setup,
-            //                 color: kSecondaryColor)),
-            //         style: RoundedProgressBarStyle(
-            //           backgroundProgress: const Color(0xFF9BA8B3),
-            //           colorProgress: colorProgressBlue,
-            //           colorProgressDark: colorProgressBlueDark,
-            //           colorBorder: const Color(0xFFB5C4D0),
-            //           colorBackgroundIcon: const Color(0xFFB5C4D0),
-            //           widthShadow: 3,
-            //           borderWidth: 3,
-            //         ),
-            //         borderRadius: BorderRadius.circular(30))),
-            // Spacer(),
           ],
         ));
+  }
+
+  Widget addEmojiButton() {
+    return TextButton(
+      child: Container(
+          alignment: Alignment.center,
+          child: Text(
+            _currentEmoji,
+            style: const TextStyle(color: Colors.white, fontSize: 20),
+          )),
+      style: ButtonStyle(
+          alignment: Alignment.center,
+          backgroundColor: MaterialStateProperty.all(kGradient1.withOpacity(0.7)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(60.0), side: const BorderSide(color: Colors.white, width: 3)))),
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                scrollable: true,
+                alignment: Alignment.center,
+                title: Stack(
+                  children: [
+                    Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Add Your Emoji',
+                          textAlign: TextAlign.center,
+                        )),
+                    Container(alignment: Alignment.centerRight, child: SizedBox(width: 45, height: 45, child: helpButton()))
+                  ],
+                ),
+                content: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            height: MediaQuery.of(context).size.height / 1.5,
+                            child: GridView.count(
+                              crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
+                              padding: const EdgeInsets.all(1.0),
+                              children: List.generate(emojiList.length, (index) {
+                                return Container(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      onEmojiChanged(emojiList[index]);
+                                      _fireStore
+                                          .collection('emojis')
+                                          .doc(_userId)
+                                          .set({'emoji': emojiList[index]}, SetOptions(merge: true));
+                                      getEmojiData();
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      emojiList[index],
+                                      style: const TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ))
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            });
+      },
+    );
+  }
+
+  Widget helpButton() {
+    return TextButton(
+      child: Container(
+          alignment: Alignment.center,
+          child: const Text(
+            "?",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          )),
+      style: ButtonStyle(
+          alignment: Alignment.center,
+          backgroundColor: MaterialStateProperty.all(kGradient1.withOpacity(0.7)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(60.0), side: const BorderSide(color: Colors.white, width: 3)))),
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                scrollable: true,
+                alignment: Alignment.center,
+                content: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Form(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width / 2,
+                            height: MediaQuery.of(context).size.height / 2,
+                            child: ListView(
+                              children: const [
+                                Text(
+                                  'What is Emoji Wall?',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                Text(
+                                  '  - A page for anyone to leave emojis anonymously.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  '  - Each visitor can only add one emoji.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Text(''),
+                                Text(
+                                  'How does this work?',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                Text(
+                                  '  - Press on button on top right.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  '  - Pick an emoji!',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  '  - The button will be \'+\' if you are new here, otherwise it will show your current emoji.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  '  - Picking new emoji will override the previous one.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ],
+                            ))
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            });
+      },
+    );
   }
 }

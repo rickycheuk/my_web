@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:my_web/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// const my_name = 'Ricky Cheuk';
-// const description = '''Software Engineer''';
-
 class HomePage extends StatelessWidget {
   const HomePage(
       {Key? key,

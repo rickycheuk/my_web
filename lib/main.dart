@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
+import 'package:my_web/update_notes.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -228,6 +229,54 @@ class _PageState extends State<Page> {
               elevation: 0.0,
               bottomOpacity: 0.5,
               actions: [
+            Container(
+              padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "What's new?",
+                        style: TextStyle(color: Colors.white, fontSize: 13),
+                      )),
+                  style: ButtonStyle(
+                      alignment: Alignment.center,
+                      backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7.0), side: const BorderSide(color: Colors.white, width: 2)))),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            scrollable: true,
+                            alignment: Alignment.center,
+                            title: const Text(
+                              "What's new?",
+                              textAlign: TextAlign.center,
+                            ),
+                            content: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Form(
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(
+                                        width: MediaQuery.of(context).size.width / 2,
+                                        height: MediaQuery.of(context).size.height / 2,
+                                        child: ListView(
+                                            children: updateNotes
+                                        )
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        });
+                  },
+                ),
+
+            ),
+
                 IconButton(
                   icon: Icon(
                       _themeMode == ThemeMode.light
