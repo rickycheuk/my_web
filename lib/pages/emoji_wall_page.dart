@@ -238,36 +238,36 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                               children: const [
                                 Text(
                                   'What is Emoji Wall?',
-                                  style: TextStyle(fontSize: 15),
+                                  style: TextStyle(fontSize: 17),
                                 ),
                                 Text(
-                                  '  - A page for anyone to leave emojis anonymously.',
-                                  style: TextStyle(fontSize: 12),
+                                  '  - A page for anyone to leave emojis anonymously',
+                                  style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
-                                  '  - Each visitor can only add one emoji.',
-                                  style: TextStyle(fontSize: 12),
+                                  '  - Each visitor can only add one emoji',
+                                  style: TextStyle(fontSize: 13),
                                 ),
                                 Text(''),
                                 Text(
                                   'How does this work?',
-                                  style: TextStyle(fontSize: 15),
+                                  style: TextStyle(fontSize: 17),
                                 ),
                                 Text(
-                                  '  - Press the button on top right.',
-                                  style: TextStyle(fontSize: 12),
+                                  '  - Press the button on top right',
+                                  style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
-                                  '  - Pick an emoji!',
-                                  style: TextStyle(fontSize: 12),
+                                  '  - Pick an emoji 😁!',
+                                  style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
-                                  '  - The button will be \'+\' if you are new here, otherwise it will show your current emoji.',
-                                  style: TextStyle(fontSize: 12),
+                                  '  - The button will be \'+\' if you are new here, otherwise it will show your current emoji',
+                                  style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
-                                  '  - Picking new emoji will override the previous one.',
-                                  style: TextStyle(fontSize: 12),
+                                  '  - Picking new emoji will override your previous one',
+                                  style: TextStyle(fontSize: 13),
                                 ),
                               ],
                             ))
