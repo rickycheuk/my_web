@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -83,15 +84,17 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                   Container(
                     alignment: Alignment.center,
                     child: Column(
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           title,
                           style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          description,
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        AnimatedTextKit(repeatForever: true, animatedTexts: [
+                          TypewriterAnimatedText(
+                            description,
+                            speed: const Duration(milliseconds: 100),
+                          ),
+                        ]),
                       ],
                     ),
                   ),
@@ -105,7 +108,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                             alignment: Alignment.center,
                             child: Text(
                               _currentEmoji,
-                              style: const TextStyle(color: Colors.white, fontSize: 25),
+                              style: const TextStyle(color: Colors.white, fontSize: 20),
                             )),
                         style: ButtonStyle(
                             alignment: Alignment.center,
@@ -132,11 +135,11 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                               width: MediaQuery.of(context).size.width / 1.5,
                                               height: MediaQuery.of(context).size.height / 1.5,
                                               child: GridView.count(
-                                                crossAxisCount: (MediaQuery.of(context).size.width/60).round(),
+                                                crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
                                                 padding: const EdgeInsets.all(1.0),
                                                 children: List.generate(emojiList.length, (index) {
                                                   return Container(
-                                                    padding: const EdgeInsets.all(1.0),
+                                                    padding: const EdgeInsets.all(3.0),
                                                     child: TextButton(
                                                       onPressed: () {
                                                         onEmojiChanged(emojiList[index]);
@@ -149,7 +152,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                                       },
                                                       child: Text(
                                                         emojiList[index],
-                                                        style: const TextStyle(fontSize: 25),
+                                                        style: const TextStyle(fontSize: 20),
                                                       ),
                                                     ),
                                                   );
