@@ -21,12 +21,10 @@ List<Widget> tabPages = [
     links: const [
       'https://www.linkedin.com/in/rickycheuk/',
       'https://github.com/rickycheuk',
-      'https://twitter.com/ThlipperyT',
       'https://www.instagram.com/thlipperythnake/?hl=en'
     ],
-    websiteNames: const ['Linkedin', 'GitHub', 'Twitter', 'Instagram'],
+    websiteNames: const ['Linkedin', 'GitHub', 'Instagram'],
     icons: const [
-      Icons.web,
       Icons.web,
       Icons.web,
       Icons.web],

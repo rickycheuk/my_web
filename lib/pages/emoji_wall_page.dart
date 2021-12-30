@@ -104,10 +104,10 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                       alignment: Alignment.centerRight,
                       child: SizedBox(width: 45, height: 45, child: addEmojiButton()),
                     ),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Container(alignment: Alignment.centerRight, child: SizedBox(width: 45, height: 45, child: helpButton())),
+                    // const SizedBox(
+                    //   width: 5,
+                    // ),
+                    // Container(alignment: Alignment.centerRight, child: SizedBox(width: 45, height: 45, child: helpButton())),
                   ])
                 ]),
               ),
@@ -254,19 +254,15 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                   style: TextStyle(fontSize: 17),
                                 ),
                                 Text(
-                                  '  - Press the button on top right',
+                                  '  - Simply tap and select an emoji',
                                   style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
-                                  '  - Pick an emoji 😁!',
+                                  '  - You will see your current emoji on top right',
                                   style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
-                                  '  - The button will be \'+\' if you are new here, otherwise it will show your current emoji',
-                                  style: TextStyle(fontSize: 13),
-                                ),
-                                Text(
-                                  '  - Picking new emoji will override your previous one',
+                                  '  - Picking a new emoji will override your previous one',
                                   style: TextStyle(fontSize: 13),
                                 ),
                               ],
