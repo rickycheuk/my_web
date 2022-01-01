@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -39,7 +40,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
       _emojis += d['emoji'];
     }
     setState(() {
-      emojis = _emojis;
+      emojis = _emojis.replaceAll('\n', '');
       _userId = userCredential.user?.uid as String;
       _currentEmoji = userSnapshot.exists ? userSnapshot['emoji'] : '+';
     });
@@ -121,11 +122,17 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                 //     border: Border.all(color: Colors.black12.withOpacity(0.2), width: 3),
                 //     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: SingleChildScrollView(
-                  child: Text(
-                    emojis.replaceAll('\n', ''),
-                    style: const TextStyle(fontSize: 25),
-                    textAlign: TextAlign.center,
-                  ),
+                  child:
+                  emojis!=''
+                    ? Text(
+                      emojis,
+                      style: const TextStyle(fontSize: 25),
+                      textAlign: TextAlign.center,
+                    )
+                    : const CircularProgressIndicator(
+                      backgroundColor: Colors.grey,
+                      color: kPrimaryColor,
+                    )
                 ),
               ),
             ),
