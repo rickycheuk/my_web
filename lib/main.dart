@@ -50,7 +50,7 @@ Future<void> main() async {
   await analytics.logEvent(
     name: 'user_visit',
     parameters: {
-      'user_id': userId,
+      'user': userId,
     },
   );
   runApp(MyApp());
