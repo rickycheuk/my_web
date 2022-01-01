@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
                   padding: const EdgeInsets.all(20.0),
                   child: CircleAvatar(
                       minRadius: 10,
-                      maxRadius: 150,
+                      maxRadius: 180,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(500),
                         child: Image.asset('assets/images/rickycheuk.jpg'),
@@ -56,7 +56,7 @@ class HomePage extends StatelessWidget {
                       userName,
                       textAlign: TextAlign.center,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       description,

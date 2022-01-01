@@ -1,15 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
 import 'package:my_web/update_notes.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
 
 final _fireStore = FirebaseFirestore.instance;
+FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
 const profileId = 'Tiqrj06AHigcHiytJPf1';
 String webTitle = 'Ricky Cheuk';
 String description = 'Software Engineer';
@@ -29,7 +33,7 @@ List<Widget> tabPages = [
       Icons.web,
       Icons.web],
   ),
-  EmojiWallPage(),
+  const EmojiWallPage(),
   // ContactPage(),
 ];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
@@ -38,6 +42,14 @@ bool isDarkMode = _brightness == Brightness.dark;
 Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+  await FirebaseAnalytics.instance
+      .logEvent(
+      name: 'user_visit',
+      parameters: {
+        'user_id': userCredential.user?.uid,
+      }
   );
   runApp(MyApp());
 }
