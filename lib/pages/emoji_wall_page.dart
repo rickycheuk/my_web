@@ -1,9 +1,7 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_web/constants.dart';
 
@@ -12,7 +10,9 @@ const title = 'Emoji Wall';
 const description = 'Add your emoji here ->';
 
 class EmojiWallPage extends StatefulWidget {
-  const EmojiWallPage({Key? key}) : super(key: key);
+  const EmojiWallPage({Key? key, required this.userId}) : super(key: key);
+
+  final String userId;
 
   @override
   _EmojiWallPageState createState() => _EmojiWallPageState();
@@ -31,17 +31,15 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
 
   Future<void> getEmojiData() async {
     String _emojis = '';
-    UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
-    print(userCredential.user?.uid);
     QuerySnapshot querySnapshot = await _fireStore.collection('emojis').get();
-    DocumentSnapshot userSnapshot = await _fireStore.collection('emojis').doc(userCredential.user?.uid).get();
+    DocumentSnapshot userSnapshot = await _fireStore.collection('emojis').doc(widget.userId).get();
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList() as List;
     for (var d in allData) {
       _emojis += d['emoji'];
     }
     setState(() {
       emojis = _emojis.replaceAll('\n', '');
-      _userId = userCredential.user?.uid as String;
+      _userId = widget.userId;
       _currentEmoji = userSnapshot.exists ? userSnapshot['emoji'] : '+';
     });
   }
@@ -122,18 +120,16 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                 //     border: Border.all(color: Colors.black12.withOpacity(0.2), width: 3),
                 //     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: SingleChildScrollView(
-                  child:
-                  emojis!=''
-                    ? Text(
-                      emojis,
-                      style: const TextStyle(fontSize: 25),
-                      textAlign: TextAlign.center,
-                    )
-                    : const CircularProgressIndicator(
-                      backgroundColor: Colors.grey,
-                      color: kPrimaryColor,
-                    )
-                ),
+                    child: emojis != ''
+                        ? Text(
+                            emojis,
+                            style: const TextStyle(fontSize: 25),
+                            textAlign: TextAlign.center,
+                          )
+                        : const CircularProgressIndicator(
+                            backgroundColor: Colors.grey,
+                            color: kPrimaryColor,
+                          )),
               ),
             ),
           ],

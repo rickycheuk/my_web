@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
 import 'package:my_web/update_notes.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -18,6 +18,7 @@ const profileId = 'Tiqrj06AHigcHiytJPf1';
 String webTitle = 'Ricky Cheuk';
 String description = 'Software Engineer';
 String userName = 'Ricky Cheuk';
+String userId = '';
 List<Widget> tabPages = [
   HomePage(
     userName: userName,
@@ -28,28 +29,29 @@ List<Widget> tabPages = [
       'https://www.instagram.com/thlipperythnake/?hl=en'
     ],
     websiteNames: const ['Linkedin', 'GitHub', 'Instagram'],
-    icons: const [
-      Icons.web,
-      Icons.web,
-      Icons.web],
+    icons: const [Icons.web, Icons.web, Icons.web],
   ),
-  const EmojiWallPage(),
+  EmojiWallPage(userId: userId),
   // ContactPage(),
 ];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
 bool isDarkMode = _brightness == Brightness.dark;
+
+Future<void> logEvent(String eventName) async {
+  await analytics.logEvent(name: eventName);
+}
 
 Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
-  await FirebaseAnalytics.instance
-      .logEvent(
-      name: 'user_visit',
-      parameters: {
-        'user_id': userCredential.user?.uid,
-      }
+  userId = userCredential.user?.uid as String;
+  await analytics.logEvent(
+    name: 'user_visit',
+    parameters: {
+      'user_id': userId,
+    },
   );
   runApp(MyApp());
 }
@@ -58,8 +60,7 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 
-  static _MyAppState? of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>();
+  static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -94,10 +95,8 @@ class _MyAppState extends State<MyApp> {
     List _websiteNames = [];
     List _icons = [];
     QuerySnapshot querySnapshot = await _fireStore.collection('urls').get();
-    DocumentSnapshot profileSnapshot =
-        await _fireStore.collection('profile').doc(profileId).get();
-    final allData =
-        querySnapshot.docs.map((doc) => doc.data()).toList() as List;
+    DocumentSnapshot profileSnapshot = await _fireStore.collection('profile').doc(profileId).get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList() as List;
     for (var d in allData) {
       _links.add(d['link']);
       _websiteNames.add(d['name']);
@@ -119,13 +118,10 @@ class _MyAppState extends State<MyApp> {
       userName = profileSnapshot['name'];
       description = profileSnapshot['description'];
       tabPages = [
-        HomePage(
-            userName: userName,
-            description: description,
-            links: _links,
-            websiteNames: _websiteNames,
-            icons: _icons),
-        EmojiWallPage(),
+        HomePage(userName: userName, description: description, links: _links, websiteNames: _websiteNames, icons: _icons),
+        EmojiWallPage(
+          userId: userId,
+        ),
         // ContactPage(),
       ];
     });
@@ -172,14 +168,14 @@ class _PageState extends State<Page> {
   }
 
   void onPageChanged(int page) {
+    logEvent("page_change_" + tabPages[page].toString());
     setState(() {
       _pageIndex = page;
     });
   }
 
   void onTabTapped(int index) {
-    _pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    _pageController.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 
   Widget _buildBottomNavigationBar() {
@@ -206,11 +202,8 @@ class _PageState extends State<Page> {
             showSelectedLabels: false,
             showUnselectedLabels: false,
             items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined), label: 'Home'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.sentiment_satisfied_alt),
-                  label: 'Emoji Wall'),
+              BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+              BottomNavigationBarItem(icon: Icon(Icons.sentiment_satisfied_alt), label: 'Emoji Wall'),
             ],
           ),
         ));
@@ -239,60 +232,51 @@ class _PageState extends State<Page> {
               elevation: 0.0,
               bottomOpacity: 0.5,
               actions: [
-            Container(
-              padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  child: Container(
-                      alignment: Alignment.center,
-                      child: const Text(
-                        "What's new?",
-                        style: TextStyle(color: Colors.white, fontSize: 13),
-                      )),
-                  style: ButtonStyle(
-                      alignment: Alignment.center,
-                      backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7.0), side: const BorderSide(color: Colors.white, width: 2)))),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            scrollable: true,
-                            alignment: Alignment.center,
-                            title: const Text(
-                              "What's new?",
-                              textAlign: TextAlign.center,
-                            ),
-                            content: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Form(
-                                child: Column(
-                                  children: <Widget>[
-                                    SizedBox(
-                                        width: MediaQuery.of(context).size.width / 2,
-                                        height: MediaQuery.of(context).size.height / 2,
-                                        child: ListView(
-                                            children: updateNotes
-                                        )
-                                    )
-                                  ],
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "What's new?",
+                          style: TextStyle(color: Colors.white, fontSize: 13),
+                        )),
+                    style: ButtonStyle(
+                        alignment: Alignment.center,
+                        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7.0), side: const BorderSide(color: Colors.white, width: 2)))),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              scrollable: true,
+                              alignment: Alignment.center,
+                              title: const Text(
+                                "What's new?",
+                                textAlign: TextAlign.center,
+                              ),
+                              content: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Form(
+                                  child: Column(
+                                    children: <Widget>[
+                                      SizedBox(
+                                          width: MediaQuery.of(context).size.width / 2,
+                                          height: MediaQuery.of(context).size.height / 2,
+                                          child: ListView(children: updateNotes))
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        });
-                  },
+                            );
+                          });
+                    },
+                  ),
                 ),
-
-            ),
-
                 IconButton(
-                  icon: Icon(
-                      _themeMode == ThemeMode.light
-                          ? Icons.dark_mode
-                          : Icons.wb_sunny_outlined,
-                      color: kContentColorDarkTheme),
+                  icon: Icon(_themeMode == ThemeMode.light ? Icons.dark_mode : Icons.wb_sunny_outlined, color: kContentColorDarkTheme),
                   onPressed: () {
                     MyApp.of(context)?._themeMode == ThemeMode.light
                         ? MyApp.of(context)?.changeTheme(ThemeMode.dark)
