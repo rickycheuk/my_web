@@ -170,7 +170,6 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
   Color textC = textColor as Color;
   return Container(
       alignment: Alignment.topCenter,
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
       decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/images/ricky_beach.jpeg"),
@@ -178,9 +177,10 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
         ),
       ),
       child: Container(
+          alignment: Alignment.topCenter,
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
           decoration: BoxDecoration(
-              color: textC == kContentColorDarkTheme ? Colors.black.withOpacity(0.7) : Colors.white.withOpacity(0.7),
-              borderRadius: const BorderRadius.all(Radius.circular(10))),
+              color: textC == kContentColorDarkTheme ? Colors.black.withOpacity(0.7) : Colors.white.withOpacity(0.7)),
           child: Flex(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -193,12 +193,11 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
                       width: min(width, 600),
                       alignment: Alignment.center,
                       padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: textC, width: 3), borderRadius: const BorderRadius.all(Radius.circular(10))),
+                      decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10))),
                       child: const Text(
                         "About",
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, decoration: TextDecoration.underline,),
                       ),
                     ),
                     Container(
