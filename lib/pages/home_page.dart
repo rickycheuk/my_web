@@ -1,18 +1,19 @@
 import 'dart:math';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:my_web/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage(
-      {Key? key,
-      required this.userName,
-      required this.description,
-      required this.links,
-      required this.websiteNames,
-      required this.icons, })
-      : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({
+    Key? key,
+    required this.userName,
+    required this.description,
+    required this.links,
+    required this.websiteNames,
+    required this.icons,
+  }) : super(key: key);
   final String userName;
   final String description;
   final List links;
@@ -20,97 +21,214 @@ class HomePage extends StatelessWidget {
   final List icons;
 
   @override
-  Widget build(BuildContext context) {
-    bool isScreenWide =
-        MediaQuery.of(context).size.width >= MediaQuery.of(context).size.height;
-    return Flex(
-      direction: isScreenWide ? Axis.horizontal : Axis.vertical,
-      children: <Widget>[
-        Flexible(
-          child: SizedBox(
-            // margin: const EdgeInsets.all(20.0),
-            width: isScreenWide
-                ? MediaQuery.of(context).size.width
-                : MediaQuery.of(context).size.width,
-            height: isScreenWide
-                ? MediaQuery.of(context).size.height
-                : MediaQuery.of(context).size.height / 3,
-            child: Column(children: <Widget>[
-              Expanded(
-                flex: 3,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: CircleAvatar(
-                      minRadius: 10,
-                      maxRadius: 180,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(500),
-                        child: Image.asset('assets/images/ricky.jpg'),
-                      )),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Text(
-                      userName,
-                      textAlign: TextAlign.center,
-                      style:
-                          const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      description,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              )
-            ]),
-          ),
-        ),
-        Flexible(
-          child: SizedBox(
-              width: isScreenWide
-                  ? MediaQuery.of(context).size.width
-                  : MediaQuery.of(context).size.width,
-              child: Align(
-                  alignment: isScreenWide
-                      ? const Alignment(0, 0.0)
-                      : const Alignment(0, -1.0),
-                  child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      //isScreenWide ? Axis.horizontal : Axis.vertical,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(10),
-                      itemCount: links.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Align(
-                            alignment: const Alignment(0, -1.0),
-                            child: Container(
-                                height: 50,
-                                width:
-                                    min(MediaQuery.of(context).size.width, 600),
-                                margin: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border:
-                                      Border.all(color: kGradient1, width: 3),
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
-                                ),
-                                child: TextButton.icon(
-                                    onPressed: () => launch(links[index]),
-                                    icon: Icon(icons[index],
-                                        color: kSecondaryColor),
-                                    label: Text(websiteNames[index],
-                                        style: const TextStyle(
-                                            color: kSecondaryColor,
-                                            fontWeight: FontWeight.bold)))));
-                      }))),
-        ),
-      ],
-    );
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    Color? textColor = Theme.of(context).textTheme.bodyText1?.color;
+    bool isScreenWide = MediaQuery.of(context).size.width >= MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    List<Widget> homeViewList = [
+      Flex(direction: Axis.horizontal, children: <Widget>[
+        ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: isScreenWide ? 300 : 400,
+              maxWidth: isScreenWide ? 300 : 800,
+            ),
+            child: Flex(
+              direction: Axis.vertical, //isScreenWide ? Axis.horizontal : Axis.vertical,
+              children: <Widget>[
+                Flexible(
+                  flex: 3,
+                  child: SizedBox(
+                    width: isScreenWide ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width,
+                    height: isScreenWide ? MediaQuery.of(context).size.height : MediaQuery.of(context).size.height / 3,
+                    child: Column(children: <Widget>[
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: CircleAvatar(
+                              minRadius: 10,
+                              maxRadius: 180,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(500),
+                                child: Image.asset('assets/images/ricky.jpg'),
+                              )),
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                              widget.userName,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              widget.description,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )
+                    ]),
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: SizedBox(
+                      width: isScreenWide ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width,
+                      child: Align(
+                          alignment: isScreenWide
+                              ? const Alignment(0, -1.0) //const Alignment(0, 0.0)
+                              : const Alignment(0, -1.0),
+                          child: ListView.builder(
+                              scrollDirection: Axis.vertical,
+                              //isScreenWide ? Axis.horizontal : Axis.vertical,
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.all(10),
+                              itemCount: widget.links.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Align(
+                                    alignment: const Alignment(0, -1.0),
+                                    child: Container(
+                                        height: 50,
+                                        width: min(MediaQuery.of(context).size.width, 500),
+                                        margin: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          border: Border.all(color: kGradient1, width: 3),
+                                          color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+                                        ),
+                                        child: TextButton.icon(
+                                            onPressed: () => launch(widget.links[index]),
+                                            icon: Icon(widget.icons[index], color: kSecondaryColor),
+                                            label: Text(widget.websiteNames[index],
+                                                style: const TextStyle(color: kSecondaryColor, fontWeight: FontWeight.bold)))));
+                              }))),
+                ),
+                isScreenWide
+                    ? Container(width: 0, height: 0)
+                    : Container(
+                        padding: const EdgeInsets.all(1),
+                        width: MediaQuery.of(context).size.width,
+                        height: 70,
+                        alignment: Alignment.center,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AnimatedTextKit(repeatForever: true, animatedTexts: [
+                              FadeAnimatedText("Scroll", textStyle: const TextStyle(fontSize: 12, color: kPrimaryColor)),
+                            ]),
+                            const Icon(
+                              Icons.arrow_circle_up_rounded,
+                              semanticLabel: 'Scroll',
+                              size: 30,
+                              color: kPrimaryColor,
+                            ),
+                          ],
+                        )),
+              ],
+            )),
+        isScreenWide
+            ? Expanded(flex: 3, child: aboutPage(isScreenWide, width, textColor))
+            : Container(
+                width: 0,
+                height: 0,
+                color: Colors.blue,
+              ),
+      ]),
+    ];
+
+    isScreenWide ? Null : homeViewList.add(aboutPage(isScreenWide, width, textColor));
+
+    return PageView(scrollDirection: Axis.vertical, children: homeViewList);
+  }
+}
+
+Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
+  Color textC = textColor as Color;
+  return Container(
+      alignment: Alignment.topCenter,
+      padding: const EdgeInsets.fromLTRB(30, 30, 30, 20),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: const AssetImage("assets/images/ricky_beach.jpeg"),
+          colorFilter: ColorFilter.mode(Colors.black.withOpacity(0.15), BlendMode.dstATop),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Flex(
+        mainAxisAlignment: MainAxisAlignment.center,
+        direction: isScreenWide ? Axis.horizontal : Axis.vertical,
+        children: [
+          Flexible(
+              flex: 4,
+              child: Column(children: [
+                Container(
+                  width: min(width, 600),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: textC, width: 3), borderRadius: const BorderRadius.all(Radius.circular(10))),
+                  child: const Text(
+                    "About",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Container(
+                  height: 15,
+                ),
+                Flexible(
+                    child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    minWidth: 450,
+                    maxWidth: 450,
+                  ),
+                  child: const SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Text(
+                      """
+Skills:
+    - Technical: Python, Unix, Git, SQL, Flutter, Spark
+    - Languages: Cantonese, English, Mandarin
+
+Background:
+    - B.S. in Information Systems
+    - 3.5 years in FinTech
+
+Current Work: 
+    - Big data processing
+    - Workflow automation
+    - API integration
+          
+Fun Facts:
+    - Hong Kong -> New York
+    - Used to dance in college
+    - Can speak 3 Chinese dialects
+""",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ))
+              ])),
+          // Flexible(
+          //     flex: isScreenWide? 4:2,
+          //     child: ClipRRect(
+          //       borderRadius: BorderRadius.circular(30),
+          //       child: Image.asset('assets/images/ricky_boston.jpg'),
+          //     )),
+        ],
+      ));
 }

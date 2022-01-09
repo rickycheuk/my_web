@@ -16,7 +16,7 @@ FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 const profileId = 'Tiqrj06AHigcHiytJPf1';
 String webTitle = 'Ricky Cheuk';
-String description = 'Software Engineer';
+String description = '- Software Engineer -';
 String userName = 'Ricky Cheuk';
 String userId = '';
 List<Widget> tabPages = [
