@@ -166,7 +166,7 @@ Widget welcomePage(double width, Color? textColor) {
           alignment: Alignment.center,
           padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
           decoration:
-              BoxDecoration(color: textC == kContentColorDarkTheme ? Colors.black.withOpacity(0.7) : Colors.white.withOpacity(0.7)),
+              BoxDecoration(color: textC == kContentColorDarkTheme ? Colors.black.withOpacity(0.7) : Colors.white.withOpacity(0.4)),
           child: Flex(direction: Axis.vertical, children: [
             Expanded(
                 child: Container(
