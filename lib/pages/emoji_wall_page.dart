@@ -265,7 +265,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                   style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
-                                  '  - Picking a new emoji will override your previous one',
+                                  '  - Picking a new emoji will replace your previous one',
                                   style: TextStyle(fontSize: 13),
                                 ),
                               ],

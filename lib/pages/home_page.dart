@@ -125,34 +125,11 @@ class _HomePageState extends State<HomePage> {
                                                             const TextStyle(color: kSecondaryColor, fontWeight: FontWeight.bold)))));
                                       }))),
                         ),
-                        isScreenWide
-                            ? Container(width: 0, height: 0)
-                            : Container(
-                                padding: const EdgeInsets.all(1),
-                                width: MediaQuery.of(context).size.width,
-                                height: 70,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    AnimatedTextKit(repeatForever: true, animatedTexts: [
-                                      FadeAnimatedText("Scroll",
-                                          duration: const Duration(milliseconds: 800),
-                                          textStyle: const TextStyle(fontSize: 12, color: kPrimaryColor)),
-                                    ]),
-                                    const Icon(
-                                      Icons.arrow_circle_up_rounded,
-                                      semanticLabel: 'Scroll',
-                                      size: 30,
-                                      color: kPrimaryColor,
-                                    ),
-                                  ],
-                                )),
+                        isScreenWide ? Container(width: 0, height: 0) : _buildScrollIndicator(),
                       ],
                     ))),
             isScreenWide
-                ? Expanded(flex: 3, child: aboutPage(isScreenWide, width, textColor))
+                ? Expanded(flex: 3, child: _buildScrollPage(isScreenWide, width, textColor))
                 : Container(
                     width: 0,
                     height: 0,
@@ -160,10 +137,48 @@ class _HomePageState extends State<HomePage> {
           ]),
     ];
 
-    isScreenWide ? Null : homeViewList.add(aboutPage(isScreenWide, width, textColor));
+    isScreenWide ? Null : homeViewList.add(_buildScrollPage(isScreenWide, width, textColor));
 
     return PageView(scrollDirection: Axis.vertical, children: homeViewList);
   }
+}
+
+Widget _buildScrollPage(bool isScreenWide, double width, Color? textColor) {
+  return PageView(scrollDirection: Axis.vertical, children: [
+    welcomePage(width, textColor),
+    aboutPage(isScreenWide, width, textColor),
+  ]);
+}
+
+Widget welcomePage(double width, Color? textColor) {
+  Color textC = textColor as Color;
+  return Container(
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/ricky_beach.jpeg"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+          decoration:
+              BoxDecoration(color: textC == kContentColorDarkTheme ? Colors.black.withOpacity(0.7) : Colors.white.withOpacity(0.7)),
+          child: Flex(direction: Axis.vertical, children: [
+            Expanded(
+                child: Container(
+                    width: min(width, 600),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10))),
+                    child: AnimatedTextKit(repeatForever: true, animatedTexts: [
+                      RotateAnimatedText("Welcome",
+                          duration: const Duration(milliseconds: 6900),
+                          textStyle: TextStyle(fontSize: 69, color: textC, fontWeight: FontWeight.bold)),
+                    ]))),
+            _buildScrollIndicator()
+          ])));
 }
 
 Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
@@ -178,41 +193,97 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
       ),
       child: Container(
           alignment: Alignment.topCenter,
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-          decoration: BoxDecoration(
-              color: textC == kContentColorDarkTheme ? Colors.black.withOpacity(0.7) : Colors.white.withOpacity(0.7)),
+          padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
+          decoration:
+              BoxDecoration(color: textC == kContentColorDarkTheme ? Colors.black.withOpacity(0.7) : Colors.white.withOpacity(0.7)),
           child: Flex(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             direction: isScreenWide ? Axis.horizontal : Axis.vertical,
             children: [
               Flexible(
-                  flex: 4,
                   child: Column(children: [
-                    Container(
-                      width: min(width, 600),
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10))),
-                      child: const Text(
-                        "About",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, decoration: TextDecoration.underline,),
-                      ),
+                Container(
+                  width: min(width, 600),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10))),
+                  child: const Text(
+                    "About",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 35,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
                     ),
-                    Container(
-                      height: 15,
-                    ),
-                    Flexible(
-                        child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        minWidth: 450,
-                        maxWidth: 450,
-                      ),
-                      child: const SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Text(
-                          """
+                  ),
+                ),
+                Container(
+                  height: 15,
+                ),
+                // Flexible(
+                //   child: Scatter(delegate: ArchimedeanSpiralScatterDelegate(ratio: 1, a: 2, b: 1, step: width/10000*2, rotation: width/10000), children: [
+                //     _buildBubbles('Hong Kong -> New York', 110, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('Python', 90, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('Unix', 60, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('Git', 50, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('SQL', 65, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('Flutter', 90, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('Spark', 75, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('Cantonese', 80, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('English', 60, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('Mandarin', 80, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('B.S. in InfoSys', 80, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('3.5 years in FinTech', 90, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('Big Data Processing', 90, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('Workflow Automation', 90, kPrimaryColor, kPrimaryColor),
+                //     _buildBubbles('API Integration', 90, kPrimaryColor, kPrimaryColor),
+                //     ]
+                //   )
+                // )
+                _buildAboutText()
+              ])),
+            ],
+          )));
+}
+
+Widget _buildBubbles(String text, double length, Color color, Color textColor) {
+  return Container(
+      width: length,
+      height: length,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: textColor, width: 2),
+        color: color.withOpacity(0.7),
+        // gradient: LinearGradient(colors: widget.bubbleData.colors)
+      ),
+      child: InkWell(
+        customBorder: CircleBorder(),
+        // splashColor: widget.bubbleData.splashColor,
+        onTap: () {
+          print(text);
+        },
+        child: Container(
+            alignment: Alignment.center,
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 15),
+              textAlign: TextAlign.center,
+            )),
+      ));
+}
+
+Widget _buildAboutText() {
+  return Flexible(
+      child: ConstrainedBox(
+    constraints: const BoxConstraints(
+      minWidth: 450,
+      maxWidth: 450,
+    ),
+    child: const SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Text(
+        """
   Skills:
       - Technical: Python, Unix, Git, SQL, Flutter, Spark
       - Languages: Cantonese, English, Mandarin
@@ -231,12 +302,32 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
       - Used to dance in college
       - Can speak 3 Chinese dialects
   """,
-                          textAlign: TextAlign.left,
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    ))
-                  ])),
-            ],
-          )));
+        textAlign: TextAlign.left,
+        style: TextStyle(fontSize: 16),
+      ),
+    ),
+  ));
+}
+
+Widget _buildScrollIndicator() {
+  return Container(
+      padding: const EdgeInsets.all(1),
+      height: 70,
+      alignment: Alignment.center,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedTextKit(repeatForever: true, animatedTexts: [
+            FadeAnimatedText("Scroll",
+                duration: const Duration(milliseconds: 800), textStyle: const TextStyle(fontSize: 12, color: kPrimaryColor)),
+          ]),
+          const Icon(
+            Icons.arrow_circle_up_rounded,
+            semanticLabel: 'Scroll',
+            size: 30,
+            color: kPrimaryColor,
+          ),
+        ],
+      ));
 }
