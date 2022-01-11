@@ -137,7 +137,8 @@ class _HomePageState extends State<HomePage> {
           ]),
     ];
 
-    isScreenWide ? Null : homeViewList.add(_buildScrollPage(isScreenWide, width, textColor));
+    isScreenWide ? Null : homeViewList.add(welcomePage(width, textColor));
+    isScreenWide ? Null : homeViewList.add(aboutPage(isScreenWide, width, textColor));
 
     return PageView(scrollDirection: Axis.vertical, children: homeViewList);
   }
