@@ -157,8 +157,9 @@ Widget welcomePage(double width, Color? textColor) {
       alignment: Alignment.center,
       decoration: const BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/ricky_beach.jpeg"),
+          image: AssetImage("assets/images/ricky_boat.jpg"),
           fit: BoxFit.cover,
+          alignment: Alignment.center
         ),
       ),
       child: Container(
