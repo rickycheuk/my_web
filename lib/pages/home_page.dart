@@ -156,11 +156,7 @@ Widget welcomePage(double width, Color? textColor) {
   return Container(
       alignment: Alignment.center,
       decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/ricky_boat.jpg"),
-          fit: BoxFit.cover,
-          alignment: Alignment.center
-        ),
+        image: DecorationImage(image: AssetImage("assets/images/ricky_boat.jpg"), fit: BoxFit.cover, alignment: Alignment.center),
       ),
       child: Container(
           alignment: Alignment.center,
@@ -175,9 +171,21 @@ Widget welcomePage(double width, Color? textColor) {
                     padding: const EdgeInsets.all(5.0),
                     decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10))),
                     child: AnimatedTextKit(repeatForever: true, animatedTexts: [
-                      RotateAnimatedText("Welcome",
-                          duration: const Duration(milliseconds: 6900),
-                          textStyle: TextStyle(fontSize: 69, color: textC, fontWeight: FontWeight.bold)),
+                      FlickerAnimatedText("Welcome",
+                          // duration: const Duration(milliseconds: 6900),
+                          textStyle: TextStyle(
+                            fontSize: 69,
+                            color: textC,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Horizon',
+                            shadows: [
+                              Shadow(
+                                blurRadius: 7.0,
+                                color: textC,
+                                offset: Offset(0, 0),
+                              ),
+                            ],
+                          )),
                     ]))),
             _buildScrollIndicator()
           ])));
@@ -223,27 +231,174 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
                 Container(
                   height: 15,
                 ),
-                // Flexible(
-                //   child: Scatter(delegate: ArchimedeanSpiralScatterDelegate(ratio: 1, a: 2, b: 1, step: width/10000*2, rotation: width/10000), children: [
-                //     _buildBubbles('Hong Kong -> New York', 110, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('Python', 90, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('Unix', 60, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('Git', 50, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('SQL', 65, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('Flutter', 90, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('Spark', 75, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('Cantonese', 80, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('English', 60, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('Mandarin', 80, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('B.S. in InfoSys', 80, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('3.5 years in FinTech', 90, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('Big Data Processing', 90, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('Workflow Automation', 90, kPrimaryColor, kPrimaryColor),
-                //     _buildBubbles('API Integration', 90, kPrimaryColor, kPrimaryColor),
-                //     ]
-                //   )
+                // _buildAboutText()
+                Expanded(
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Wrap(
+                        spacing: 15,
+                        runSpacing: 15,
+                        direction: Axis.horizontal,
+                        children: [
+                          Container(
+                            height: 130,
+                            width: 400,
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(5.0),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: kPrimaryColor.withOpacity(0.7), width: 3),
+                                borderRadius: const BorderRadius.all(Radius.circular(10))),
+                            child: Column(
+                              children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('Skills',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: textC,
+                                      )),
+                                ),
+                                DefaultTextStyle(
+                                    style: TextStyle(
+                                      fontSize: 25.0,
+                                      color: textC,
+                                    ),
+                                    child:
+                                        AnimatedTextKit(pause: const Duration(milliseconds: 0), repeatForever: true, animatedTexts: [
+                                      RotateAnimatedText('Python', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('Unix', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('Git', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('SQL', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('Flutter', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('Spark', duration: const Duration(milliseconds: 3000)),
+                                    ]))
+                              ],
+                            ),
+                          ),
+                          Container(
+                              height: 130,
+                              width: 400,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: kPrimaryColor.withOpacity(0.7), width: 3),
+                                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+                              child: Column(children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('Languages',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: textC,
+                                      )),
+                                ),
+                                DefaultTextStyle(
+                                    style: TextStyle(
+                                      fontSize: 25.0,
+                                      color: textC,
+                                    ),
+                                    child:
+                                        AnimatedTextKit(pause: const Duration(milliseconds: 0), repeatForever: true, animatedTexts: [
+                                      RotateAnimatedText('Cantonese', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('English', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('Mandarin', duration: const Duration(milliseconds: 3000)),
+                                    ]))
+                              ])),
+                          Container(
+                              height: 130,
+                              width: 400,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: kPrimaryColor.withOpacity(0.7), width: 3),
+                                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+                              child: Column(children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('Background',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: textC,
+                                      )),
+                                ),
+                                DefaultTextStyle(
+                                    style: TextStyle(
+                                      fontSize: 25.0,
+                                      color: textC,
+                                    ),
+                                    child:
+                                        AnimatedTextKit(pause: const Duration(milliseconds: 0), repeatForever: true, animatedTexts: [
+                                      RotateAnimatedText('B.S. Information Systems', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('3.5 years in FinTech', duration: const Duration(milliseconds: 3000)),
+                                    ]))
+                              ])),
+                          Container(
+                              height: 130,
+                              width: 400,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: kPrimaryColor.withOpacity(0.7), width: 3),
+                                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+                              child: Column(children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('Current Work',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: textC,
+                                      )),
+                                ),
+                                DefaultTextStyle(
+                                    style: TextStyle(
+                                      fontSize: 25.0,
+                                      color: textC,
+                                    ),
+                                    child:
+                                        AnimatedTextKit(pause: const Duration(milliseconds: 0), repeatForever: true, animatedTexts: [
+                                      RotateAnimatedText('Big data processing', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('Workflow automation', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('API integration', duration: const Duration(milliseconds: 3000)),
+                                    ]))
+                              ])),
+                          Container(
+                              height: 130,
+                              width: 400,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: kPrimaryColor.withOpacity(0.7), width: 3),
+                                  borderRadius: const BorderRadius.all(Radius.circular(10))),
+                              child: Column(children: [
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('Fun Facts',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: textC,
+                                      )),
+                                ),
+                                DefaultTextStyle(
+                                    style: TextStyle(
+                                      fontSize: 25.0,
+                                      color: textC,
+                                    ),
+                                    child:
+                                        AnimatedTextKit(pause: const Duration(milliseconds: 0), repeatForever: true, animatedTexts: [
+                                      RotateAnimatedText('Hong Kong -> New York', duration: const Duration(milliseconds: 3000)),
+                                      RotateAnimatedText('Can speak 3 Chinese dialects', duration: const Duration(milliseconds: 3000)),
+                                    ]))
+                              ]))
+                        ],
+                      )),
+                )
+
                 // )
-                _buildAboutText()
               ])),
             ],
           )));

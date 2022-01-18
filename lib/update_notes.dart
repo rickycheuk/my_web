@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 const List<Text> updateNotes = [
+  Text("01/17/2022", style: TextStyle(fontSize: 17),),
+  Text("  - About Page format update", style: TextStyle(fontSize: 13),),
+  Text(""),
   Text("01/08/2022", style: TextStyle(fontSize: 17),),
   Text("  - About Me", style: TextStyle(fontSize: 13),),
   Text(""),
