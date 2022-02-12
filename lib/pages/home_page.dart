@@ -242,7 +242,7 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
                         children: [
                           Container(
                             height: 130,
-                            width: 400,
+                            width: min(width, 400),
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(5.0),
                             decoration: BoxDecoration(
@@ -278,7 +278,7 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
                           ),
                           Container(
                               height: 130,
-                              width: 400,
+                              width: min(width, 400),
                               alignment: Alignment.center,
                               padding: const EdgeInsets.all(5.0),
                               decoration: BoxDecoration(
@@ -308,7 +308,7 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
                               ])),
                           Container(
                               height: 130,
-                              width: 400,
+                              width: min(width, 400),
                               alignment: Alignment.center,
                               padding: const EdgeInsets.all(5.0),
                               decoration: BoxDecoration(
@@ -337,7 +337,7 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
                               ])),
                           Container(
                               height: 130,
-                              width: 400,
+                              width: min(width, 400),
                               alignment: Alignment.center,
                               padding: const EdgeInsets.all(5.0),
                               decoration: BoxDecoration(
@@ -367,7 +367,7 @@ Widget aboutPage(bool isScreenWide, double width, Color? textColor) {
                               ])),
                           Container(
                               height: 130,
-                              width: 400,
+                              width: min(width, 400),
                               alignment: Alignment.center,
                               padding: const EdgeInsets.all(5.0),
                               decoration: BoxDecoration(
