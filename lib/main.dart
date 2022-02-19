@@ -1,28 +1,68 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
+import 'package:my_web/update_notes.dart';
+import 'package:my_web/utils/my_web_icons.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
 
-const webTitle = 'Ricky Cheuk';
 final _fireStore = FirebaseFirestore.instance;
+FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
+const profileId = 'Tiqrj06AHigcHiytJPf1';
+String webTitle = 'Ricky Cheuk';
+String description = '- Software Engineer -';
+String userName = 'Ricky Cheuk';
+String userId = '';
 List<Widget> tabPages = [
   HomePage(
-    links: [],
-    websiteNames: [],
-    icons: [],
+    userName: userName,
+    description: description,
+    links: const [
+      'https://www.linkedin.com/in/rickycheuk/',
+      'https://github.com/rickycheuk',
+      'https://www.instagram.com/thlipperythnake/?hl=en'
+    ],
+    websiteNames: const ['Linkedin', 'GitHub', 'Instagram'],
+    icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
   ),
-  EmojiWallPage(),
+  EmojiWallPage(userId: userId),
   // ContactPage(),
 ];
+var _brightness = SchedulerBinding.instance!.window.platformBrightness;
+bool isDarkMode = _brightness == Brightness.dark;
+
+Future<void> logEvent(String eventName) async {
+  await analytics.logEvent(name: eventName);
+}
 
 Future<void> main() async {
+  // Preload all emojis for better experience
+  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle(locale: window.locale));
+  pb.addText(emojiList.join());
+  pb.build().layout(const ParagraphConstraints(width: 100));
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  UserCredential userCredential =
+      await FirebaseAuth.instance.signInAnonymously();
+  userId = userCredential.user?.uid as String;
+  await analytics.logEvent(
+    name: 'user_visit',
+    parameters: {
+      'user': userId,
+    },
+  );
+  await Future.delayed(const Duration(seconds: 2));
   runApp(MyApp());
 }
 
@@ -35,7 +75,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = ThemeMode.system;
+  ThemeMode _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+
+  @override
+  void initState() {
+    super.initState();
+    // Disabled for now
+    // getData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +92,7 @@ class _MyAppState extends State<MyApp> {
       theme: lightThemeData(context),
       darkTheme: darkThemeData(context),
       themeMode: _themeMode,
-      home: const Page(title: webTitle),
+      home: Page(title: webTitle),
     );
   }
 
@@ -53,6 +100,54 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _themeMode = themeMode;
     });
+  }
+
+  Future<void> getData() async {
+    List _links = [];
+    List _websiteNames = [];
+    List _icons = [];
+    QuerySnapshot querySnapshot = await _fireStore.collection('urls').get();
+    DocumentSnapshot profileSnapshot =
+        await _fireStore.collection('profile').doc(profileId).get();
+    final allData =
+        querySnapshot.docs.map((doc) => doc.data()).toList() as List;
+    for (var d in allData) {
+      _links.add(d['link']);
+      _websiteNames.add(d['name']);
+      switch (d['icon'].toLowerCase()) {
+        case 'linkedin':
+          {
+            _icons.add(Icons.account_circle_outlined);
+          }
+          break;
+        default:
+          {
+            _icons.add(Icons.web);
+          }
+          break;
+      }
+    }
+    setState(() {
+      webTitle = profileSnapshot['name'];
+      userName = profileSnapshot['name'];
+      description = profileSnapshot['description'];
+      tabPages = [
+        HomePage(
+            userName: userName,
+            description: description,
+            links: _links,
+            websiteNames: _websiteNames,
+            icons: _icons),
+        EmojiWallPage(
+          userId: userId,
+        ),
+        // ContactPage(),
+      ];
+    });
+    if (kDebugMode) {
+      print(webTitle);
+      print(_links);
+    }
   }
 }
 
@@ -73,43 +168,6 @@ class _PageState extends State<Page> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _pageIndex);
-    getData();
-  }
-
-  Future<void> getData() async {
-    List _links = [];
-    List _websiteNames = [];
-    List _icons = [];
-    QuerySnapshot querySnapshot = await _fireStore.collection('urls').get();
-    final allData =
-        querySnapshot.docs.map((doc) => doc.data()).toList() as List;
-    for (var d in allData) {
-      _links.add(d['link']);
-      _websiteNames.add(d['name']);
-      switch ( d['icon'].toLowerCase() ) {
-        case 'linkedin':
-          {
-            _icons.add(Icons.account_circle_outlined);
-          }
-          break;
-        default:
-          {
-            _icons.add(Icons.web);
-          }
-          break;
-      }
-    }
-    setState(() {
-      tabPages = [
-        HomePage(
-          links: _links,
-          websiteNames: _websiteNames,
-          icons: _icons
-        ),
-        EmojiWallPage(),
-        // ContactPage(),
-      ];
-    });
   }
 
   @override
@@ -131,6 +189,7 @@ class _PageState extends State<Page> {
   }
 
   void onPageChanged(int page) {
+    logEvent("page_change_" + tabPages[page].toString());
     setState(() {
       _pageIndex = page;
     });
@@ -198,14 +257,67 @@ class _PageState extends State<Page> {
               elevation: 0.0,
               bottomOpacity: 0.5,
               actions: [
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    child: Container(
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "What's new?",
+                          style: TextStyle(color: Colors.white, fontSize: 13),
+                        )),
+                    style: ButtonStyle(
+                        alignment: Alignment.center,
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7.0),
+                                    side: const BorderSide(
+                                        color: Colors.white, width: 2)))),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              scrollable: true,
+                              alignment: Alignment.center,
+                              title: const Text(
+                                "What's new?",
+                                textAlign: TextAlign.center,
+                              ),
+                              content: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Form(
+                                  child: Column(
+                                    children: <Widget>[
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              2,
+                                          child:
+                                              ListView(children: updateNotes))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                    },
+                  ),
+                ),
                 IconButton(
                   icon: Icon(
                       _themeMode == ThemeMode.light
                           ? Icons.dark_mode
                           : Icons.wb_sunny_outlined,
-                      color: _themeMode == ThemeMode.light
-                          ? kSecondaryColor
-                          : kContentColorDarkTheme),
+                      color: kContentColorDarkTheme),
                   onPressed: () {
                     MyApp.of(context)?._themeMode == ThemeMode.light
                         ? MyApp.of(context)?.changeTheme(ThemeMode.dark)
