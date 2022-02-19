@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
@@ -296,6 +297,10 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                 ),
                                 Text(
                                   '  - Picking a new emoji will replace your previous one',
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                Text(
+                                  '  - New emojis might take few seconds to update, try refreshing the page',
                                   style: TextStyle(fontSize: 13),
                                 ),
                               ],
