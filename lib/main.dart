@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
 import 'package:my_web/update_notes.dart';
+import 'package:my_web/utils/my_web_icons.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -29,7 +31,7 @@ List<Widget> tabPages = [
       'https://www.instagram.com/thlipperythnake/?hl=en'
     ],
     websiteNames: const ['Linkedin', 'GitHub', 'Instagram'],
-    icons: const [Icons.web, Icons.web, Icons.web],
+    icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
   ),
   EmojiWallPage(userId: userId),
   // ContactPage(),
@@ -45,7 +47,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+  UserCredential userCredential =
+      await FirebaseAuth.instance.signInAnonymously();
   userId = userCredential.user?.uid as String;
   await analytics.logEvent(
     name: 'user_visit',
@@ -60,7 +63,8 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 
-  static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
+  static _MyAppState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_MyAppState>();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -69,6 +73,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    // Disabled for now
     // getData();
   }
 
@@ -95,8 +100,10 @@ class _MyAppState extends State<MyApp> {
     List _websiteNames = [];
     List _icons = [];
     QuerySnapshot querySnapshot = await _fireStore.collection('urls').get();
-    DocumentSnapshot profileSnapshot = await _fireStore.collection('profile').doc(profileId).get();
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList() as List;
+    DocumentSnapshot profileSnapshot =
+        await _fireStore.collection('profile').doc(profileId).get();
+    final allData =
+        querySnapshot.docs.map((doc) => doc.data()).toList() as List;
     for (var d in allData) {
       _links.add(d['link']);
       _websiteNames.add(d['name']);
@@ -118,15 +125,22 @@ class _MyAppState extends State<MyApp> {
       userName = profileSnapshot['name'];
       description = profileSnapshot['description'];
       tabPages = [
-        HomePage(userName: userName, description: description, links: _links, websiteNames: _websiteNames, icons: _icons),
+        HomePage(
+            userName: userName,
+            description: description,
+            links: _links,
+            websiteNames: _websiteNames,
+            icons: _icons),
         EmojiWallPage(
           userId: userId,
         ),
         // ContactPage(),
       ];
     });
-    print(webTitle);
-    print(_links);
+    if (kDebugMode) {
+      print(webTitle);
+      print(_links);
+    }
   }
 }
 
@@ -175,7 +189,8 @@ class _PageState extends State<Page> {
   }
 
   void onTabTapped(int index) {
-    _pageController.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    _pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 
   Widget _buildBottomNavigationBar() {
@@ -202,8 +217,11 @@ class _PageState extends State<Page> {
             showSelectedLabels: false,
             showUnselectedLabels: false,
             items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.sentiment_satisfied_alt), label: 'Emoji Wall'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined), label: 'Home'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.sentiment_satisfied_alt),
+                  label: 'Emoji Wall'),
             ],
           ),
         ));
@@ -243,9 +261,14 @@ class _PageState extends State<Page> {
                         )),
                     style: ButtonStyle(
                         alignment: Alignment.center,
-                        backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(7.0), side: const BorderSide(color: Colors.white, width: 2)))),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7.0),
+                                    side: const BorderSide(
+                                        color: Colors.white, width: 2)))),
                     onPressed: () {
                       showDialog(
                           context: context,
@@ -263,9 +286,16 @@ class _PageState extends State<Page> {
                                   child: Column(
                                     children: <Widget>[
                                       SizedBox(
-                                          width: MediaQuery.of(context).size.width / 2,
-                                          height: MediaQuery.of(context).size.height / 2,
-                                          child: ListView(children: updateNotes))
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              2,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height /
+                                              2,
+                                          child:
+                                              ListView(children: updateNotes))
                                     ],
                                   ),
                                 ),
@@ -276,7 +306,11 @@ class _PageState extends State<Page> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(_themeMode == ThemeMode.light ? Icons.dark_mode : Icons.wb_sunny_outlined, color: kContentColorDarkTheme),
+                  icon: Icon(
+                      _themeMode == ThemeMode.light
+                          ? Icons.dark_mode
+                          : Icons.wb_sunny_outlined,
+                      color: kContentColorDarkTheme),
                   onPressed: () {
                     MyApp.of(context)?._themeMode == ThemeMode.light
                         ? MyApp.of(context)?.changeTheme(ThemeMode.dark)

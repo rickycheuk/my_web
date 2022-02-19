@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 const List<Text> updateNotes = [
+  Text("02/19/2022", style: TextStyle(fontSize: 17),),
+  Text("  - Site layout update", style: TextStyle(fontSize: 13),),
+  Text("  - Improved emoji page loading ", style: TextStyle(fontSize: 13),),
+  Text(""),
   Text("01/17/2022", style: TextStyle(fontSize: 17),),
   Text("  - About Page format update", style: TextStyle(fontSize: 13),),
   Text(""),
