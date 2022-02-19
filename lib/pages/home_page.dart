@@ -183,8 +183,10 @@ class _HomePageState extends State<HomePage> {
                                                     onPressed: () => launch(
                                                         widget.links[index]),
                                                     icon: Icon(
-                                                        widget.icons[index],
-                                                        color: kSecondaryColor),
+                                                      widget.icons[index],
+                                                      color: kSecondaryColor,
+                                                      size: 16,
+                                                    ),
                                                     label: Text(
                                                         widget.websiteNames[
                                                             index],

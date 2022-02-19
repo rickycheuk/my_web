@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,6 +46,10 @@ Future<void> logEvent(String eventName) async {
 }
 
 Future<void> main() async {
+  // Preload all emojis for better experience
+  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle(locale: window.locale));
+  pb.addText(emojiList.join());
+  pb.build().layout(const ParagraphConstraints(width: 100));
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -56,6 +62,7 @@ Future<void> main() async {
       'user': userId,
     },
   );
+  await Future.delayed(const Duration(seconds: 2));
   runApp(MyApp());
 }
 

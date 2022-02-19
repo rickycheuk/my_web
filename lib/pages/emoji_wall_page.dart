@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,7 +21,7 @@ class EmojiWallPage extends StatefulWidget {
 
 class _EmojiWallPageState extends State<EmojiWallPage> {
   String _currentEmoji = '+';
-  String emojis = '';
+  Text emojis = const Text('');
   String _userId = '';
   late Future _emojiFuture;
 
@@ -41,10 +42,15 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
       _emojis += d['emoji'];
     }
     setState(() {
-      emojis = _emojis.replaceAll('\n', '');
+      emojis = Text(
+        _emojis.replaceAll('\n', ''),
+        style: const TextStyle(fontSize: 25),
+        textAlign: TextAlign.center,
+      );
       _userId = widget.userId;
       _currentEmoji = userSnapshot.exists ? userSnapshot['emoji'] : '+';
     });
+    await Future.delayed(const Duration(seconds: 2));
   }
 
   void onEmojiChanged(String emoji) {
@@ -135,11 +141,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                               "Error while loading Emojis. Please refresh."),
                         );
                       } else {
-                        return Text(
-                          emojis,
-                          style: const TextStyle(fontSize: 25),
-                          textAlign: TextAlign.center,
-                        );
+                        return emojis;
                       }
                     },
                   ),
