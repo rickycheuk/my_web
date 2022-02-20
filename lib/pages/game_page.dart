@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
 import 'package:my_web/constants.dart';
 
 class GamePage extends StatelessWidget {
@@ -12,14 +11,11 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     Color? textColor = Theme.of(context).textTheme.bodyText1?.color;
     return Container(
+        alignment: Alignment.center,
         color: Colors.transparent,
+        padding: const EdgeInsets.all(10.0),
         child: Column(children: [
           const Spacer(),
-          // const Center(
-          //     child: Text(
-          //       "Games",
-          //       style: TextStyle(fontSize: 22),
-          //     )),
           Container(
             width: min(MediaQuery.of(context).size.width, 500),
             height: 100,
@@ -54,28 +50,13 @@ class GamePage extends StatelessWidget {
               width: min(MediaQuery.of(context).size.width, 500),
               alignment: Alignment.center,
               margin: EdgeInsets.all(20),
-              child: SizedBox(
-                  height: 50,
-                  child: LiquidLinearProgressIndicator(
-                    value: 0.30,
-                    valueColor:
-                        AlwaysStoppedAnimation(kPrimaryColor.withOpacity(0.5)),
-                    backgroundColor: textColor == kContentColorDarkTheme
-                        ? kSecondaryColor
-                        : kContentColorDarkTheme,
-                    borderColor: kPrimaryColor,
-                    borderWidth: 3.0,
-                    borderRadius: 10.0,
-                    direction: Axis.horizontal,
-                    center:
-                        AnimatedTextKit(repeatForever: true, animatedTexts: [
-                      TypewriterAnimatedText(
-                        "Stay Tuned...",
-                        speed: const Duration(milliseconds: 100),
-                        textStyle: TextStyle(fontSize: 20),
-                      ),
-                    ]),
-                  ))),
+              child: AnimatedTextKit(repeatForever: true, animatedTexts: [
+                TypewriterAnimatedText(
+                  "Stay Tuned...",
+                  speed: const Duration(milliseconds: 100),
+                  textStyle: TextStyle(fontSize: 20),
+                ),
+              ])),
           const Spacer(),
         ]));
   }
