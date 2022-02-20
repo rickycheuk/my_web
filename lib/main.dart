@@ -36,7 +36,7 @@ List<Widget> tabPages = [
     icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
   ),
   EmojiWallPage(userId: userId),
-  // ContactPage(),
+  GamePage(),
 ];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
 bool isDarkMode = _brightness == Brightness.dark;
@@ -141,7 +141,7 @@ class _MyAppState extends State<MyApp> {
         EmojiWallPage(
           userId: userId,
         ),
-        // ContactPage(),
+        GamePage(),
       ];
     });
     if (kDebugMode) {
@@ -229,6 +229,8 @@ class _PageState extends State<Page> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.sentiment_satisfied_alt),
                   label: 'Emoji Wall'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.videogame_asset_outlined), label: 'Games'),
             ],
           ),
         ));

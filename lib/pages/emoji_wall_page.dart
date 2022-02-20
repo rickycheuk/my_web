@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
@@ -29,10 +28,10 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
   @override
   void initState() {
     super.initState();
-    _emojiFuture = getEmojiData();
+    _emojiFuture = getEmojiData(2);
   }
 
-  Future<void> getEmojiData() async {
+  Future<void> getEmojiData(int wait) async {
     String _emojis = '';
     QuerySnapshot querySnapshot = await _fireStore.collection('emojis').get();
     DocumentSnapshot userSnapshot =
@@ -51,7 +50,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
       _userId = widget.userId;
       _currentEmoji = userSnapshot.exists ? userSnapshot['emoji'] : '+';
     });
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: wait));
   }
 
   void onEmojiChanged(String emoji) {
@@ -125,10 +124,6 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
               child: Container(
                 alignment: Alignment.topCenter,
                 padding: const EdgeInsets.all(10.0),
-                // decoration: BoxDecoration(
-                //     color: Colors.black12.withOpacity(0.2),
-                //     border: Border.all(color: Colors.black12.withOpacity(0.2), width: 3),
-                //     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: SingleChildScrollView(
                   child: FutureBuilder(
                     future: _emojiFuture,
@@ -216,7 +211,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                           .doc(_userId)
                                           .set({'emoji': emojiList[index]},
                                               SetOptions(merge: true));
-                                      getEmojiData();
+                                      getEmojiData(0);
                                       Navigator.pop(context);
                                     },
                                     child: Text(
