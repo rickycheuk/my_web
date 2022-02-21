@@ -119,8 +119,7 @@ class _HomePageState extends State<HomePage> {
                       separatorBuilder: (BuildContext context, int index) {
                         return const SizedBox(height: 15);
                       },
-                      scrollDirection: Axis.vertical,
-                      //isScreenWide ? Axis.horizontal : Axis.vertical,
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.all(10),
                       itemCount: widget.links.length,
@@ -144,7 +143,10 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                               child: TextButton.icon(
-                                onPressed: () => {HapticFeedback.mediumImpact(), launch(widget.links[index])},
+                                onPressed: () async {
+                                  await HapticFeedback.lightImpact();
+                                  launch(widget.links[index]);
+                                },
                                 icon: Icon(
                                   widget.icons[index],
                                   color: kSecondaryColor,
@@ -160,8 +162,9 @@ class _HomePageState extends State<HomePage> {
             width: min(width, 500),
             margin: const EdgeInsets.fromLTRB(20, 0, 20, 15),
             alignment: Alignment.topCenter,
-            child: const Divider(
-              height: 0,
+            child: Divider(
+              thickness: 1.0,
+              color: Colors.grey.withOpacity(0.7),
             ),
           ),
           Container(

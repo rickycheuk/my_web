@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
 import 'package:my_web/update_notes.dart';
@@ -352,6 +353,7 @@ class _PageState extends State<Page> {
                                                       height: 40,
                                                       text: "Login",
                                                       onPressed: () async {
+                                                        await HapticFeedback.lightImpact();
                                                         UserCredential userCredential = await signInWithGoogle();
                                                         setState(() {
                                                           userId = userCredential.user?.uid as String;
@@ -369,6 +371,7 @@ class _PageState extends State<Page> {
                                                         height: 40,
                                                         text: "Cancel",
                                                         onPressed: () {
+                                                          HapticFeedback.lightImpact();
                                                           Navigator.pop(context);
                                                         })
                                                   ],
