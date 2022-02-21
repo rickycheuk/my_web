@@ -228,6 +228,8 @@ class _PageState extends State<Page> {
             currentIndex: _pageIndex,
             onTap: onTabTapped,
             elevation: 50.0,
+            unselectedFontSize: 0.0,
+            selectedFontSize: 0.0,
             showSelectedLabels: false,
             showUnselectedLabels: false,
             items: const [
@@ -336,8 +338,11 @@ class _PageState extends State<Page> {
                                                       height: 10,
                                                     ),
                                                     const Text(
-                                                      "** Please enable popup when logging in **",
-                                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                                      "Please enable popup when logging in",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.bold,
+                                                          decoration: TextDecoration.underline),
                                                     ),
                                                     const SizedBox(
                                                       height: 20,
