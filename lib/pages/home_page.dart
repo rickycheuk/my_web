@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                                 ],
                               ),
                               child: TextButton.icon(
-                                onPressed: () => {HapticFeedback.lightImpact(), launch(widget.links[index])},
+                                onPressed: () => {HapticFeedback.mediumImpact(), launch(widget.links[index])},
                                 icon: Icon(
                                   widget.icons[index],
                                   color: kSecondaryColor,
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 label: Text(widget.websiteNames[index],
                                     style: const TextStyle(
-                                        color: kSecondaryColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                                        color: kSecondaryColor, fontWeight: FontWeight.bold, fontSize: 15)),
                               ),
                             ));
                       }))),
@@ -185,14 +185,11 @@ class _HomePageState extends State<HomePage> {
                       canTapOnHeader: true,
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          title: Text(item.headerValue,
-                              style:
-                                  const TextStyle(color: kSecondaryColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                          title: Text(item.headerValue, style: const TextStyle(color: kSecondaryColor)),
                         );
                       },
                       body: ListTile(
-                        title: Text(item.expandedValue,
-                            style: const TextStyle(color: kSecondaryColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                        title: Text(item.expandedValue, style: const TextStyle(color: kSecondaryColor)),
                       ),
                       isExpanded: item.isExpanded,
                     );
