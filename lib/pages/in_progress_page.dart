@@ -4,8 +4,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:my_web/constants.dart';
 
-class GamePage extends StatelessWidget {
-  const GamePage({Key? key}) : super(key: key);
+class InProgressPage extends StatelessWidget {
+  const InProgressPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +15,10 @@ class GamePage extends StatelessWidget {
         color: Colors.transparent,
         padding: const EdgeInsets.all(10.0),
         child: Column(children: [
+          const Spacer(),
           Container(
             width: min(MediaQuery.of(context).size.width, 500),
-            height: 75,
+            height: 100,
             alignment: Alignment.center,
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
@@ -36,7 +37,7 @@ class GamePage extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               child: const Text(
-                "Pet",
+                "Games",
                 style: TextStyle(
                     fontSize: 25,
                     color: Colors.white,
@@ -44,6 +45,19 @@ class GamePage extends StatelessWidget {
               ),
             ),
           ),
+          const Spacer(),
+          Container(
+              width: min(MediaQuery.of(context).size.width, 500),
+              alignment: Alignment.center,
+              margin: EdgeInsets.all(20),
+              child: AnimatedTextKit(repeatForever: true, animatedTexts: [
+                TypewriterAnimatedText(
+                  "Stay Tuned...",
+                  speed: const Duration(milliseconds: 100),
+                  textStyle: TextStyle(fontSize: 20),
+                ),
+              ])),
+          const Spacer(),
         ]));
   }
 }

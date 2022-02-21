@@ -420,7 +420,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             AnimatedTextKit(repeatForever: true, animatedTexts: [
-              FadeAnimatedText("More",
+              FadeAnimatedText("Scroll",
                   duration: const Duration(milliseconds: 800),
                   textStyle:
                       const TextStyle(fontSize: 12, color: kPrimaryColor)),
@@ -430,7 +430,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const Icon(
               Icons.arrow_circle_down_rounded,
-              semanticLabel: 'More',
+              semanticLabel: 'Scroll',
               size: 30,
               color: kPrimaryColor,
             ),

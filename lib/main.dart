@@ -11,6 +11,7 @@ import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
 import 'package:my_web/update_notes.dart';
 import 'package:my_web/utils/my_web_icons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -23,6 +24,7 @@ String webTitle = 'Ricky Cheuk';
 String description = '- Software Engineer -';
 String userName = 'Ricky Cheuk';
 String userId = '';
+bool anon = true;
 List<Widget> tabPages = [
   HomePage(
     userName: userName,
@@ -36,7 +38,8 @@ List<Widget> tabPages = [
     icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
   ),
   EmojiWallPage(userId: userId),
-  GamePage(),
+  // GamePage(),
+  InProgressPage(),
 ];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
 bool isDarkMode = _brightness == Brightness.dark;
@@ -53,9 +56,17 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  UserCredential userCredential =
-      await FirebaseAuth.instance.signInAnonymously();
-  userId = userCredential.user?.uid as String;
+  final prefs = await SharedPreferences.getInstance();
+  int loggedIn = prefs.getInt('logged_in') ?? 0;
+  if (loggedIn == 1) {
+    anon = false;
+    UserCredential userCredential = await signInWithGoogle();
+    userId = userCredential.user?.uid as String;
+  } else {
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInAnonymously();
+    userId = userCredential.user?.uid as String;
+  }
   await analytics.logEvent(
     name: 'user_visit',
     parameters: {
@@ -64,6 +75,20 @@ Future<void> main() async {
   );
   await Future.delayed(const Duration(seconds: 2));
   runApp(MyApp());
+}
+
+Future<UserCredential> signInWithGoogle() async {
+  // Create a new provider
+  GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+  googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+  googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
+
+  // Once signed in, return the UserCredential
+  return await FirebaseAuth.instance.signInWithPopup(googleProvider);
+
+  // Or use signInWithRedirect
+  // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
 }
 
 class MyApp extends StatefulWidget {
@@ -141,7 +166,7 @@ class _MyAppState extends State<MyApp> {
         EmojiWallPage(
           userId: userId,
         ),
-        GamePage(),
+        InProgressPage(),
       ];
     });
     if (kDebugMode) {
@@ -313,6 +338,226 @@ class _PageState extends State<Page> {
                           });
                     },
                   ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                      child: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            FirebaseAuth.instance.currentUser!.isAnonymous
+                                ? "Login"
+                                : "Logout",
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 13),
+                          )),
+                      style: ButtonStyle(
+                          alignment: Alignment.center,
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(7.0),
+                                      side: const BorderSide(
+                                          color: Colors.white, width: 2)))),
+                      onPressed: FirebaseAuth.instance.currentUser!.isAnonymous
+                          ? () {
+                              Color textColor = _themeMode == ThemeMode.light
+                                  ? Colors.black
+                                  : Colors.white;
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      scrollable: true,
+                                      alignment: Alignment.center,
+                                      title: const Text(
+                                        "Login",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      content: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: <Widget>[
+                                            SizedBox(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width /
+                                                    2,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    2,
+                                                child: Column(
+                                                  children: [
+                                                    const Text(
+                                                      "Login is preferred to better persist onsite data. No user personal data is collected or used on this site.",
+                                                      style: TextStyle(
+                                                          fontSize: 13),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    const Text(
+                                                      "* Note that all the guest session data will be cleared by logging in.",
+                                                      style: TextStyle(
+                                                          fontSize: 13),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    TextButton(
+                                                      child: Container(
+                                                          height: 40,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: Text(
+                                                            "Login",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    textColor,
+                                                                fontSize: 13),
+                                                          )),
+                                                      style: ButtonStyle(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          backgroundColor:
+                                                              MaterialStateProperty.all(
+                                                                  Colors
+                                                                      .transparent),
+                                                          shape: MaterialStateProperty.all<
+                                                                  RoundedRectangleBorder>(
+                                                              RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                          7.0),
+                                                                  side: BorderSide(
+                                                                      color:
+                                                                          textColor,
+                                                                      width:
+                                                                          2)))),
+                                                      onPressed: () async {
+                                                        final prefs =
+                                                            await SharedPreferences
+                                                                .getInstance();
+                                                        if (anon) {
+                                                          UserCredential
+                                                              userCredential =
+                                                              await signInWithGoogle();
+                                                          prefs.setInt(
+                                                              'logged_in', 1);
+                                                          setState(() {
+                                                            userId =
+                                                                userCredential
+                                                                        .user
+                                                                        ?.uid
+                                                                    as String;
+                                                            tabPages[1] =
+                                                                EmojiWallPage(
+                                                                    userId:
+                                                                        userId);
+                                                            anon = FirebaseAuth
+                                                                .instance
+                                                                .currentUser!
+                                                                .isAnonymous;
+                                                          });
+                                                        } else {
+                                                          UserCredential
+                                                              userCredential =
+                                                              await FirebaseAuth
+                                                                  .instance
+                                                                  .signInAnonymously();
+                                                          prefs.setInt(
+                                                              'logged_in', 0);
+                                                          setState(() {
+                                                            userId =
+                                                                userCredential
+                                                                        .user
+                                                                        ?.uid
+                                                                    as String;
+                                                            tabPages[1] =
+                                                                EmojiWallPage(
+                                                                    userId:
+                                                                        userId);
+                                                            anon = FirebaseAuth
+                                                                .instance
+                                                                .currentUser!
+                                                                .isAnonymous;
+                                                          });
+                                                        }
+                                                        Navigator.pop(context);
+                                                      },
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    TextButton(
+                                                        child: Container(
+                                                            height: 40,
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child: Text(
+                                                              "Cancel",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      textColor,
+                                                                  fontSize: 13),
+                                                            )),
+                                                        style: ButtonStyle(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            backgroundColor:
+                                                                MaterialStateProperty.all(Colors
+                                                                    .transparent),
+                                                            shape: MaterialStateProperty.all<
+                                                                    RoundedRectangleBorder>(
+                                                                RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            7.0),
+                                                                    side: BorderSide(
+                                                                        color:
+                                                                            textColor,
+                                                                        width: 2)))),
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        })
+                                                  ],
+                                                ))
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  });
+                            }
+                          : () async {
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              if (anon) {
+                                UserCredential userCredential =
+                                    await signInWithGoogle();
+                                prefs.setInt('logged_in', 1);
+                                setState(() {
+                                  userId = userCredential.user?.uid as String;
+                                  tabPages[1] = EmojiWallPage(userId: userId);
+                                  anon = FirebaseAuth
+                                      .instance.currentUser!.isAnonymous;
+                                });
+                              } else {
+                                UserCredential userCredential =
+                                    await FirebaseAuth.instance
+                                        .signInAnonymously();
+                                prefs.setInt('logged_in', 0);
+                                setState(() {
+                                  userId = userCredential.user?.uid as String;
+                                  tabPages[1] = EmojiWallPage(userId: userId);
+                                  anon = FirebaseAuth
+                                      .instance.currentUser!.isAnonymous;
+                                });
+                              }
+                            }),
                 ),
                 IconButton(
                   icon: Icon(

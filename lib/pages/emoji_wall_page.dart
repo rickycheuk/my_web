@@ -22,13 +22,12 @@ class EmojiWallPage extends StatefulWidget {
 class _EmojiWallPageState extends State<EmojiWallPage> {
   String _currentEmoji = '+';
   Text emojis = const Text('');
-  String _userId = '';
   late Future _emojiFuture;
 
   @override
   void initState() {
-    super.initState();
     _emojiFuture = getEmojiData(2);
+    super.initState();
   }
 
   Future<void> getEmojiData(int wait) async {
@@ -47,7 +46,6 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
         style: const TextStyle(fontSize: 25),
         textAlign: TextAlign.center,
       );
-      _userId = widget.userId;
       _currentEmoji = userSnapshot.exists ? userSnapshot['emoji'] : '+';
     });
     await Future.delayed(Duration(seconds: wait));
@@ -74,6 +72,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
               padding: const EdgeInsets.all(10.0),
               child: Container(
                 alignment: Alignment.center,
+                height: 75,
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -208,7 +207,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                       onEmojiChanged(emojiList[index]);
                                       _fireStore
                                           .collection('emojis')
-                                          .doc(_userId)
+                                          .doc(widget.userId)
                                           .set({'emoji': emojiList[index]},
                                               SetOptions(merge: true));
                                       getEmojiData(0);
