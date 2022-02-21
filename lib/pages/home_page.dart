@@ -68,8 +68,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Color? textColor = Theme.of(context).textTheme.bodyText1?.color;
-    bool isScreenWide =
-        MediaQuery.of(context).size.width >= MediaQuery.of(context).size.height;
+    bool isScreenWide = MediaQuery.of(context).size.width >= MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     List<Widget> homeViewList = [
       Flex(
@@ -92,9 +91,7 @@ class _HomePageState extends State<HomePage> {
                         Flexible(
                           flex: 3,
                           child: SizedBox(
-                            width: isScreenWide
-                                ? MediaQuery.of(context).size.width
-                                : MediaQuery.of(context).size.width,
+                            width: isScreenWide ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width,
                             height: isScreenWide
                                 ? MediaQuery.of(context).size.height
                                 : MediaQuery.of(context).size.height / 3,
@@ -107,10 +104,8 @@ class _HomePageState extends State<HomePage> {
                                       minRadius: 10,
                                       maxRadius: 180,
                                       child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(500),
-                                        child: Image.asset(
-                                            'assets/images/ricky.jpg'),
+                                        borderRadius: BorderRadius.circular(500),
+                                        child: Image.asset('assets/images/ricky.jpg'),
                                       )),
                                 ),
                               ),
@@ -120,9 +115,7 @@ class _HomePageState extends State<HomePage> {
                                     Text(
                                       widget.userName,
                                       textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
+                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       widget.description,
@@ -138,17 +131,14 @@ class _HomePageState extends State<HomePage> {
                           flex: 4,
                           child: Container(
                               padding: const EdgeInsets.all(10),
-                              width: isScreenWide
-                                  ? MediaQuery.of(context).size.width
-                                  : MediaQuery.of(context).size.width,
+                              width:
+                                  isScreenWide ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width,
                               child: Align(
                                   alignment: isScreenWide
-                                      ? const Alignment(
-                                          0, -1.0) //const Alignment(0, 0.0)
+                                      ? const Alignment(0, -1.0) //const Alignment(0, 0.0)
                                       : const Alignment(0, -1.0),
                                   child: ListView.separated(
-                                      separatorBuilder:
-                                          (BuildContext context, int index) {
+                                      separatorBuilder: (BuildContext context, int index) {
                                         return const SizedBox(height: 10);
                                       },
                                       scrollDirection: Axis.vertical,
@@ -156,45 +146,29 @@ class _HomePageState extends State<HomePage> {
                                       shrinkWrap: true,
                                       padding: const EdgeInsets.all(10),
                                       itemCount: widget.links.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
+                                      itemBuilder: (BuildContext context, int index) {
                                         return Align(
                                             alignment: const Alignment(0, -1.0),
                                             child: Container(
                                                 height: 60,
-                                                width: min(
-                                                    MediaQuery.of(context)
-                                                        .size
-                                                        .width,
-                                                    500),
+                                                width: min(MediaQuery.of(context).size.width, 500),
                                                 margin: const EdgeInsets.all(5),
                                                 decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  border: Border.all(
-                                                      color: kGradient1,
-                                                      width: 3),
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary
-                                                      .withOpacity(0.7),
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(color: kGradient1, width: 3),
+                                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
                                                 ),
                                                 child: TextButton.icon(
-                                                    onPressed: () => launch(
-                                                        widget.links[index]),
+                                                    onPressed: () => launch(widget.links[index]),
                                                     icon: Icon(
                                                       widget.icons[index],
                                                       color: kSecondaryColor,
                                                       size: 16,
                                                     ),
-                                                    label: Text(
-                                                        widget.websiteNames[
-                                                            index],
+                                                    label: Text(widget.websiteNames[index],
                                                         style: const TextStyle(
-                                                            color:
-                                                                kSecondaryColor,
-                                                            fontWeight:
-                                                                FontWeight.bold,
+                                                            color: kSecondaryColor,
+                                                            fontWeight: FontWeight.bold,
                                                             fontSize: 14)))));
                                       }))),
                         ),
@@ -221,27 +195,21 @@ class _HomePageState extends State<HomePage> {
         alignment: Alignment.center,
         decoration: const BoxDecoration(
           image: DecorationImage(
-              image: AssetImage("assets/images/ricky_boat.jpg"),
-              fit: BoxFit.cover,
-              alignment: Alignment.center),
+              image: AssetImage("assets/images/ricky_boat.jpg"), fit: BoxFit.cover, alignment: Alignment.center),
         ),
         child: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
             decoration: BoxDecoration(
-                color: textC == kContentColorDarkTheme
-                    ? Colors.black.withOpacity(0.7)
-                    : Colors.white.withOpacity(0.4)),
+                color: textC == kContentColorDarkTheme ? Colors.black.withOpacity(0.7) : Colors.white.withOpacity(0.4)),
             child: Flex(direction: Axis.vertical, children: [
               Expanded(
                   child: Container(
                       width: min(width, 600),
                       alignment: Alignment.center,
                       padding: const EdgeInsets.all(5.0),
-                      decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      child:
-                          AnimatedTextKit(repeatForever: true, animatedTexts: [
+                      decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
+                      child: AnimatedTextKit(repeatForever: true, animatedTexts: [
                         FlickerAnimatedText("Welcome",
                             // duration: const Duration(milliseconds: 6900),
                             textStyle: TextStyle(
@@ -276,9 +244,7 @@ class _HomePageState extends State<HomePage> {
             alignment: Alignment.topCenter,
             padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
             decoration: BoxDecoration(
-                color: textC == kContentColorDarkTheme
-                    ? Colors.black.withOpacity(0.7)
-                    : Colors.white.withOpacity(0.7)),
+                color: textC == kContentColorDarkTheme ? Colors.black.withOpacity(0.7) : Colors.white.withOpacity(0.7)),
             child: Flex(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -290,8 +256,7 @@ class _HomePageState extends State<HomePage> {
                     width: min(width, 500),
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(5.0),
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
                     child: const Text(
                       "About",
                       textAlign: TextAlign.center,
@@ -327,8 +292,7 @@ class _HomePageState extends State<HomePage> {
                             children: L.map<ExpansionPanel>((Item item) {
                               return ExpansionPanel(
                                 canTapOnHeader: true,
-                                headerBuilder:
-                                    (BuildContext context, bool isExpanded) {
+                                headerBuilder: (BuildContext context, bool isExpanded) {
                                   return ListTile(
                                     title: Text(item.headerValue),
                                   );
@@ -345,8 +309,7 @@ class _HomePageState extends State<HomePage> {
             )));
   }
 
-  Widget _buildBubbles(
-      String text, double length, Color color, Color textColor) {
+  Widget _buildBubbles(String text, double length, Color color, Color textColor) {
     return Container(
         width: length,
         height: length,
@@ -422,8 +385,7 @@ class _HomePageState extends State<HomePage> {
             AnimatedTextKit(repeatForever: true, animatedTexts: [
               FadeAnimatedText("Scroll",
                   duration: const Duration(milliseconds: 800),
-                  textStyle:
-                      const TextStyle(fontSize: 12, color: kPrimaryColor)),
+                  textStyle: const TextStyle(fontSize: 12, color: kPrimaryColor)),
             ]),
             Container(
               height: 3,

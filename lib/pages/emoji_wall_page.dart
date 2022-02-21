@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -33,10 +32,8 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
   Future<void> getEmojiData(int wait) async {
     String _emojis = '';
     QuerySnapshot querySnapshot = await _fireStore.collection('emojis').get();
-    DocumentSnapshot userSnapshot =
-        await _fireStore.collection('emojis').doc(widget.userId).get();
-    final allData =
-        querySnapshot.docs.map((doc) => doc.data()).toList() as List;
+    DocumentSnapshot userSnapshot = await _fireStore.collection('emojis').doc(widget.userId).get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList() as List;
     for (var d in allData) {
       _emojis += d['emoji'];
     }
@@ -94,10 +91,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                       children: [
                         const Text(
                           title,
-                          style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                         AnimatedTextKit(repeatForever: true, animatedTexts: [
                           TypewriterAnimatedText(
@@ -112,8 +106,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                   Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     Container(
                       alignment: Alignment.centerRight,
-                      child: SizedBox(
-                          width: 45, height: 45, child: addEmojiButton()),
+                      child: SizedBox(width: 45, height: 45, child: addEmojiButton()),
                     ),
                   ])
                 ]),
@@ -128,12 +121,10 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                     future: _emojiFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator(
-                            backgroundColor: Colors.grey, color: kPrimaryColor);
+                        return const CircularProgressIndicator(backgroundColor: Colors.grey, color: kPrimaryColor);
                       } else if (snapshot.hasError) {
                         return const Center(
-                          child: Text(
-                              "Error while loading Emojis. Please refresh."),
+                          child: Text("Error while loading Emojis. Please refresh."),
                         );
                       } else {
                         return emojis;
@@ -157,12 +148,9 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
           )),
       style: ButtonStyle(
           alignment: Alignment.center,
-          backgroundColor:
-              MaterialStateProperty.all(kGradient1.withOpacity(0.7)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(60.0),
-                  side: const BorderSide(color: Colors.white, width: 3)))),
+          backgroundColor: MaterialStateProperty.all(kGradient1.withOpacity(0.7)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(60.0), side: const BorderSide(color: Colors.white, width: 3)))),
       onPressed: () {
         showDialog(
             context: context,
@@ -179,9 +167,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                           textAlign: TextAlign.center,
                         )),
                     Container(
-                        alignment: Alignment.centerRight,
-                        child: SizedBox(
-                            width: 45, height: 45, child: helpButton()))
+                        alignment: Alignment.centerRight, child: SizedBox(width: 45, height: 45, child: helpButton()))
                   ],
                 ),
                 content: Padding(
@@ -193,13 +179,9 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                             width: MediaQuery.of(context).size.width / 1.5,
                             height: MediaQuery.of(context).size.height / 1.5,
                             child: GridView.count(
-                              crossAxisCount:
-                                  (MediaQuery.of(context).size.width / 70)
-                                          .round() -
-                                      1,
+                              crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
                               padding: const EdgeInsets.all(1.0),
-                              children:
-                                  List.generate(emojiList.length, (index) {
+                              children: List.generate(emojiList.length, (index) {
                                 return Container(
                                   padding: const EdgeInsets.all(3.0),
                                   child: TextButton(
@@ -208,8 +190,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                       _fireStore
                                           .collection('emojis')
                                           .doc(widget.userId)
-                                          .set({'emoji': emojiList[index]},
-                                              SetOptions(merge: true));
+                                          .set({'emoji': emojiList[index]}, SetOptions(merge: true));
                                       getEmojiData(0);
                                       Navigator.pop(context);
                                     },
@@ -241,12 +222,9 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
           )),
       style: ButtonStyle(
           alignment: Alignment.center,
-          backgroundColor:
-              MaterialStateProperty.all(kGradient1.withOpacity(0.7)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(60.0),
-                  side: const BorderSide(color: Colors.white, width: 3)))),
+          backgroundColor: MaterialStateProperty.all(kGradient1.withOpacity(0.7)),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(60.0), side: const BorderSide(color: Colors.white, width: 3)))),
       onPressed: () {
         showDialog(
             context: context,

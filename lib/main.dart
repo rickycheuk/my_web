@@ -11,7 +11,6 @@ import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
 import 'package:my_web/update_notes.dart';
 import 'package:my_web/utils/my_web_icons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -56,17 +55,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final prefs = await SharedPreferences.getInstance();
-  int loggedIn = prefs.getInt('logged_in') ?? 0;
-  if (loggedIn == 1) {
-    anon = false;
-    UserCredential userCredential = await signInWithGoogle();
-    userId = userCredential.user?.uid as String;
-  } else {
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInAnonymously();
-    userId = userCredential.user?.uid as String;
-  }
+  UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+  userId = userCredential.user?.uid as String;
   await analytics.logEvent(
     name: 'user_visit',
     parameters: {
@@ -95,8 +85,7 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 
-  static _MyAppState? of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>();
+  static _MyAppState? of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -132,10 +121,8 @@ class _MyAppState extends State<MyApp> {
     List _websiteNames = [];
     List _icons = [];
     QuerySnapshot querySnapshot = await _fireStore.collection('urls').get();
-    DocumentSnapshot profileSnapshot =
-        await _fireStore.collection('profile').doc(profileId).get();
-    final allData =
-        querySnapshot.docs.map((doc) => doc.data()).toList() as List;
+    DocumentSnapshot profileSnapshot = await _fireStore.collection('profile').doc(profileId).get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList() as List;
     for (var d in allData) {
       _links.add(d['link']);
       _websiteNames.add(d['name']);
@@ -158,11 +145,7 @@ class _MyAppState extends State<MyApp> {
       description = profileSnapshot['description'];
       tabPages = [
         HomePage(
-            userName: userName,
-            description: description,
-            links: _links,
-            websiteNames: _websiteNames,
-            icons: _icons),
+            userName: userName, description: description, links: _links, websiteNames: _websiteNames, icons: _icons),
         EmojiWallPage(
           userId: userId,
         ),
@@ -221,8 +204,7 @@ class _PageState extends State<Page> {
   }
 
   void onTabTapped(int index) {
-    _pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
+    _pageController.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
   }
 
   Widget _buildBottomNavigationBar() {
@@ -249,13 +231,9 @@ class _PageState extends State<Page> {
             showSelectedLabels: false,
             showUnselectedLabels: false,
             items: const [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined), label: 'Home'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.sentiment_satisfied_alt),
-                  label: 'Emoji Wall'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.videogame_asset_outlined), label: 'Games'),
+              BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+              BottomNavigationBarItem(icon: Icon(Icons.sentiment_satisfied_alt), label: 'Emoji Wall'),
+              BottomNavigationBarItem(icon: Icon(Icons.videogame_asset_outlined), label: 'Games'),
             ],
           ),
         ));
@@ -286,23 +264,8 @@ class _PageState extends State<Page> {
               actions: [
                 Container(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextButton(
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: const Text(
-                          "What's new?",
-                          style: TextStyle(color: Colors.white, fontSize: 13),
-                        )),
-                    style: ButtonStyle(
-                        alignment: Alignment.center,
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(7.0),
-                                    side: const BorderSide(
-                                        color: Colors.white, width: 2)))),
+                  child: _buildTextButton(
+                    text: "What's new?",
                     onPressed: () {
                       showDialog(
                           context: context,
@@ -320,16 +283,9 @@ class _PageState extends State<Page> {
                                   child: Column(
                                     children: <Widget>[
                                       SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              2,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              2,
-                                          child:
-                                              ListView(children: updateNotes))
+                                          width: MediaQuery.of(context).size.width / 2,
+                                          height: MediaQuery.of(context).size.height / 2,
+                                          child: ListView(children: updateNotes))
                                     ],
                                   ),
                                 ),
@@ -341,31 +297,11 @@ class _PageState extends State<Page> {
                 ),
                 Container(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextButton(
-                      child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            FirebaseAuth.instance.currentUser!.isAnonymous
-                                ? "Login"
-                                : "Logout",
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 13),
-                          )),
-                      style: ButtonStyle(
-                          alignment: Alignment.center,
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(7.0),
-                                      side: const BorderSide(
-                                          color: Colors.white, width: 2)))),
+                  child: _buildTextButton(
+                      text: FirebaseAuth.instance.currentUser!.isAnonymous ? "Login" : "Logout",
                       onPressed: FirebaseAuth.instance.currentUser!.isAnonymous
                           ? () {
-                              Color textColor = _themeMode == ThemeMode.light
-                                  ? Colors.black
-                                  : Colors.white;
+                              Color textColor = _themeMode == ThemeMode.light ? Colors.black : Colors.white;
                               showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -381,148 +317,54 @@ class _PageState extends State<Page> {
                                         child: Column(
                                           children: <Widget>[
                                             SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width /
-                                                    2,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                    2,
+                                                width: MediaQuery.of(context).size.width / 2,
+                                                height: MediaQuery.of(context).size.height / 2,
                                                 child: Column(
                                                   children: [
                                                     const Text(
                                                       "Login is preferred to better persist onsite data. No user personal data is collected or used on this site.",
-                                                      style: TextStyle(
-                                                          fontSize: 13),
+                                                      style: TextStyle(fontSize: 13),
                                                     ),
                                                     const SizedBox(
                                                       height: 10,
                                                     ),
                                                     const Text(
                                                       "* Note that all the guest session data will be cleared by logging in.",
-                                                      style: TextStyle(
-                                                          fontSize: 13),
+                                                      style: TextStyle(fontSize: 13),
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    const Text(
+                                                      "** Please enable popup when logging in **",
+                                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                                                     ),
                                                     const SizedBox(
                                                       height: 20,
                                                     ),
-                                                    TextButton(
-                                                      child: Container(
-                                                          height: 40,
-                                                          alignment:
-                                                              Alignment.center,
-                                                          child: Text(
-                                                            "Login",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    textColor,
-                                                                fontSize: 13),
-                                                          )),
-                                                      style: ButtonStyle(
-                                                          alignment:
-                                                              Alignment.center,
-                                                          backgroundColor:
-                                                              MaterialStateProperty.all(
-                                                                  Colors
-                                                                      .transparent),
-                                                          shape: MaterialStateProperty.all<
-                                                                  RoundedRectangleBorder>(
-                                                              RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                          7.0),
-                                                                  side: BorderSide(
-                                                                      color:
-                                                                          textColor,
-                                                                      width:
-                                                                          2)))),
+                                                    _buildTextButton(
+                                                      textColor: textColor,
+                                                      height: 40,
+                                                      text: "Login",
                                                       onPressed: () async {
-                                                        final prefs =
-                                                            await SharedPreferences
-                                                                .getInstance();
-                                                        if (anon) {
-                                                          UserCredential
-                                                              userCredential =
-                                                              await signInWithGoogle();
-                                                          prefs.setInt(
-                                                              'logged_in', 1);
-                                                          setState(() {
-                                                            userId =
-                                                                userCredential
-                                                                        .user
-                                                                        ?.uid
-                                                                    as String;
-                                                            tabPages[1] =
-                                                                EmojiWallPage(
-                                                                    userId:
-                                                                        userId);
-                                                            anon = FirebaseAuth
-                                                                .instance
-                                                                .currentUser!
-                                                                .isAnonymous;
-                                                          });
-                                                        } else {
-                                                          UserCredential
-                                                              userCredential =
-                                                              await FirebaseAuth
-                                                                  .instance
-                                                                  .signInAnonymously();
-                                                          prefs.setInt(
-                                                              'logged_in', 0);
-                                                          setState(() {
-                                                            userId =
-                                                                userCredential
-                                                                        .user
-                                                                        ?.uid
-                                                                    as String;
-                                                            tabPages[1] =
-                                                                EmojiWallPage(
-                                                                    userId:
-                                                                        userId);
-                                                            anon = FirebaseAuth
-                                                                .instance
-                                                                .currentUser!
-                                                                .isAnonymous;
-                                                          });
-                                                        }
+                                                        UserCredential userCredential = await signInWithGoogle();
+                                                        setState(() {
+                                                          userId = userCredential.user?.uid as String;
+                                                          tabPages[1] = EmojiWallPage(userId: userId);
+                                                        });
                                                         Navigator.pop(context);
+                                                        Navigator.popAndPushNamed(context, '/');
                                                       },
                                                     ),
                                                     const SizedBox(
                                                       height: 20,
                                                     ),
-                                                    TextButton(
-                                                        child: Container(
-                                                            height: 40,
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Text(
-                                                              "Cancel",
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      textColor,
-                                                                  fontSize: 13),
-                                                            )),
-                                                        style: ButtonStyle(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            backgroundColor:
-                                                                MaterialStateProperty.all(Colors
-                                                                    .transparent),
-                                                            shape: MaterialStateProperty.all<
-                                                                    RoundedRectangleBorder>(
-                                                                RoundedRectangleBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            7.0),
-                                                                    side: BorderSide(
-                                                                        color:
-                                                                            textColor,
-                                                                        width: 2)))),
+                                                    _buildTextButton(
+                                                        textColor: textColor,
+                                                        height: 40,
+                                                        text: "Cancel",
                                                         onPressed: () {
-                                                          Navigator.pop(
-                                                              context);
+                                                          Navigator.pop(context);
                                                         })
                                                   ],
                                                 ))
@@ -533,37 +375,17 @@ class _PageState extends State<Page> {
                                   });
                             }
                           : () async {
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              if (anon) {
-                                UserCredential userCredential =
-                                    await signInWithGoogle();
-                                prefs.setInt('logged_in', 1);
-                                setState(() {
-                                  userId = userCredential.user?.uid as String;
-                                  tabPages[1] = EmojiWallPage(userId: userId);
-                                  anon = FirebaseAuth
-                                      .instance.currentUser!.isAnonymous;
-                                });
-                              } else {
-                                UserCredential userCredential =
-                                    await FirebaseAuth.instance
-                                        .signInAnonymously();
-                                prefs.setInt('logged_in', 0);
-                                setState(() {
-                                  userId = userCredential.user?.uid as String;
-                                  tabPages[1] = EmojiWallPage(userId: userId);
-                                  anon = FirebaseAuth
-                                      .instance.currentUser!.isAnonymous;
-                                });
-                              }
+                              UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+                              setState(() {
+                                userId = userCredential.user?.uid as String;
+                                tabPages[1] = EmojiWallPage(userId: userId);
+                                anon = FirebaseAuth.instance.currentUser!.isAnonymous;
+                              });
+                              Navigator.popAndPushNamed(context, '/');
                             }),
                 ),
                 IconButton(
-                  icon: Icon(
-                      _themeMode == ThemeMode.light
-                          ? Icons.dark_mode
-                          : Icons.wb_sunny_outlined,
+                  icon: Icon(_themeMode == ThemeMode.light ? Icons.dark_mode : Icons.wb_sunny_outlined,
                       color: kContentColorDarkTheme),
                   onPressed: () {
                     MyApp.of(context)?._themeMode == ThemeMode.light
@@ -576,5 +398,23 @@ class _PageState extends State<Page> {
                 ),
               ],
             )));
+  }
+
+  Widget _buildTextButton(
+      {Color textColor = Colors.white, double height = 20, String text = "Button", void Function()? onPressed}) {
+    return TextButton(
+        child: Container(
+            height: height,
+            alignment: Alignment.center,
+            child: Text(
+              text,
+              style: TextStyle(color: textColor, fontSize: 13),
+            )),
+        style: ButtonStyle(
+            alignment: Alignment.center,
+            backgroundColor: MaterialStateProperty.all(Colors.transparent),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7.0), side: BorderSide(color: textColor, width: 2)))),
+        onPressed: onPressed);
   }
 }

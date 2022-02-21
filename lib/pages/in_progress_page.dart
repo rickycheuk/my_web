@@ -38,10 +38,7 @@ class InProgressPage extends StatelessWidget {
               alignment: Alignment.center,
               child: const Text(
                 "Games",
-                style: TextStyle(
-                    fontSize: 25,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           ),
