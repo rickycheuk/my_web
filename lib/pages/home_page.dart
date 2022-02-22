@@ -21,22 +21,22 @@ class Item {
 
 List<Item> aboutList = [
   Item(headerValue: 'Skills', expandedValue: """
-- Technical: Python, Unix, Git, SQL, Flutter, Spark
-- Languages: Cantonese, English, Mandarin
+• Technical: Python, Unix, Git, SQL, Flutter, Spark
+• Languages: Cantonese, English, Mandarin
 """),
   Item(headerValue: 'Background', expandedValue: """
-- B.S. in Information Systems
-- 3.5 years in FinTech
+• B.S. in Information Systems
+• 3.5 years in FinTech
 """),
   Item(headerValue: 'Current Work', expandedValue: """
-- Big data processing
-- Workflow automation
-- API integration
+• Big data processing
+• Workflow automation
+• API integration
 """),
   Item(headerValue: 'More', expandedValue: """
-- Hong Kong -> New York
-- Used to dance in college
-- Can speak 3 Chinese dialects
+• Hong Kong -> New York
+• Used to dance in college
+• Can speak 3 Chinese dialects
 """),
 ];
 
@@ -188,11 +188,15 @@ class _HomePageState extends State<HomePage> {
                       canTapOnHeader: true,
                       headerBuilder: (BuildContext context, bool isExpanded) {
                         return ListTile(
-                          title: Text(item.headerValue, style: const TextStyle(color: kSecondaryColor)),
+                          title: Text(item.headerValue,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.apply(color: kSecondaryColor, fontWeightDelta: 2)),
                         );
                       },
                       body: ListTile(
-                        title: Text(item.expandedValue, style: const TextStyle(color: kSecondaryColor)),
+                        subtitle: Text(item.expandedValue, style: const TextStyle(color: kSecondaryColor)),
                       ),
                       isExpanded: item.isExpanded,
                     );

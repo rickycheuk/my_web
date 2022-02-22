@@ -23,6 +23,7 @@ class _AppPageState extends State<AppPage> {
 
   late AssetImage diceImage1, diceImage2;
   var answer = "Press button to start";
+  bool _firstPress = true;
 
   @override
   void initState() {
@@ -44,8 +45,10 @@ class _AppPageState extends State<AppPage> {
       setState(() {
         diceImage1 = faces[random - 1];
         diceImage2 = faces[anotherRandom - 1];
+        _firstPress = false;
         if (i == rollCount - 1) {
           answer = (random + anotherRandom).toString();
+          _firstPress = true;
         }
       });
       if (i < rollCount - 1) {
@@ -179,7 +182,7 @@ class _AppPageState extends State<AppPage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               // border: Border.all(color: kGradient1, width: 3),
-                              color: Theme.of(context).colorScheme.primary,
+                              color: _firstPress? Theme.of(context).colorScheme.primary: Colors.grey,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.5),
@@ -190,8 +193,11 @@ class _AppPageState extends State<AppPage> {
                             ),
                             child: TextButton.icon(
                               onPressed: () async {
-                                await HapticFeedback.lightImpact();
-                                diceChanger();
+                                if (_firstPress == true) {
+                                  _firstPress = false;
+                                  await HapticFeedback.lightImpact();
+                                  await diceChanger();
+                                }
                               },
                               icon: const Icon(
                                 Icons.rotate_left_rounded,
