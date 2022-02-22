@@ -38,8 +38,9 @@ List<Widget> tabPages = [
     icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
   ),
   EmojiWallPage(userId: userId),
-  // GamePage(),
-  InProgressPage(),
+  AppPage(),
+  // InProgressPage(),
+  // Dice()
 ];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
 bool isDarkMode = _brightness == Brightness.dark;
@@ -150,7 +151,9 @@ class _MyAppState extends State<MyApp> {
         EmojiWallPage(
           userId: userId,
         ),
-        InProgressPage(),
+        AppPage(),
+        // InProgressPage(),
+        // Dice()
       ];
     });
     if (kDebugMode) {
@@ -237,6 +240,7 @@ class _PageState extends State<Page> {
               BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
               BottomNavigationBarItem(icon: Icon(Icons.sentiment_satisfied_alt), label: 'Emoji Wall'),
               BottomNavigationBarItem(icon: Icon(Icons.videogame_asset_outlined), label: 'Games'),
+              // BottomNavigationBarItem(icon: Icon(My_web.dice_d6), label: 'Dices'),
             ],
           ),
         ));
@@ -357,7 +361,10 @@ class _PageState extends State<Page> {
                                                         UserCredential userCredential = await signInWithGoogle();
                                                         setState(() {
                                                           userId = userCredential.user?.uid as String;
-                                                          tabPages[1] = EmojiWallPage(userId: userId);
+                                                          tabPages[1] = EmojiWallPage(
+                                                              userId: userId,
+                                                              isLoggedIn:
+                                                                  !FirebaseAuth.instance.currentUser!.isAnonymous);
                                                         });
                                                         Navigator.pop(context);
                                                         Navigator.popAndPushNamed(context, '/');

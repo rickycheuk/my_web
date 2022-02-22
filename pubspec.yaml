@@ -90,6 +90,12 @@ flutter:
      - assets/images/ricky_boston_Edited.jpg
      - assets/images/ricky_boston2.jpeg
      - assets/images/ricky_beach.jpeg
+     - assets/images/one.png
+     - assets/images/two.png
+     - assets/images/three.png
+     - assets/images/four.png
+     - assets/images/five.png
+     - assets/images/six.png
   #   - images/a_dot_ham.jpeg
 
   # An image assets can refer to one or more resolution-specific "variants", see
