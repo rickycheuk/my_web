@@ -42,7 +42,8 @@ class DefaultFirebaseOptions {
     appId: '1:1052333107123:web:aaac55426e2ace3a058dc6',
     messagingSenderId: '1052333107123',
     projectId: 'my-website-2f7f3',
-    authDomain: 'my-website-2f7f3.firebaseapp.com',
+    // Changed from my-website-2f7f3.firebaseapp.com
+    authDomain: 'rickycheuk.com',
     storageBucket: 'my-website-2f7f3.appspot.com',
     measurementId: 'G-P9916WZK0X',
   );

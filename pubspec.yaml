@@ -46,6 +46,10 @@ dependencies:
   webview_flutter: ^3.0.0
   flutter_launcher_icons: ^0.9.2
   flutter_scatter: ^0.2.0
+  percent_indicator: ^4.0.0
+  liquid_progress_indicator: ^0.4.0
+  google_sign_in: ^5.2.4
+  shared_preferences: ^2.0.13
 
 
 flutter_icons:
@@ -86,6 +90,12 @@ flutter:
      - assets/images/ricky_boston_Edited.jpg
      - assets/images/ricky_boston2.jpeg
      - assets/images/ricky_beach.jpeg
+     - assets/images/one.png
+     - assets/images/two.png
+     - assets/images/three.png
+     - assets/images/four.png
+     - assets/images/five.png
+     - assets/images/six.png
   #   - images/a_dot_ham.jpeg
 
   # An image assets can refer to one or more resolution-specific "variants", see

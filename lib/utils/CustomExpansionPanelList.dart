@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+
 const double _kPanelHeaderCollapsedHeight = 60.0;
 const double _kPanelHeaderExpandedHeight = 76.0;
 
@@ -34,8 +36,8 @@ class CustomExpansionPanelList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> items = <Widget>[];
-    const EdgeInsets kExpandedEdgeInsets = EdgeInsets.symmetric(
-        vertical: _kPanelHeaderExpandedHeight - _kPanelHeaderCollapsedHeight);
+    const EdgeInsets kExpandedEdgeInsets =
+        EdgeInsets.symmetric(vertical: _kPanelHeaderExpandedHeight - _kPanelHeaderCollapsedHeight);
 
     for (int index = 0; index < children.length; index += 1) {
       final Row header = Row(
@@ -44,9 +46,7 @@ class CustomExpansionPanelList extends StatelessWidget {
             child: AnimatedContainer(
               duration: animationDuration,
               curve: Curves.fastOutSlowIn,
-              margin: _isChildExpanded(index)
-                  ? kExpandedEdgeInsets
-                  : EdgeInsets.zero,
+              margin: _isChildExpanded(index) ? kExpandedEdgeInsets : EdgeInsets.zero,
               child: SizedBox(
                 height: _kPanelHeaderCollapsedHeight,
                 child: Container(
@@ -66,43 +66,41 @@ class CustomExpansionPanelList extends StatelessWidget {
               onPressed: (bool isExpanded) {
                 expansionCallback(index, isExpanded);
               },
+              color: kSecondaryColor,
             ),
           ),
         ],
       );
 
-      items.add(InkWell(
-        onTap: () {
-          expansionCallback(index, _isChildExpanded(index));
-        }, // Handle your callback
-        child: Ink(
+      items.add(Ink(
           width: min(screenWidth, 500),
-          key: _SaltedKey<BuildContext, int>(context, index * 2),
-          child: Material(
-            elevation: 2.0,
-            borderRadius: BorderRadius.all(Radius.circular(radius)),
-            color: color,
-            child: Column(
-              children: <Widget>[
-                header,
-                AnimatedCrossFade(
-                  firstChild: Container(height: 0.0),
-                  secondChild: children[index].body,
-                  firstCurve:
-                      const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
-                  secondCurve:
-                      const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
-                  sizeCurve: Curves.fastOutSlowIn,
-                  crossFadeState: _isChildExpanded(index)
-                      ? CrossFadeState.showSecond
-                      : CrossFadeState.showFirst,
-                  duration: animationDuration,
+          child: InkWell(
+            onTap: () {
+              expansionCallback(index, _isChildExpanded(index));
+            }, // Handle your callback
+            child: Ink(
+              key: _SaltedKey<BuildContext, int>(context, index * 2),
+              child: Material(
+                elevation: 3.0,
+                borderRadius: BorderRadius.all(Radius.circular(radius)),
+                color: color,
+                child: Column(
+                  children: <Widget>[
+                    header,
+                    AnimatedCrossFade(
+                      firstChild: Container(height: 0.0),
+                      secondChild: children[index].body,
+                      firstCurve: const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
+                      secondCurve: const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
+                      sizeCurve: Curves.fastOutSlowIn,
+                      crossFadeState: _isChildExpanded(index) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                      duration: animationDuration,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ));
+          )));
       items.add(Divider(
         key: _SaltedKey<BuildContext, int>(context, index * 2 + 1),
         height: 15.0,
