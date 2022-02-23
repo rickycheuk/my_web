@@ -65,7 +65,7 @@ Future<void> main() async {
       'user': userId,
     },
   );
-  await Future.delayed(const Duration(seconds: 2));
+  // await Future.delayed(const Duration(seconds: 2));
   runApp(MyApp());
 }
 
@@ -326,7 +326,8 @@ class _PageState extends State<Page> {
                                             SizedBox(
                                                 width: MediaQuery.of(context).size.width / 2,
                                                 height: MediaQuery.of(context).size.height / 2,
-                                                child: Column(
+                                                child: SingleChildScrollView(
+                                                    child: Column(
                                                   children: [
                                                     const Text(
                                                       "Login is preferred to better persist onsite data. No user personal data is collected or used on this site.",
@@ -382,7 +383,7 @@ class _PageState extends State<Page> {
                                                           Navigator.pop(context);
                                                         })
                                                   ],
-                                                ))
+                                                )))
                                           ],
                                         ),
                                       ),

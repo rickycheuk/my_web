@@ -151,7 +151,8 @@ class _AppPageState extends State<AppPage> {
                       ),
                       Container(
                         alignment: Alignment.center,
-                        margin: const EdgeInsets.fromLTRB(50.0, 30.0, 50.0, 0.0),
+                        transformAlignment: Alignment.center,
+                        margin: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
