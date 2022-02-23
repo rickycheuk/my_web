@@ -39,7 +39,7 @@ List<Widget> tabPages = [
   ),
   EmojiWallPage(
     userId: userId,
-    waitTime: 5,
+    waitTime: waitTime,
   ),
   AppPage(),
   // InProgressPage(),
@@ -151,6 +151,7 @@ class _MyAppState extends State<MyApp> {
             userName: userName, description: description, links: _links, websiteNames: _websiteNames, icons: _icons),
         EmojiWallPage(
           userId: userId,
+          waitTime: waitTime,
         ),
         AppPage(),
         // InProgressPage(),
@@ -372,9 +373,10 @@ class _PageState extends State<Page> {
                                                         setState(() {
                                                           userId = userCredential.user?.uid as String;
                                                           tabPages[1] = EmojiWallPage(
-                                                              userId: userId,
-                                                              isLoggedIn:
-                                                                  !FirebaseAuth.instance.currentUser!.isAnonymous);
+                                                            userId: userId,
+                                                            isLoggedIn: !FirebaseAuth.instance.currentUser!.isAnonymous,
+                                                            waitTime: waitTime,
+                                                          );
                                                         });
                                                         Navigator.pop(context);
                                                         Navigator.popAndPushNamed(context, '/');
@@ -403,7 +405,10 @@ class _PageState extends State<Page> {
                               UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
                               setState(() {
                                 userId = userCredential.user?.uid as String;
-                                tabPages[1] = EmojiWallPage(userId: userId);
+                                tabPages[1] = EmojiWallPage(
+                                  userId: userId,
+                                  waitTime: waitTime,
+                                );
                               });
                               Navigator.popAndPushNamed(context, '/');
                             }),

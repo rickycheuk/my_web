@@ -21,12 +21,12 @@ class Item {
 
 List<Item> aboutList = [
   Item(headerValue: 'Skills', expandedValue: """
-• Technical: Python, Unix, Git, SQL, Flutter, Spark
+• Technical: Python, Unix, Git, SQL, Flutter, Spark, AWS, Airflow, Jenkins, Databricks, Jupyter
 • Languages: Cantonese, English, Mandarin
 """),
   Item(headerValue: 'Background', expandedValue: """
 • B.S. in Information Systems
-• 3.5 years in FinTech
+• Over 3.5 years exp in tech
 """),
   Item(headerValue: 'Current Work', expandedValue: """
 • Big data processing
@@ -35,7 +35,6 @@ List<Item> aboutList = [
 """),
   Item(headerValue: 'More', expandedValue: """
 • Hong Kong -> New York
-• Used to dance in college
 • Can speak 3 Chinese dialects
 """),
 ];

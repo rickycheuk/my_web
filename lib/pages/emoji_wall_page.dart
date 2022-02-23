@@ -9,7 +9,7 @@ const title = 'Emoji Wall';
 const description = 'Add your emoji here ->';
 
 class EmojiWallPage extends StatefulWidget {
-  const EmojiWallPage({Key? key, required this.userId, this.isLoggedIn=false, this.waitTime=2}) : super(key: key);
+  const EmojiWallPage({Key? key, required this.userId, this.isLoggedIn=false, this.waitTime=1}) : super(key: key);
 
   final String userId;
   final bool isLoggedIn;
