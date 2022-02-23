@@ -9,10 +9,11 @@ const title = 'Emoji Wall';
 const description = 'Add your emoji here ->';
 
 class EmojiWallPage extends StatefulWidget {
-  const EmojiWallPage({Key? key, required this.userId, this.isLoggedIn=false}) : super(key: key);
+  const EmojiWallPage({Key? key, required this.userId, this.isLoggedIn=false, this.waitTime=2}) : super(key: key);
 
   final String userId;
   final bool isLoggedIn;
+  final int waitTime;
 
   @override
   _EmojiWallPageState createState() => _EmojiWallPageState();
@@ -25,7 +26,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
 
   @override
   void initState() {
-    _emojiFuture = getEmojiData(2);
+    _emojiFuture = getEmojiData(widget.waitTime);
     super.initState();
   }
 
@@ -188,13 +189,13 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                 return Container(
                                   padding: const EdgeInsets.all(3.0),
                                   child: TextButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       onEmojiChanged(emojiList[index]);
-                                      _fireStore
+                                      await _fireStore
                                           .collection('emojis')
                                           .doc(widget.userId)
                                           .set({'emoji': emojiList[index]}, SetOptions(merge: true));
-                                      getEmojiData(0);
+                                      await getEmojiData(0);
                                       Navigator.pop(context);
                                     },
                                     child: Text(

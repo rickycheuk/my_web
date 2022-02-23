@@ -24,7 +24,7 @@ String webTitle = 'Ricky Cheuk';
 String description = '- Software Engineer -';
 String userName = 'Ricky Cheuk';
 String userId = '';
-bool anon = true;
+int waitTime = 3;
 List<Widget> tabPages = [
   HomePage(
     userName: userName,
@@ -37,7 +37,10 @@ List<Widget> tabPages = [
     websiteNames: const ['Linkedin', 'GitHub', 'Instagram'],
     icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
   ),
-  EmojiWallPage(userId: userId),
+  EmojiWallPage(
+    userId: userId,
+    waitTime: 5,
+  ),
   AppPage(),
   // InProgressPage(),
   // Dice()
@@ -51,7 +54,7 @@ Future<void> logEvent(String eventName) async {
 
 Future<void> main() async {
   // Preload all emojis for better experience
-  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle(locale: window.locale));
+  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle());
   pb.addText(emojiList.join());
   pb.build().layout(const ParagraphConstraints(width: 100));
   await Firebase.initializeApp(
@@ -65,20 +68,18 @@ Future<void> main() async {
       'user': userId,
     },
   );
-  // await Future.delayed(const Duration(seconds: 2));
+  await Future.delayed(const Duration(seconds: 2));
   runApp(MyApp());
 }
 
 Future<UserCredential> signInWithGoogle() async {
   // Create a new provider
   GoogleAuthProvider googleProvider = GoogleAuthProvider();
-
   googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
   googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
 
   // Once signed in, return the UserCredential
   return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-
   // Or use signInWithRedirect
   // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
 }
@@ -204,6 +205,14 @@ class _PageState extends State<Page> {
     logEvent("page_change_" + tabPages[page].toString());
     setState(() {
       _pageIndex = page;
+      if (waitTime > 0 && page == 1) {
+        waitTime = 0;
+        tabPages[1] = EmojiWallPage(
+          userId: userId,
+          isLoggedIn: !FirebaseAuth.instance.currentUser!.isAnonymous,
+          waitTime: waitTime,
+        );
+      }
     });
   }
 
@@ -395,7 +404,6 @@ class _PageState extends State<Page> {
                               setState(() {
                                 userId = userCredential.user?.uid as String;
                                 tabPages[1] = EmojiWallPage(userId: userId);
-                                anon = FirebaseAuth.instance.currentUser!.isAnonymous;
                               });
                               Navigator.popAndPushNamed(context, '/');
                             }),
