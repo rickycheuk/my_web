@@ -312,107 +312,107 @@ class _PageState extends State<Page> {
                     },
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _buildTextButton(
-                      text: FirebaseAuth.instance.currentUser!.isAnonymous ? "Login" : "Logout",
-                      onPressed: FirebaseAuth.instance.currentUser!.isAnonymous
-                          ? () {
-                              Color textColor = _themeMode == ThemeMode.light ? Colors.black : Colors.white;
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      scrollable: true,
-                                      alignment: Alignment.center,
-                                      title: const Text(
-                                        "Login",
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      content: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          children: <Widget>[
-                                            SizedBox(
-                                                width: MediaQuery.of(context).size.width / 2,
-                                                height: MediaQuery.of(context).size.height / 2,
-                                                child: SingleChildScrollView(
-                                                    child: Column(
-                                                  children: [
-                                                    const Text(
-                                                      "Login is preferred to better persist onsite data. No user personal data is collected or used on this site.",
-                                                      style: TextStyle(fontSize: 13),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "* Note that all the guest session data will be cleared by logging in.",
-                                                      style: TextStyle(fontSize: 13),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    const Text(
-                                                      "Please enable popup when logging in",
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          fontWeight: FontWeight.bold,
-                                                          decoration: TextDecoration.underline),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    _buildTextButton(
-                                                      textColor: textColor,
-                                                      height: 40,
-                                                      text: "Login",
-                                                      onPressed: () async {
-                                                        await HapticFeedback.lightImpact();
-                                                        UserCredential userCredential = await signInWithGoogle();
-                                                        setState(() {
-                                                          userId = userCredential.user?.uid as String;
-                                                          tabPages[1] = EmojiWallPage(
-                                                            userId: userId,
-                                                            isLoggedIn: !FirebaseAuth.instance.currentUser!.isAnonymous,
-                                                            waitTime: waitTime,
-                                                          );
-                                                        });
-                                                        Navigator.pop(context);
-                                                        Navigator.popAndPushNamed(context, '/');
-                                                      },
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    _buildTextButton(
-                                                        textColor: textColor,
-                                                        height: 40,
-                                                        text: "Cancel",
-                                                        onPressed: () {
-                                                          HapticFeedback.lightImpact();
-                                                          Navigator.pop(context);
-                                                        })
-                                                  ],
-                                                )))
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  });
-                            }
-                          : () async {
-                              UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
-                              setState(() {
-                                userId = userCredential.user?.uid as String;
-                                tabPages[1] = EmojiWallPage(
-                                  userId: userId,
-                                  waitTime: waitTime,
-                                );
-                              });
-                              Navigator.popAndPushNamed(context, '/');
-                            }),
-                ),
+                // Container(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: _buildTextButton(
+                //       text: FirebaseAuth.instance.currentUser!.isAnonymous ? "Login" : "Logout",
+                //       onPressed: FirebaseAuth.instance.currentUser!.isAnonymous
+                //           ? () {
+                //               Color textColor = _themeMode == ThemeMode.light ? Colors.black : Colors.white;
+                //               showDialog(
+                //                   context: context,
+                //                   builder: (BuildContext context) {
+                //                     return AlertDialog(
+                //                       scrollable: true,
+                //                       alignment: Alignment.center,
+                //                       title: const Text(
+                //                         "Login",
+                //                         textAlign: TextAlign.center,
+                //                       ),
+                //                       content: Padding(
+                //                         padding: const EdgeInsets.all(8.0),
+                //                         child: Column(
+                //                           children: <Widget>[
+                //                             SizedBox(
+                //                                 width: MediaQuery.of(context).size.width / 2,
+                //                                 height: MediaQuery.of(context).size.height / 2,
+                //                                 child: SingleChildScrollView(
+                //                                     child: Column(
+                //                                   children: [
+                //                                     const Text(
+                //                                       "Login is preferred to better persist onsite data. No user personal data is collected or used on this site.",
+                //                                       style: TextStyle(fontSize: 13),
+                //                                     ),
+                //                                     const SizedBox(
+                //                                       height: 10,
+                //                                     ),
+                //                                     const Text(
+                //                                       "* Note that all the guest session data will be cleared by logging in.",
+                //                                       style: TextStyle(fontSize: 13),
+                //                                     ),
+                //                                     const SizedBox(
+                //                                       height: 10,
+                //                                     ),
+                //                                     const Text(
+                //                                       "Please enable popup when logging in",
+                //                                       style: TextStyle(
+                //                                           fontSize: 14,
+                //                                           fontWeight: FontWeight.bold,
+                //                                           decoration: TextDecoration.underline),
+                //                                     ),
+                //                                     const SizedBox(
+                //                                       height: 20,
+                //                                     ),
+                //                                     _buildTextButton(
+                //                                       textColor: textColor,
+                //                                       height: 40,
+                //                                       text: "Login",
+                //                                       onPressed: () async {
+                //                                         await HapticFeedback.lightImpact();
+                //                                         UserCredential userCredential = await signInWithGoogle();
+                //                                         setState(() {
+                //                                           userId = userCredential.user?.uid as String;
+                //                                           tabPages[1] = EmojiWallPage(
+                //                                             userId: userId,
+                //                                             isLoggedIn: !FirebaseAuth.instance.currentUser!.isAnonymous,
+                //                                             waitTime: waitTime,
+                //                                           );
+                //                                         });
+                //                                         Navigator.pop(context);
+                //                                         Navigator.popAndPushNamed(context, '/');
+                //                                       },
+                //                                     ),
+                //                                     const SizedBox(
+                //                                       height: 20,
+                //                                     ),
+                //                                     _buildTextButton(
+                //                                         textColor: textColor,
+                //                                         height: 40,
+                //                                         text: "Cancel",
+                //                                         onPressed: () {
+                //                                           HapticFeedback.lightImpact();
+                //                                           Navigator.pop(context);
+                //                                         })
+                //                                   ],
+                //                                 )))
+                //                           ],
+                //                         ),
+                //                       ),
+                //                     );
+                //                   });
+                //             }
+                //           : () async {
+                //               UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+                //               setState(() {
+                //                 userId = userCredential.user?.uid as String;
+                //                 tabPages[1] = EmojiWallPage(
+                //                   userId: userId,
+                //                   waitTime: waitTime,
+                //                 );
+                //               });
+                //               Navigator.popAndPushNamed(context, '/');
+                //             }),
+                // ),
                 IconButton(
                   icon: Icon(_themeMode == ThemeMode.light ? Icons.dark_mode : Icons.wb_sunny_outlined,
                       color: kContentColorDarkTheme),
