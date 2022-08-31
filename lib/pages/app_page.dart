@@ -11,7 +11,7 @@ class AppPage extends StatefulWidget {
   _AppPageState createState() => _AppPageState();
 }
 
-class _AppPageState extends State<AppPage> {
+class _AppPageState extends State<AppPage> with SingleTickerProviderStateMixin {
   List<AssetImage> faces = const [
     AssetImage("assets/images/one.png"),
     AssetImage("assets/images/two.png"),
@@ -20,7 +20,7 @@ class _AppPageState extends State<AppPage> {
     AssetImage("assets/images/five.png"),
     AssetImage("assets/images/six.png"),
   ];
-
+  late AnimationController _controller;
   late AssetImage diceImage1, diceImage2;
   var answer = "Press button to start";
   bool _firstPress = true;
@@ -28,16 +28,27 @@ class _AppPageState extends State<AppPage> {
   @override
   void initState() {
     super.initState();
+
+    _controller = AnimationController(
+      duration: Duration(seconds: 5),
+      vsync: this,
+    );
     setState(() {
       diceImage1 = faces[0];
       diceImage2 = faces[0];
     });
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   Future<void> diceChanger() async {
     int random = 1;
     int anotherRandom = 1;
-    int rollCount = 25;
+    int rollCount = 10;
     for (var i = 0; i < rollCount; i++) {
       random = (1 + Random().nextInt(6));
       anotherRandom = (1 + Random().nextInt(6));
@@ -49,6 +60,7 @@ class _AppPageState extends State<AppPage> {
         if (i == rollCount - 1) {
           answer = (random + anotherRandom).toString();
           _firstPress = true;
+          _controller.reset();
         }
       });
       if (i < rollCount - 1) {
@@ -67,43 +79,43 @@ class _AppPageState extends State<AppPage> {
             color: Colors.transparent,
             padding: const EdgeInsets.all(20.0),
             child: Column(children: [
-              Container(
-                width: min(MediaQuery.of(context).size.width, 500),
-                height: 75,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      kGradient1.withOpacity(0.8),
-                      kGradient2.withOpacity(0.8),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    stops: const [0.0, 1],
-                    tileMode: TileMode.clamp,
-                  ),
-                  border: Border.all(color: kGradient1, width: 3),
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      blurRadius: 3,
-                      offset: const Offset(1, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Container(
-                  alignment: Alignment.center,
-                  child: const Text(
-                    "Apps",
-                    style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Container(
-                height: 20,
-              ),
+              // Container(
+              //   width: min(MediaQuery.of(context).size.width, 500),
+              //   height: 75,
+              //   alignment: Alignment.center,
+              //   padding: const EdgeInsets.all(10.0),
+              //   decoration: BoxDecoration(
+              //     gradient: LinearGradient(
+              //       colors: [
+              //         kGradient1.withOpacity(0.8),
+              //         kGradient2.withOpacity(0.8),
+              //       ],
+              //       begin: Alignment.centerLeft,
+              //       end: Alignment.centerRight,
+              //       stops: const [0.0, 1],
+              //       tileMode: TileMode.clamp,
+              //     ),
+              //     border: Border.all(color: kGradient1, width: 3),
+              //     borderRadius: const BorderRadius.all(Radius.circular(10)),
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color: Colors.black.withOpacity(0.5),
+              //         blurRadius: 3,
+              //         offset: const Offset(1, 3), // changes position of shadow
+              //       ),
+              //     ],
+              //   ),
+              //   child: Container(
+              //     alignment: Alignment.center,
+              //     child: const Text(
+              //       "Dice Roller",
+              //       style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+              //     ),
+              //   ),
+              // ),
+              // Container(
+              //   height: 20,
+              // ),
               Container(
                   width: min(MediaQuery.of(context).size.width, 500),
                   height: 450,
@@ -157,18 +169,24 @@ class _AppPageState extends State<AppPage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Image(
-                              image: diceImage1,
-                              width: 120.0,
-                              height: 120.0,
+                            RotationTransition(
+                              turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
+                              child: Image(
+                                image: diceImage1,
+                                width: 120.0,
+                                height: 120.0,
+                              ),
                             ),
                             Container(
-                              width: 20,
+                              width: 30,
                             ),
-                            Image(
-                              image: diceImage2,
-                              width: 120.0,
-                              height: 120.0,
+                            RotationTransition(
+                              turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
+                              child: Image(
+                                image: diceImage2,
+                                width: 120.0,
+                                height: 120.0,
+                              ),
                             ),
                           ],
                         ),
@@ -183,7 +201,7 @@ class _AppPageState extends State<AppPage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               // border: Border.all(color: kGradient1, width: 3),
-                              color: _firstPress? Theme.of(context).colorScheme.primary: Colors.grey,
+                              color: _firstPress ? Theme.of(context).colorScheme.primary : Colors.grey,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.5),
@@ -196,6 +214,7 @@ class _AppPageState extends State<AppPage> {
                               onPressed: () async {
                                 if (_firstPress == true) {
                                   _firstPress = false;
+                                  _controller.forward();
                                   await HapticFeedback.lightImpact();
                                   await diceChanger();
                                 }

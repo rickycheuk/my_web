@@ -9,10 +9,9 @@ const title = 'Emoji Wall';
 const description = 'Add your emoji here ->';
 
 class EmojiWallPage extends StatefulWidget {
-  const EmojiWallPage({Key? key, required this.userId, this.isLoggedIn=false, this.waitTime=1}) : super(key: key);
+  const EmojiWallPage({Key? key, required this.userId, this.waitTime=1}) : super(key: key);
 
   final String userId;
-  final bool isLoggedIn;
   final int waitTime;
 
   @override
@@ -176,8 +175,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                 content: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
-                    child: widget.isLoggedIn
-                    ?Column(
+                    child: Column(
                       children: <Widget>[
                         SizedBox(
                             width: MediaQuery.of(context).size.width / 1.5,
@@ -208,7 +206,6 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                             ))
                       ],
                     )
-                    : const Text("User not logged in, please login and try again")
                   ),
                 ),
               );
