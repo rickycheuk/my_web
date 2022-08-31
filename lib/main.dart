@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -16,6 +17,20 @@ import 'package:my_web/utils/my_web_icons.dart';
 import 'constants.dart';
 import 'firebase_options.dart';
 
+class Item {
+  Item({
+    required this.expandedValue,
+    required this.headerValue,
+    this.icon = Icons.web,
+    this.isExpanded = false,
+  });
+
+  Widget expandedValue;
+  String headerValue;
+  IconData icon;
+  bool isExpanded;
+}
+
 final _fireStore = FirebaseFirestore.instance;
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
@@ -24,7 +39,9 @@ String webTitle = 'Ricky Cheuk';
 String description = '- Software Engineer -';
 String userName = 'Ricky Cheuk';
 String userId = '';
-int waitTime = 3;
+int waitTime = 1;
+
+// init pages
 List<Widget> tabPages = [
   HomePage(
     userName: userName,
@@ -36,13 +53,32 @@ List<Widget> tabPages = [
     ],
     websiteNames: const ['Linkedin', 'GitHub', 'Instagram'],
     icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
+    appList: [
+      Item(
+          headerValue: 'About Me',
+          expandedValue: Container(
+            alignment: Alignment.topLeft,
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            child: const Text("""• Hong Kong -> New York\n• Python, Spark, Flink, Flutter, SQL, AWS\n• AWS Certified Solutions Architect – Associate""",
+                style: TextStyle(color: kSecondaryColor)),
+          ),
+          icon: Icons.person),
+      Item(
+          headerValue: 'Emoji Wall',
+          expandedValue: EmojiWallPage(
+            userId: userId,
+            waitTime: waitTime,
+          ),
+          icon: Icons.sentiment_satisfied_alt),
+      Item(headerValue: 'Dice Roller', expandedValue: AppPage(), icon: My_web.dice_six),
+    ],
   ),
-  EmojiWallPage(
-    userId: userId,
-    waitTime: waitTime,
-  ),
-  AppPage(),
-  // InProgressPage(),
+  // EmojiWallPage(
+  //   userId: userId,
+  //   waitTime: waitTime,
+  // ),
+  // AppPage(),
+  InProgressPage(),
   // Dice()
 ];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
@@ -68,7 +104,7 @@ Future<void> main() async {
       'user': userId,
     },
   );
-  await Future.delayed(const Duration(seconds: 2));
+  // await Future.delayed(const Duration(seconds: 1));
   runApp(MyApp());
 }
 
@@ -148,12 +184,34 @@ class _MyAppState extends State<MyApp> {
       description = profileSnapshot['description'];
       tabPages = [
         HomePage(
-            userName: userName, description: description, links: _links, websiteNames: _websiteNames, icons: _icons),
-        EmojiWallPage(
-          userId: userId,
-          waitTime: waitTime,
+          userName: userName,
+          description: description,
+          links: _links,
+          websiteNames: _websiteNames,
+          icons: _icons,
+          appList: [
+            Item(
+                headerValue: 'About Me',
+                expandedValue: Container(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                  child: const Text("""Hong Kong -> New York""", style: TextStyle(color: kSecondaryColor)),
+                ),
+                icon: Icons.person),
+            Item(
+                headerValue: 'Emoji Wall',
+                expandedValue: EmojiWallPage(
+                  userId: userId,
+                  waitTime: waitTime,
+                ),
+                icon: Icons.sentiment_satisfied_alt),
+            Item(headerValue: 'Dice Roller', expandedValue: AppPage(), icon: My_web.dice_six),
+          ],
         ),
-        AppPage(),
+        // EmojiWallPage(
+        //   userId: userId,
+        //   waitTime: waitTime,
+        // ),
+        // AppPage(),
         // InProgressPage(),
         // Dice()
       ];
@@ -206,14 +264,13 @@ class _PageState extends State<Page> {
     logEvent("page_change_" + tabPages[page].toString());
     setState(() {
       _pageIndex = page;
-      if (waitTime > 0 && page == 1) {
-        waitTime = 0;
-        tabPages[1] = EmojiWallPage(
-          userId: userId,
-          isLoggedIn: !FirebaseAuth.instance.currentUser!.isAnonymous,
-          waitTime: waitTime,
-        );
-      }
+      // if (waitTime > 0 && page == 1) {
+      //   waitTime = 0;
+      //   tabPages[1] = EmojiWallPage(
+      //     userId: userId,
+      //     waitTime: waitTime,
+      //   );
+      // }
     });
   }
 
@@ -248,9 +305,10 @@ class _PageState extends State<Page> {
             showUnselectedLabels: false,
             items: const [
               BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-              BottomNavigationBarItem(icon: Icon(Icons.sentiment_satisfied_alt), label: 'Emoji Wall'),
-              BottomNavigationBarItem(icon: Icon(Icons.videogame_asset_outlined), label: 'Games'),
+              // BottomNavigationBarItem(icon: Icon(Icons.sentiment_satisfied_alt), label: 'Emoji Wall'),
+              // BottomNavigationBarItem(icon: Icon(Icons.videogame_asset_outlined), label: 'Games'),
               // BottomNavigationBarItem(icon: Icon(My_web.dice_d6), label: 'Dices'),
+              BottomNavigationBarItem(icon: Icon(Icons.insert_comment_outlined), label: 'Comment'),
             ],
           ),
         ));

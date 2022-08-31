@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 const double _kPanelHeaderCollapsedHeight = 60.0;
-const double _kPanelHeaderExpandedHeight = 76.0;
+const double _kPanelHeaderExpandedHeight = 60.0;
 
 class CustomExpansionPanelList extends StatelessWidget {
   const CustomExpansionPanelList(
@@ -19,14 +19,10 @@ class CustomExpansionPanelList extends StatelessWidget {
       : super(key: key);
 
   final Color color;
-
   final double radius;
-
   final double screenWidth;
   final List<ExpansionPanel> children;
-
   final ExpansionPanelCallback expansionCallback;
-
   final Duration animationDuration;
 
   bool _isChildExpanded(int index) {
@@ -36,8 +32,6 @@ class CustomExpansionPanelList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> items = <Widget>[];
-    const EdgeInsets kExpandedEdgeInsets =
-        EdgeInsets.symmetric(vertical: _kPanelHeaderExpandedHeight - _kPanelHeaderCollapsedHeight);
 
     for (int index = 0; index < children.length; index += 1) {
       final Row header = Row(
@@ -46,7 +40,7 @@ class CustomExpansionPanelList extends StatelessWidget {
             child: AnimatedContainer(
               duration: animationDuration,
               curve: Curves.fastOutSlowIn,
-              margin: _isChildExpanded(index) ? kExpandedEdgeInsets : EdgeInsets.zero,
+              margin: EdgeInsets.zero,
               child: SizedBox(
                 height: _kPanelHeaderCollapsedHeight,
                 child: Container(
@@ -78,10 +72,20 @@ class CustomExpansionPanelList extends StatelessWidget {
             onTap: () {
               expansionCallback(index, _isChildExpanded(index));
             }, // Handle your callback
-            child: Ink(
+            child: Container(
               key: _SaltedKey<BuildContext, int>(context, index * 2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Theme.of(context).colorScheme.primary,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    blurRadius: 3,
+                    offset: const Offset(1, 3), // changes position of shadow
+                  ),
+                ],
+              ),
               child: Material(
-                elevation: 3.0,
                 borderRadius: BorderRadius.all(Radius.circular(radius)),
                 color: color,
                 child: Column(
@@ -103,7 +107,7 @@ class CustomExpansionPanelList extends StatelessWidget {
           )));
       items.add(Divider(
         key: _SaltedKey<BuildContext, int>(context, index * 2 + 1),
-        height: 15.0,
+        height: 20.0,
         color: Colors.transparent,
       ));
     }
