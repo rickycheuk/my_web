@@ -9,7 +9,7 @@ const title = 'Emoji Wall';
 const description = 'Add your emoji here ->';
 
 class EmojiWallPage extends StatefulWidget {
-  const EmojiWallPage({Key? key, required this.userId, this.waitTime=1}) : super(key: key);
+  const EmojiWallPage({Key? key, required this.userId, this.waitTime = 1}) : super(key: key);
 
   final String userId;
   final int waitTime;
@@ -119,23 +119,27 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                   ),
                 ),
                 Container(
-                  alignment: Alignment.topCenter,
-                  padding: const EdgeInsets.all(10.0),
-                  child: FutureBuilder(
-                    future: _emojiFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator(backgroundColor: Colors.grey, color: kPrimaryColor);
-                      } else if (snapshot.hasError) {
-                        return const Center(
-                          child: Text("Error while loading Emojis. Please refresh."),
-                        );
-                      } else {
-                        return emojis;
-                      }
-                    },
-                  ),
-                ),
+                    constraints: const BoxConstraints(maxHeight: 390, minHeight: 0),
+                    child: IntrinsicHeight(
+                        child: SingleChildScrollView(
+                            child: Container(
+                      alignment: Alignment.topCenter,
+                      padding: const EdgeInsets.all(10.0),
+                      child: FutureBuilder(
+                        future: _emojiFuture,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const CircularProgressIndicator(backgroundColor: Colors.grey, color: kPrimaryColor);
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                              child: Text("Error while loading Emojis. Please refresh."),
+                            );
+                          } else {
+                            return emojis;
+                          }
+                        },
+                      ),
+                    )))),
               ],
             )));
   }
@@ -175,38 +179,37 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                 content: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width / 1.5,
-                            height: MediaQuery.of(context).size.height / 1.5,
-                            child: GridView.count(
-                              crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
-                              padding: const EdgeInsets.all(1.0),
-                              children: List.generate(emojiList.length, (index) {
-                                return Container(
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: TextButton(
-                                    onPressed: () async {
-                                      onEmojiChanged(emojiList[index]);
-                                      await _fireStore
-                                          .collection('emojis')
-                                          .doc(widget.userId)
-                                          .set({'emoji': emojiList[index]}, SetOptions(merge: true));
-                                      await getEmojiData(0);
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      emojiList[index],
-                                      style: const TextStyle(fontSize: 20),
-                                    ),
+                      child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width / 1.5,
+                          height: MediaQuery.of(context).size.height / 1.5,
+                          child: GridView.count(
+                            crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
+                            padding: const EdgeInsets.all(1.0),
+                            children: List.generate(emojiList.length, (index) {
+                              return Container(
+                                padding: const EdgeInsets.all(3.0),
+                                child: TextButton(
+                                  onPressed: () async {
+                                    onEmojiChanged(emojiList[index]);
+                                    await _fireStore
+                                        .collection('emojis')
+                                        .doc(widget.userId)
+                                        .set({'emoji': emojiList[index]}, SetOptions(merge: true));
+                                    await getEmojiData(0);
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    emojiList[index],
+                                    style: const TextStyle(fontSize: 20),
                                   ),
-                                );
-                              }),
-                            ))
-                      ],
-                    )
-                  ),
+                                ),
+                              );
+                            }),
+                          ))
+                    ],
+                  )),
                 ),
               );
             });
