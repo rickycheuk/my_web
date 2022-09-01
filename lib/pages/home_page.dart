@@ -158,6 +158,7 @@ class _HomePageState extends State<HomePage> {
                           }
                           widget.appList[index].isExpanded = !isExpanded;
                           appExpanded = widget.appList[index].isExpanded;
+                          print(appExpanded);
                           scrollTo = 300.0 + 80.0 * index;
                           scrollController.animateTo(scrollTo,
                               duration: const Duration(milliseconds: 420), curve: Curves.easeIn);
@@ -189,7 +190,7 @@ class _HomePageState extends State<HomePage> {
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText1
-                                            ?.apply(color: kSecondaryColor, fontWeightDelta: 2)),
+                                            ?.apply(color: kSecondaryColor, fontWeightDelta: 2, fontSizeDelta: 1)),
                                   ],
                                 ));
                           },

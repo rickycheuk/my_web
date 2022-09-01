@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 const List<Text> updateNotes = [
   Text("08/31/2022", style: TextStyle(fontSize: 17),),
-  Text("  - Reorganized pages, moved apps to home page", style: TextStyle(fontSize: 13),),
+  Text("  - Reorganized pages/apps", style: TextStyle(fontSize: 13),),
+  Text("  - Add message page", style: TextStyle(fontSize: 13),),
   Text(""),
   Text("02/22/2022", style: TextStyle(fontSize: 17),),
   Text("  - Added dice roller as a test app", style: TextStyle(fontSize: 13),),

@@ -59,8 +59,9 @@ List<Widget> tabPages = [
           expandedValue: Container(
             alignment: Alignment.topLeft,
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-            child: const Text("""• Hong Kong -> New York\n• Python, Spark, Flink, Flutter, SQL, AWS\n• AWS Certified Solutions Architect – Associate""",
-                style: TextStyle(color: kSecondaryColor)),
+            child: const Text(
+                """• Hong Kong -> New York\n• Python, Spark, Flink, Flutter, SQL, AWS\n• AWS Certified Solutions Architect – Associate""",
+                style: TextStyle(color: kSecondaryColor, fontSize: 16)),
           ),
           icon: Icons.person),
       Item(
@@ -78,8 +79,8 @@ List<Widget> tabPages = [
   //   waitTime: waitTime,
   // ),
   // AppPage(),
-  InProgressPage(),
-  // Dice()
+  // InProgressPage(),
+  MessagePage()
 ];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
 bool isDarkMode = _brightness == Brightness.dark;
@@ -214,6 +215,7 @@ class _MyAppState extends State<MyApp> {
         // AppPage(),
         // InProgressPage(),
         // Dice()
+        MessagePage()
       ];
     });
     if (kDebugMode) {
@@ -250,27 +252,22 @@ class _PageState extends State<Page> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: _buildAppBar(),
-        body: PageView(
-          children: tabPages,
-          onPageChanged: onPageChanged,
-          controller: _pageController,
-        ),
-        bottomNavigationBar: _buildBottomNavigationBar());
+    return GestureDetector(
+        onTapDown: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+            appBar: _buildAppBar(),
+            body: PageView(
+              children: tabPages,
+              onPageChanged: onPageChanged,
+              controller: _pageController,
+            ),
+            bottomNavigationBar: _buildBottomNavigationBar()));
   }
 
   void onPageChanged(int page) {
     logEvent("page_change_" + tabPages[page].toString());
     setState(() {
       _pageIndex = page;
-      // if (waitTime > 0 && page == 1) {
-      //   waitTime = 0;
-      //   tabPages[1] = EmojiWallPage(
-      //     userId: userId,
-      //     waitTime: waitTime,
-      //   );
-      // }
     });
   }
 

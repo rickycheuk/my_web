@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
   String _currentEmoji = '+';
   Text emojis = const Text('');
   late Future _emojiFuture;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -33,7 +35,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
     String _emojis = '';
     QuerySnapshot querySnapshot = await _fireStore.collection('emojis').get();
     DocumentSnapshot userSnapshot = await _fireStore.collection('emojis').doc(widget.userId).get();
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList() as List;
+    final List allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     for (var d in allData) {
       _emojis += d['emoji'];
     }
@@ -184,30 +186,34 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                       SizedBox(
                           width: MediaQuery.of(context).size.width / 1.5,
                           height: MediaQuery.of(context).size.height / 1.5,
-                          child: GridView.count(
-                            crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
-                            padding: const EdgeInsets.all(1.0),
-                            children: List.generate(emojiList.length, (index) {
-                              return Container(
-                                padding: const EdgeInsets.all(3.0),
-                                child: TextButton(
-                                  onPressed: () async {
-                                    onEmojiChanged(emojiList[index]);
-                                    await _fireStore
-                                        .collection('emojis')
-                                        .doc(widget.userId)
-                                        .set({'emoji': emojiList[index]}, SetOptions(merge: true));
-                                    await getEmojiData(0);
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text(
-                                    emojiList[index],
-                                    style: const TextStyle(fontSize: 20),
-                                  ),
-                                ),
-                              );
-                            }),
-                          ))
+                          child: Scrollbar(
+                              isAlwaysShown: true,
+                              controller: _scrollController,
+                              child: GridView.count(
+                                controller: _scrollController,
+                                crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
+                                padding: const EdgeInsets.all(1.0),
+                                children: List.generate(emojiList.length, (index) {
+                                  return Container(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: TextButton(
+                                      onPressed: () async {
+                                        onEmojiChanged(emojiList[index]);
+                                        await _fireStore
+                                            .collection('emojis')
+                                            .doc(widget.userId)
+                                            .set({'emoji': emojiList[index]}, SetOptions(merge: true));
+                                        await getEmojiData(0);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        emojiList[index],
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              )))
                     ],
                   )),
                 ),
