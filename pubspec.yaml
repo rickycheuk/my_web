@@ -53,6 +53,8 @@ dependencies:
   flutter_email_sender: ^5.1.0
   uuid: ^3.0.6
   draggable_scrollbar: ^0.1.0
+  instagram_public_api: ^0.2.3
+  animated_background: ^2.0.0
 
 
 flutter_icons:

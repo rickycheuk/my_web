@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_web/constants.dart';
 
-class AppPage extends StatefulWidget {
-  const AppPage({Key? key}) : super(key: key);
+class DicePage extends StatefulWidget {
+  const DicePage({Key? key}) : super(key: key);
 
   @override
-  _AppPageState createState() => _AppPageState();
+  _DicePageState createState() => _DicePageState();
 }
 
-class _AppPageState extends State<AppPage> with SingleTickerProviderStateMixin {
+class _DicePageState extends State<DicePage> with SingleTickerProviderStateMixin {
   List<AssetImage> faces = const [
     AssetImage("assets/images/one.png"),
     AssetImage("assets/images/two.png"),
@@ -72,53 +72,51 @@ class _AppPageState extends State<AppPage> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Color? textColor = Theme.of(context).textTheme.bodyText1?.color;
-    double width = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
         child: Container(
             alignment: Alignment.center,
             color: Colors.transparent,
             padding: const EdgeInsets.all(20.0),
             child: Column(children: [
-              // Container(
-              //   width: min(MediaQuery.of(context).size.width, 500),
-              //   height: 75,
-              //   alignment: Alignment.center,
-              //   padding: const EdgeInsets.all(10.0),
-              //   decoration: BoxDecoration(
-              //     gradient: LinearGradient(
-              //       colors: [
-              //         kGradient1.withOpacity(0.8),
-              //         kGradient2.withOpacity(0.8),
-              //       ],
-              //       begin: Alignment.centerLeft,
-              //       end: Alignment.centerRight,
-              //       stops: const [0.0, 1],
-              //       tileMode: TileMode.clamp,
-              //     ),
-              //     border: Border.all(color: kGradient1, width: 3),
-              //     borderRadius: const BorderRadius.all(Radius.circular(10)),
-              //     boxShadow: [
-              //       BoxShadow(
-              //         color: Colors.black.withOpacity(0.5),
-              //         blurRadius: 3,
-              //         offset: const Offset(1, 3), // changes position of shadow
-              //       ),
-              //     ],
-              //   ),
-              //   child: Container(
-              //     alignment: Alignment.center,
-              //     child: const Text(
-              //       "Dice Roller",
-              //       style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
-              //     ),
-              //   ),
-              // ),
-              // Container(
-              //   height: 20,
-              // ),
+              Container(
+                width: min(MediaQuery.of(context).size.width, 500),
+                height: 75,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      kGradient1.withOpacity(0.8),
+                      kGradient2.withOpacity(0.8),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    stops: const [0.0, 1],
+                    tileMode: TileMode.clamp,
+                  ),
+                  border: Border.all(color: kGradient1, width: 3),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      blurRadius: 3,
+                      offset: const Offset(1, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: const Text(
+                    "Dice Roller",
+                    style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              Container(
+                height: 20,
+              ),
               Container(
                   width: min(MediaQuery.of(context).size.width, 500),
-                  height: 450,
                   alignment: Alignment.center,
                   padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
@@ -139,20 +137,20 @@ class _AppPageState extends State<AppPage> with SingleTickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        height: 30,
-                      ),
-                      Text(
-                        "Dice Roller",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: textColor,
-                          fontSize: 36.0,
-                        ),
-                      ),
-                      Container(
-                        height: 30,
-                      ),
+                      // Container(
+                      //   height: 30,
+                      // ),
+                      // Text(
+                      //   "Dice Roller",
+                      //   style: TextStyle(
+                      //     fontWeight: FontWeight.bold,
+                      //     color: textColor,
+                      //     fontSize: 36.0,
+                      //   ),
+                      // ),
+                      // Container(
+                      //   height: 30,
+                      // ),
                       Text(
                         answer,
                         style: TextStyle(
@@ -196,7 +194,7 @@ class _AppPageState extends State<AppPage> with SingleTickerProviderStateMixin {
                           margin: const EdgeInsets.only(top: 30.0),
                           child: Container(
                             height: 60,
-                            width: min(width, 200),
+                            width: 150,
                             // margin: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
@@ -219,13 +217,16 @@ class _AppPageState extends State<AppPage> with SingleTickerProviderStateMixin {
                                   await diceChanger();
                                 }
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.rotate_left_rounded,
-                                color: kSecondaryColor,
+                                color: Theme.of(context).colorScheme.secondary,
                                 size: 24,
                               ),
-                              label: const Text('Roll',
-                                  style: TextStyle(color: kSecondaryColor, fontWeight: FontWeight.bold, fontSize: 20)),
+                              label: Text('Roll',
+                                  style: TextStyle(
+                                      color: Theme.of(context).colorScheme.secondary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20)),
                             ),
                           )),
                     ],

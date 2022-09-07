@@ -58,8 +58,10 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
 
   @override
   Widget build(BuildContext context) {
+    Color? textColor = Theme.of(context).textTheme.bodyText1?.color;
     return SingleChildScrollView(
         child: Container(
+            padding: const EdgeInsets.all(20.0),
             alignment: Alignment.center,
             color: Colors.transparent,
             child: Column(
@@ -69,79 +71,94 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                 Container(
                   width: min(MediaQuery.of(context).size.width, 500),
                   alignment: Alignment.center,
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 75,
+                  height: 75,
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        kGradient1.withOpacity(0.8),
+                        kGradient2.withOpacity(0.8),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      stops: const [0.0, 1],
+                      tileMode: TileMode.clamp,
+                    ),
+                    border: Border.all(color: kGradient1, width: 3),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        blurRadius: 3,
+                        offset: const Offset(1, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Stack(children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: const [
+                          Text(
+                            title,
+                            style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            description,
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
+                      ),
+                    ),
+                    Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: SizedBox(width: 45, height: 45, child: addEmojiButton()),
+                      ),
+                    ])
+                  ]),
+                ),
+                Container(
+                  height: 20,
+                ),
+                Container(
+                    width: min(MediaQuery.of(context).size.width, 500),
+                    alignment: Alignment.topCenter,
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          kGradient1.withOpacity(0.8),
-                          kGradient2.withOpacity(0.8),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        stops: const [0.0, 1],
-                        tileMode: TileMode.clamp,
-                      ),
-                      border: Border.all(color: kGradient1, width: 3),
+                      color: textColor == kContentColorDarkTheme
+                          ? Colors.black.withOpacity(0.3)
+                          : Colors.white.withOpacity(0.3),
+                      // border: Border.all(color: kGradient1, width: 3),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.1),
                           blurRadius: 3,
                           offset: const Offset(1, 3), // changes position of shadow
                         ),
                       ],
                     ),
-                    child: Stack(children: [
-                      Container(
-                        alignment: Alignment.center,
-                        child: Column(
-                          children: const [
-                            Text(
-                              title,
-                              style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              description,
-                              style: TextStyle(color: Colors.white),
-                            )
-                          ],
-                        ),
-                      ),
-                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                        Container(
-                          alignment: Alignment.centerRight,
-                          child: SizedBox(width: 45, height: 45, child: addEmojiButton()),
-                        ),
-                      ])
-                    ]),
-                  ),
-                ),
-                Container(
-                    constraints: const BoxConstraints(maxHeight: 390, minHeight: 0),
-                    child: IntrinsicHeight(
-                        child: SingleChildScrollView(
-                            child: Container(
-                      alignment: Alignment.topCenter,
-                      padding: const EdgeInsets.all(10.0),
-                      child: FutureBuilder(
-                        future: _emojiFuture,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return const CircularProgressIndicator(backgroundColor: Colors.grey, color: kPrimaryColor);
-                          } else if (snapshot.hasError) {
-                            return const Center(
-                              child: Text("Error while loading Emojis. Please refresh."),
-                            );
-                          } else {
-                            return emojis;
-                          }
-                        },
-                      ),
-                    )))),
+                    child: SingleChildScrollView(
+                        child: Container(
+                          constraints: const BoxConstraints(maxHeight: 390, minHeight: 0),
+                          alignment: Alignment.topCenter,
+                          padding: const EdgeInsets.all(10.0),
+                          child: FutureBuilder(
+                            future: _emojiFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return const CircularProgressIndicator(backgroundColor: Colors.grey, color: kPrimaryColor);
+                              } else if (snapshot.hasError) {
+                                return const Center(
+                                  child: Text("Error while loading Emojis. Please refresh."),
+                                );
+                              } else {
+                                return emojis;
+                              }
+                            },
+                          ),
+                    ))),
               ],
             )));
   }
