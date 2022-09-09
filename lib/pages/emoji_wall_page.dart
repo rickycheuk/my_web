@@ -42,7 +42,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
     setState(() {
       emojis = Text(
         _emojis.replaceAll('\n', ''),
-        style: const TextStyle(fontSize: 25),
+        style: const TextStyle(fontSize: 25, fontFamily: ''),
         textAlign: TextAlign.center,
       );
       _currentEmoji = userSnapshot.exists ? userSnapshot['emoji'] : '+';
@@ -204,7 +204,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                           width: MediaQuery.of(context).size.width / 1.5,
                           height: MediaQuery.of(context).size.height / 1.5,
                           child: Scrollbar(
-                              isAlwaysShown: true,
+                              thumbVisibility: true,
                               controller: _scrollController,
                               child: GridView.count(
                                 controller: _scrollController,
@@ -225,7 +225,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                       },
                                       child: Text(
                                         emojiList[index],
-                                        style: const TextStyle(fontSize: 20),
+                                        style: const TextStyle(fontSize: 20, fontFamily: ''),
                                       ),
                                     ),
                                   );

@@ -80,6 +80,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    precacheImage(const AssetImage('assets/images/ricky.jpg'), context);
+    precacheImage(const AssetImage("assets/images/one.png"), context);
+    precacheImage(const AssetImage("assets/images/two.png"), context);
+    precacheImage(const AssetImage("assets/images/three.png"), context);
+    precacheImage(const AssetImage("assets/images/four.png"), context);
+    precacheImage(const AssetImage("assets/images/five.png"), context);
+    precacheImage(const AssetImage("assets/images/six.png"), context);
     super.initState();
     // Disabled for now
     // getData();
@@ -325,7 +332,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
               ),
             ),
             child: AppBar(
-              title: Text(widget.title),
+              title: Text(widget.title, style: const TextStyle(color: kContentColorDarkTheme),),
               // centerTitle: true,
               elevation: 0.0,
               bottomOpacity: 0.5,

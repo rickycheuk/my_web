@@ -62,7 +62,7 @@ class _MessagePageState extends State<MessagePage> {
                 child: Container(
                   alignment: Alignment.center,
                   child: const Text(
-                    "Leave me a message",
+                    "Message Me",
                     style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
