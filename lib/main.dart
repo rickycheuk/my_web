@@ -1,17 +1,13 @@
 import 'dart:ui';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:animated_background/animated_background.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
-import 'package:my_web/update_notes.dart';
 import 'package:my_web/utils/my_web_icons.dart';
 
 import 'constants.dart';
@@ -31,7 +27,7 @@ class Item {
   bool isExpanded;
 }
 
-final _fireStore = FirebaseFirestore.instance;
+// final _fireStore = FirebaseFirestore.instance;
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 const profileId = 'Tiqrj06AHigcHiytJPf1';
@@ -41,46 +37,6 @@ String userName = 'Ricky Cheuk';
 String userId = '';
 int waitTime = 1;
 
-// init pages
-List<Widget> tabPages = [
-  HomePage(
-    userName: userName,
-    description: description,
-    links: const [
-      'https://www.linkedin.com/in/rickycheuk/',
-      'https://github.com/rickycheuk',
-      'https://www.instagram.com/thlipperythnake/?hl=en'
-    ],
-    websiteNames: const ['Linkedin', 'GitHub', 'Instagram'],
-    icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
-    appList: [
-      Item(
-          headerValue: 'About Me',
-          expandedValue: Container(
-            alignment: Alignment.topLeft,
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-            child: const Text("""• Hong Kong -> New York\n• Python, Spark, Flink, Flutter, SQL, AWS\n• AWS Certified Solutions Architect – Associate""",
-                style: TextStyle(color: kSecondaryColor)),
-          ),
-          icon: Icons.person),
-      Item(
-          headerValue: 'Emoji Wall',
-          expandedValue: EmojiWallPage(
-            userId: userId,
-            waitTime: waitTime,
-          ),
-          icon: Icons.sentiment_satisfied_alt),
-      Item(headerValue: 'Dice Roller', expandedValue: AppPage(), icon: My_web.dice_six),
-    ],
-  ),
-  // EmojiWallPage(
-  //   userId: userId,
-  //   waitTime: waitTime,
-  // ),
-  // AppPage(),
-  InProgressPage(),
-  // Dice()
-];
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
 bool isDarkMode = _brightness == Brightness.dark;
 
@@ -93,6 +49,7 @@ Future<void> main() async {
   ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle());
   pb.addText(emojiList.join());
   pb.build().layout(const ParagraphConstraints(width: 100));
+  // Firebase init
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -108,18 +65,6 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-Future<UserCredential> signInWithGoogle() async {
-  // Create a new provider
-  GoogleAuthProvider googleProvider = GoogleAuthProvider();
-  googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-  googleProvider.setCustomParameters({'login_hint': 'user@example.com'});
-
-  // Once signed in, return the UserCredential
-  return await FirebaseAuth.instance.signInWithPopup(googleProvider);
-  // Or use signInWithRedirect
-  // return await FirebaseAuth.instance.signInWithRedirect(googleProvider);
-}
-
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
@@ -128,13 +73,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  ThemeMode _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+  ThemeMode _themeMode = ThemeMode.dark; //isDarkMode ? ThemeMode.dark : ThemeMode.light;
 
   @override
   void initState() {
+    precacheImage(const AssetImage('assets/images/ricky.jpg'), context);
+    precacheImage(const AssetImage("assets/images/one.png"), context);
+    precacheImage(const AssetImage("assets/images/two.png"), context);
+    precacheImage(const AssetImage("assets/images/three.png"), context);
+    precacheImage(const AssetImage("assets/images/four.png"), context);
+    precacheImage(const AssetImage("assets/images/five.png"), context);
+    precacheImage(const AssetImage("assets/images/six.png"), context);
     super.initState();
-    // Disabled for now
-    // getData();
   }
 
   @override
@@ -155,72 +105,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  Future<void> getData() async {
-    List _links = [];
-    List _websiteNames = [];
-    List _icons = [];
-    QuerySnapshot querySnapshot = await _fireStore.collection('urls').get();
-    DocumentSnapshot profileSnapshot = await _fireStore.collection('profile').doc(profileId).get();
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList() as List;
-    for (var d in allData) {
-      _links.add(d['link']);
-      _websiteNames.add(d['name']);
-      switch (d['icon'].toLowerCase()) {
-        case 'linkedin':
-          {
-            _icons.add(Icons.account_circle_outlined);
-          }
-          break;
-        default:
-          {
-            _icons.add(Icons.web);
-          }
-          break;
-      }
-    }
-    setState(() {
-      webTitle = profileSnapshot['name'];
-      userName = profileSnapshot['name'];
-      description = profileSnapshot['description'];
-      tabPages = [
-        HomePage(
-          userName: userName,
-          description: description,
-          links: _links,
-          websiteNames: _websiteNames,
-          icons: _icons,
-          appList: [
-            Item(
-                headerValue: 'About Me',
-                expandedValue: Container(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  child: const Text("""Hong Kong -> New York""", style: TextStyle(color: kSecondaryColor)),
-                ),
-                icon: Icons.person),
-            Item(
-                headerValue: 'Emoji Wall',
-                expandedValue: EmojiWallPage(
-                  userId: userId,
-                  waitTime: waitTime,
-                ),
-                icon: Icons.sentiment_satisfied_alt),
-            Item(headerValue: 'Dice Roller', expandedValue: AppPage(), icon: My_web.dice_six),
-          ],
-        ),
-        // EmojiWallPage(
-        //   userId: userId,
-        //   waitTime: waitTime,
-        // ),
-        // AppPage(),
-        // InProgressPage(),
-        // Dice()
-      ];
-    });
-    if (kDebugMode) {
-      print(webTitle);
-      print(_links);
-    }
-  }
 }
 
 class Page extends StatefulWidget {
@@ -232,84 +116,75 @@ class Page extends StatefulWidget {
   _PageState createState() => _PageState();
 }
 
-class _PageState extends State<Page> {
-  int _pageIndex = 0;
-  PageController _pageController = PageController();
-
+class _PageState extends State<Page> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: _pageIndex);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: _buildAppBar(),
-        body: PageView(
-          children: tabPages,
-          onPageChanged: onPageChanged,
-          controller: _pageController,
-        ),
-        bottomNavigationBar: _buildBottomNavigationBar());
-  }
+    // init pages
+    Widget homePage = HomePage(
+      userName: userName,
+      description: description,
+      links: const [
+        'https://www.linkedin.com/in/rickycheuk/',
+        'https://github.com/rickycheuk',
+        'https://www.instagram.com/thlipperythnake/?hl=en'
+      ],
+      websiteNames: const ['Linkedin', 'GitHub', 'Instagram'],
+      icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
+      appList: [
+        // Item(
+        //     headerValue: 'About Me',
+        //     expandedValue: Container(
+        //       alignment: Alignment.topLeft,
+        //       padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+        //       child: Text(
+        //           """• Hong Kong -> New York\n• Python, Spark, Flink, Flutter, SQL, AWS\n• AWS Certified Solutions Architect – Associate""",
+        //           style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
+        //     ),
+        //     icon: Icons.person),
+        Item(headerValue: 'Dice Roller', expandedValue: DicePage(), icon: My_web.dice_six),
+        Item(
+            headerValue: 'Emoji Wall',
+            expandedValue: EmojiWallPage(
+              userId: userId,
+              waitTime: waitTime,
+            ),
+            icon: Icons.sentiment_satisfied_alt),
+        Item(headerValue: 'Message Me', expandedValue: MessagePage(), icon: Icons.insert_comment_outlined),
+      ]
+    );
 
-  void onPageChanged(int page) {
-    logEvent("page_change_" + tabPages[page].toString());
-    setState(() {
-      _pageIndex = page;
-      // if (waitTime > 0 && page == 1) {
-      //   waitTime = 0;
-      //   tabPages[1] = EmojiWallPage(
-      //     userId: userId,
-      //     waitTime: waitTime,
-      //   );
-      // }
-    });
-  }
+    // Defining particles for animated background
+    ParticleOptions particles = const ParticleOptions(
+      baseColor: Colors.white,
+      spawnOpacity: 0.0,
+      opacityChangeRate: 0.69,
+      minOpacity: 0.069,
+      maxOpacity: 0.420,
+      particleCount: 69,
+      spawnMaxRadius: 5.0,
+      spawnMaxSpeed: 69.0,
+      spawnMinSpeed: 11,
+      spawnMinRadius: 2.0,
+    );
 
-  void onTabTapped(int index) {
-    _pageController.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              kGradient1,
-              kGradient2,
-              kGradient1,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.topRight,
-            stops: [0.0, 0.5, 1],
-            tileMode: TileMode.clamp,
-          ),
-        ),
-        child: Container(
-          margin: const EdgeInsets.fromLTRB(0.0, 1.0, 0.0, 0.0),
-          child: BottomNavigationBar(
-            currentIndex: _pageIndex,
-            onTap: onTabTapped,
-            elevation: 50.0,
-            unselectedFontSize: 0.0,
-            selectedFontSize: 0.0,
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
-              // BottomNavigationBarItem(icon: Icon(Icons.sentiment_satisfied_alt), label: 'Emoji Wall'),
-              // BottomNavigationBarItem(icon: Icon(Icons.videogame_asset_outlined), label: 'Games'),
-              // BottomNavigationBarItem(icon: Icon(My_web.dice_d6), label: 'Dices'),
-              BottomNavigationBarItem(icon: Icon(Icons.insert_comment_outlined), label: 'Comment'),
-            ],
+    return GestureDetector(
+        onTapDown: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          appBar: _buildAppBar(),
+          body: AnimatedBackground(
+            vsync: this,
+            behaviour: RandomParticleBehaviour(options: particles),
+            child: Container(alignment: Alignment.center, child: homePage),
           ),
         ));
   }
@@ -332,154 +207,24 @@ class _PageState extends State<Page> {
               ),
             ),
             child: AppBar(
-              title: Text(widget.title),
+              title: Text(widget.title, style: const TextStyle(color: kContentColorDarkTheme),),
               // centerTitle: true,
               elevation: 0.0,
               bottomOpacity: 0.5,
               actions: [
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: _buildTextButton(
-                    text: "What's new?",
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              scrollable: true,
-                              alignment: Alignment.center,
-                              title: const Text(
-                                "What's new?",
-                                textAlign: TextAlign.center,
-                              ),
-                              content: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Form(
-                                  child: Column(
-                                    children: <Widget>[
-                                      SizedBox(
-                                          width: MediaQuery.of(context).size.width / 2,
-                                          height: MediaQuery.of(context).size.height / 2,
-                                          child: ListView(children: updateNotes))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
-                    },
-                  ),
-                ),
-                // Container(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: _buildTextButton(
-                //       text: FirebaseAuth.instance.currentUser!.isAnonymous ? "Login" : "Logout",
-                //       onPressed: FirebaseAuth.instance.currentUser!.isAnonymous
-                //           ? () {
-                //               Color textColor = _themeMode == ThemeMode.light ? Colors.black : Colors.white;
-                //               showDialog(
-                //                   context: context,
-                //                   builder: (BuildContext context) {
-                //                     return AlertDialog(
-                //                       scrollable: true,
-                //                       alignment: Alignment.center,
-                //                       title: const Text(
-                //                         "Login",
-                //                         textAlign: TextAlign.center,
-                //                       ),
-                //                       content: Padding(
-                //                         padding: const EdgeInsets.all(8.0),
-                //                         child: Column(
-                //                           children: <Widget>[
-                //                             SizedBox(
-                //                                 width: MediaQuery.of(context).size.width / 2,
-                //                                 height: MediaQuery.of(context).size.height / 2,
-                //                                 child: SingleChildScrollView(
-                //                                     child: Column(
-                //                                   children: [
-                //                                     const Text(
-                //                                       "Login is preferred to better persist onsite data. No user personal data is collected or used on this site.",
-                //                                       style: TextStyle(fontSize: 13),
-                //                                     ),
-                //                                     const SizedBox(
-                //                                       height: 10,
-                //                                     ),
-                //                                     const Text(
-                //                                       "* Note that all the guest session data will be cleared by logging in.",
-                //                                       style: TextStyle(fontSize: 13),
-                //                                     ),
-                //                                     const SizedBox(
-                //                                       height: 10,
-                //                                     ),
-                //                                     const Text(
-                //                                       "Please enable popup when logging in",
-                //                                       style: TextStyle(
-                //                                           fontSize: 14,
-                //                                           fontWeight: FontWeight.bold,
-                //                                           decoration: TextDecoration.underline),
-                //                                     ),
-                //                                     const SizedBox(
-                //                                       height: 20,
-                //                                     ),
-                //                                     _buildTextButton(
-                //                                       textColor: textColor,
-                //                                       height: 40,
-                //                                       text: "Login",
-                //                                       onPressed: () async {
-                //                                         await HapticFeedback.lightImpact();
-                //                                         UserCredential userCredential = await signInWithGoogle();
-                //                                         setState(() {
-                //                                           userId = userCredential.user?.uid as String;
-                //                                           tabPages[1] = EmojiWallPage(
-                //                                             userId: userId,
-                //                                             isLoggedIn: !FirebaseAuth.instance.currentUser!.isAnonymous,
-                //                                             waitTime: waitTime,
-                //                                           );
-                //                                         });
-                //                                         Navigator.pop(context);
-                //                                         Navigator.popAndPushNamed(context, '/');
-                //                                       },
-                //                                     ),
-                //                                     const SizedBox(
-                //                                       height: 20,
-                //                                     ),
-                //                                     _buildTextButton(
-                //                                         textColor: textColor,
-                //                                         height: 40,
-                //                                         text: "Cancel",
-                //                                         onPressed: () {
-                //                                           HapticFeedback.lightImpact();
-                //                                           Navigator.pop(context);
-                //                                         })
-                //                                   ],
-                //                                 )))
-                //                           ],
-                //                         ),
-                //                       ),
-                //                     );
-                //                   });
-                //             }
-                //           : () async {
-                //               UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
-                //               setState(() {
-                //                 userId = userCredential.user?.uid as String;
-                //                 tabPages[1] = EmojiWallPage(
-                //                   userId: userId,
-                //                   waitTime: waitTime,
-                //                 );
-                //               });
-                //               Navigator.popAndPushNamed(context, '/');
-                //             }),
-                // ),
                 IconButton(
                   icon: Icon(_themeMode == ThemeMode.light ? Icons.dark_mode : Icons.wb_sunny_outlined,
                       color: kContentColorDarkTheme),
                   onPressed: () {
-                    MyApp.of(context)?._themeMode == ThemeMode.light
+                    MyApp
+                        .of(context)
+                        ?._themeMode == ThemeMode.light
                         ? MyApp.of(context)?.changeTheme(ThemeMode.dark)
                         : MyApp.of(context)?.changeTheme(ThemeMode.light);
                     setState(() {
-                      _themeMode = MyApp.of(context)?._themeMode;
+                      _themeMode = MyApp
+                          .of(context)
+                          ?._themeMode;
                     });
                   },
                 ),
@@ -487,21 +232,4 @@ class _PageState extends State<Page> {
             )));
   }
 
-  Widget _buildTextButton(
-      {Color textColor = Colors.white, double height = 20, String text = "Button", void Function()? onPressed}) {
-    return TextButton(
-        child: Container(
-            height: height,
-            alignment: Alignment.center,
-            child: Text(
-              text,
-              style: TextStyle(color: textColor, fontSize: 13),
-            )),
-        style: ButtonStyle(
-            alignment: Alignment.center,
-            backgroundColor: MaterialStateProperty.all(Colors.transparent),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(7.0), side: BorderSide(color: textColor, width: 2)))),
-        onPressed: onPressed);
-  }
 }

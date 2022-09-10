@@ -5,13 +5,16 @@ const kPrimaryColor = Color(0xFF75A9FA);
 // const kSecondaryColor = Color(0xFF281EA5);
 // const kContentColorLightTheme = Color(0xFF1D1D35);
 // const kSecondaryColor = Color(0xFF17172A);
-const kSecondaryColor = Color(0xFF1E1E21);
+// const kSecondaryColor = Color(0xFF1E1E21);
+const kSecondaryColor = Color(0xFF29292D);
 const kContentColorLightTheme = Color(0xFF000000);
-const kContentColorDarkTheme = Color(0xFFD8E4EC);
+// const kContentColorDarkTheme = Color(0xFFD8E4EC);
+const kContentColorDarkTheme = Color(0xFFD1DAE3);
 const kWarninngColor = Color(0xFFC7C000);
 const kErrorColor = Color(0xFFF03738);
 const kGradient1 = Color(0xFF5897FA);
 const kGradient2 = Color(0xFFA48BFF);
+const kDarkGradient1 = Color(0xFF1B2430);
 
 const kDefaultPadding = 20.0;
 

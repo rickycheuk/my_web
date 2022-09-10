@@ -30,20 +30,20 @@ ThemeData darkThemeData(BuildContext context) {
   // By default flutter provides us light and dark theme
   // we just modify it as our need
   return ThemeData.dark().copyWith(
-    primaryColor: kPrimaryColor,
-    scaffoldBackgroundColor: kSecondaryColor,
+    primaryColor: kSecondaryColor,//kPrimaryColor,
+    scaffoldBackgroundColor: Colors.black,//kSecondaryColor,
     appBarTheme: const AppBarTheme(
         centerTitle: false, elevation: 0, backgroundColor: Colors.transparent),
     iconTheme: const IconThemeData(color: kContentColorDarkTheme),
     textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme)
         .apply(bodyColor: kContentColorDarkTheme),
     colorScheme: const ColorScheme.dark().copyWith(
-      primary: kPrimaryColor,
-      secondary: kSecondaryColor,
+      primary: kSecondaryColor,//kPrimaryColor,
+      secondary: kContentColorDarkTheme,//kSecondaryColor,
       error: kErrorColor,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: kSecondaryColor,
+      backgroundColor: Colors.black,//kSecondaryColor,
       selectedItemColor: Colors.white70,
       unselectedItemColor: kContentColorDarkTheme.withOpacity(0.32),
       selectedIconTheme: const IconThemeData(color: kPrimaryColor),

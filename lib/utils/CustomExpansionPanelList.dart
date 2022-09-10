@@ -2,8 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../constants.dart';
-
 const double _kPanelHeaderCollapsedHeight = 60.0;
 const double _kPanelHeaderExpandedHeight = 60.0;
 
@@ -60,7 +58,7 @@ class CustomExpansionPanelList extends StatelessWidget {
               onPressed: (bool isExpanded) {
                 expansionCallback(index, isExpanded);
               },
-              color: kSecondaryColor,
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ],
@@ -68,26 +66,26 @@ class CustomExpansionPanelList extends StatelessWidget {
 
       items.add(Ink(
           width: min(screenWidth, 500),
-          child: InkWell(
-            onTap: () {
-              expansionCallback(index, _isChildExpanded(index));
-            }, // Handle your callback
-            child: Container(
-              key: _SaltedKey<BuildContext, int>(context, index * 2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Theme.of(context).colorScheme.primary,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    blurRadius: 3,
-                    offset: const Offset(1, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: Material(
-                borderRadius: BorderRadius.all(Radius.circular(radius)),
-                color: color,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(radius)),
+            color: color,
+            child: InkWell(
+              onTap: () {
+                expansionCallback(index, _isChildExpanded(index));
+              }, // Handle your callback
+              child: Container(
+                key: _SaltedKey<BuildContext, int>(context, index * 2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Theme.of(context).colorScheme.primary,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      blurRadius: 3,
+                      offset: const Offset(1, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
                 child: Column(
                   children: <Widget>[
                     header,
