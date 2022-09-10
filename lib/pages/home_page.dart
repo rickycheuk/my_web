@@ -100,24 +100,14 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                // padding: const EdgeInsets.all(10),
                 itemCount: widget.links.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     height: 60,
                     width: 60,
-                    // margin: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      // border: Border.all(color: kGradient1, width: 3),
-                      color: Colors.transparent, //Theme.of(context).colorScheme.primary,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.black.withOpacity(0.5),
-                      //     blurRadius: 3,
-                      //     offset: const Offset(1, 3), // changes position of shadow
-                      //   ),
-                      // ],
+                      color: Colors.transparent,
                     ),
                     child: TextButton(
                       onPressed: () async {
@@ -168,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Icon(
                                 item.icon,
-                                color: Theme.of(context).colorScheme.secondary, //kSecondaryColor,
+                                color: Theme.of(context).colorScheme.secondary,
                                 size: 24,
                               ),
                               const SizedBox(
@@ -176,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Text(item.headerValue,
                                   style: Theme.of(context).textTheme.bodyText1?.apply(
-                                      color: Theme.of(context).colorScheme.secondary, //kSecondaryColor,
+                                      color: Theme.of(context).colorScheme.secondary,
                                       fontWeightDelta: 2,
                                       fontSizeDelta: 1)),
                             ],
@@ -189,11 +179,6 @@ class _HomePageState extends State<HomePage> {
               )
             ]))
       ],
-    ) // ))),
-        // ]
-        );
-    // ];
-
-    // return PageView(scrollDirection: Axis.vertical, children: homeViewList);
+    ));
   }
 }
