@@ -10,7 +10,7 @@ const title = 'Emoji Wall';
 const description = 'Add your Emoji ->';
 
 class EmojiWallPage extends StatefulWidget {
-  const EmojiWallPage({Key? key, required this.userId, this.waitTime = 1}) : super(key: key);
+  const EmojiWallPage({Key? key, required this.userId, this.waitTime = 2}) : super(key: key);
 
   final String userId;
   final int waitTime;
@@ -170,27 +170,37 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                           alignment: Alignment.center,
                           child: Column(
                             children: [
+                              Container(
+                                height: 10,
+                              ),
                               const Text(
                                 'Add Your Emoji',
                                 textAlign: TextAlign.center,
                               ),
                               Container(
-                                height: 10,
+                                height: 20,
                               ),
-                              DropdownButton(
-                                value: selectedValue,
-                                items: emojiListNames.map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (Object? value) {
-                                  setState(() {
-                                    selectedValue = value as String;
-                                  });
-                                },
-                              )
+                              DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.69),
+                                  ),
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(left: 10, right: 10),
+                                      child: DropdownButton(
+                                        value: selectedValue,
+                                        items: emojiListNames.map<DropdownMenuItem<String>>((String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (Object? value) {
+                                          setState(() {
+                                            selectedValue = value as String;
+                                          });
+                                        },
+                                      )))
                             ],
                           )),
                       Container(
@@ -199,7 +209,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                     ],
                   ),
                   content: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(6.9),
                     child: Form(
                         child: Column(
                       children: <Widget>[
@@ -277,19 +287,6 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                             child: ListView(
                               children: const [
                                 Text(
-                                  'What is Emoji Wall?',
-                                  style: TextStyle(fontSize: 17),
-                                ),
-                                Text(
-                                  '  - A page for anyone to leave emojis anonymously',
-                                  style: TextStyle(fontSize: 13),
-                                ),
-                                Text(
-                                  '  - Each visitor can only add one emoji',
-                                  style: TextStyle(fontSize: 13),
-                                ),
-                                Text(''),
-                                Text(
                                   'How does this work?',
                                   style: TextStyle(fontSize: 17),
                                 ),
@@ -298,7 +295,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                   style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
-                                  '  - You will see your current emoji on top right',
+                                  '  - You will see your current emoji at bottom right',
                                   style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
@@ -306,7 +303,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                   style: TextStyle(fontSize: 13),
                                 ),
                                 Text(
-                                  '  - New emojis might take few seconds to update, try refreshing the page',
+                                  '  - New emojis could take few seconds to update, try refreshing the page',
                                   style: TextStyle(fontSize: 13),
                                 ),
                               ],

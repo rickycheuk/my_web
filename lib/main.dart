@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:animated_background/animated_background.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -36,7 +35,7 @@ String webTitle = 'Ricky Cheuk';
 String description = '- Software Engineer -';
 String userName = 'Ricky Cheuk';
 String userId = '';
-int waitTime = 1;
+int waitTime = 2;
 
 List preloadImages = [
   "assets/images/ricky.jpg",
@@ -48,7 +47,7 @@ List preloadImages = [
   "assets/images/six.png"
 ];
 
-var _brightness = SchedulerBinding.instance!.window.platformBrightness;
+var _brightness = SchedulerBinding.instance.window.platformBrightness;
 bool isDarkMode = _brightness == Brightness.dark;
 
 Future<void> logEvent(String eventName) async {
@@ -60,13 +59,6 @@ Future<void> main() async {
   for (var img in preloadImages) {
     await loadImage(AssetImage(img));
   }
-  // Preload all emojis for better experience
-  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle());
-  for (var emojiList in emojiListMap.values){
-    pb.addText(emojiList.join());
-  }
-  pb.build().layout(const ParagraphConstraints(width: 100));
-
   // Firebase init
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -152,16 +144,6 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
       My_web.github_1,
       My_web.instagram_1
     ], appList: [
-      // Item(
-      //     headerValue: 'About Me',
-      //     expandedValue: Container(
-      //       alignment: Alignment.topLeft,
-      //       padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-      //       child: Text(
-      //           """• Hong Kong -> New York\n• Python, Spark, Flink, Flutter, SQL, AWS\n• AWS Certified Solutions Architect – Associate""",
-      //           style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
-      //     ),
-      //     icon: Icons.person),
       Item(headerValue: 'Dice Roller', expandedValue: DicePage(), icon: My_web.dice_six),
       Item(
           headerValue: 'Emoji Wall',
