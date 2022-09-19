@@ -9,6 +9,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/theme.dart';
 import 'package:my_web/utils/my_web_icons.dart';
+import 'package:my_web/utils/preload_image.dart';
 
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -37,6 +38,16 @@ String userName = 'Ricky Cheuk';
 String userId = '';
 int waitTime = 1;
 
+List preloadImages = [
+  "assets/images/ricky.jpg",
+  "assets/images/one.png",
+  "assets/images/two.png",
+  "assets/images/three.png",
+  "assets/images/four.png",
+  "assets/images/five.png",
+  "assets/images/six.png"
+];
+
 var _brightness = SchedulerBinding.instance!.window.platformBrightness;
 bool isDarkMode = _brightness == Brightness.dark;
 
@@ -45,10 +56,17 @@ Future<void> logEvent(String eventName) async {
 }
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  for (var img in preloadImages) {
+    await loadImage(AssetImage(img));
+  }
   // Preload all emojis for better experience
   ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle());
-  pb.addText(emojiList.join());
+  for (var emojiList in emojiListMap.values){
+    pb.addText(emojiList.join());
+  }
   pb.build().layout(const ParagraphConstraints(width: 100));
+
   // Firebase init
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -61,7 +79,6 @@ Future<void> main() async {
       'user': userId,
     },
   );
-  // await Future.delayed(const Duration(seconds: 1));
   runApp(MyApp());
 }
 
@@ -77,13 +94,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    precacheImage(const AssetImage('assets/images/ricky.jpg'), context);
-    precacheImage(const AssetImage("assets/images/one.png"), context);
-    precacheImage(const AssetImage("assets/images/two.png"), context);
-    precacheImage(const AssetImage("assets/images/three.png"), context);
-    precacheImage(const AssetImage("assets/images/four.png"), context);
-    precacheImage(const AssetImage("assets/images/five.png"), context);
-    precacheImage(const AssetImage("assets/images/six.png"), context);
     super.initState();
   }
 
@@ -104,7 +114,6 @@ class _MyAppState extends State<MyApp> {
       _themeMode = themeMode;
     });
   }
-
 }
 
 class Page extends StatefulWidget {
@@ -130,38 +139,39 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // init pages
-    Widget homePage = HomePage(
-      userName: userName,
-      description: description,
-      links: const [
-        'https://www.linkedin.com/in/rickycheuk/',
-        'https://github.com/rickycheuk',
-        'https://www.instagram.com/thlipperythnake/?hl=en'
-      ],
-      websiteNames: const ['Linkedin', 'GitHub', 'Instagram'],
-      icons: const [My_web.linkedin_1, My_web.github_1, My_web.instagram_1],
-      appList: [
-        // Item(
-        //     headerValue: 'About Me',
-        //     expandedValue: Container(
-        //       alignment: Alignment.topLeft,
-        //       padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-        //       child: Text(
-        //           """• Hong Kong -> New York\n• Python, Spark, Flink, Flutter, SQL, AWS\n• AWS Certified Solutions Architect – Associate""",
-        //           style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
-        //     ),
-        //     icon: Icons.person),
-        Item(headerValue: 'Dice Roller', expandedValue: DicePage(), icon: My_web.dice_six),
-        Item(
-            headerValue: 'Emoji Wall',
-            expandedValue: EmojiWallPage(
-              userId: userId,
-              waitTime: waitTime,
-            ),
-            icon: Icons.sentiment_satisfied_alt),
-        Item(headerValue: 'Message Me', expandedValue: MessagePage(), icon: Icons.insert_comment_outlined),
-      ]
-    );
+    Widget homePage = HomePage(userName: userName, description: description, links: const [
+      'https://www.linkedin.com/in/rickycheuk/',
+      'https://github.com/rickycheuk',
+      'https://www.instagram.com/thlipperythnake/?hl=en'
+    ], websiteNames: const [
+      'Linkedin',
+      'GitHub',
+      'Instagram'
+    ], icons: const [
+      My_web.linkedin_1,
+      My_web.github_1,
+      My_web.instagram_1
+    ], appList: [
+      // Item(
+      //     headerValue: 'About Me',
+      //     expandedValue: Container(
+      //       alignment: Alignment.topLeft,
+      //       padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+      //       child: Text(
+      //           """• Hong Kong -> New York\n• Python, Spark, Flink, Flutter, SQL, AWS\n• AWS Certified Solutions Architect – Associate""",
+      //           style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 16)),
+      //     ),
+      //     icon: Icons.person),
+      Item(headerValue: 'Dice Roller', expandedValue: DicePage(), icon: My_web.dice_six),
+      Item(
+          headerValue: 'Emoji Wall',
+          expandedValue: EmojiWallPage(
+            userId: userId,
+            waitTime: waitTime,
+          ),
+          icon: Icons.sentiment_satisfied_alt),
+      Item(headerValue: 'Message Me', expandedValue: MessagePage(), icon: Icons.insert_comment_outlined),
+    ]);
 
     // Defining particles for animated background
     ParticleOptions particles = const ParticleOptions(
@@ -207,7 +217,10 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
               ),
             ),
             child: AppBar(
-              title: Text(widget.title, style: const TextStyle(color: kContentColorDarkTheme),),
+              title: Text(
+                widget.title,
+                style: const TextStyle(color: kContentColorDarkTheme),
+              ),
               // centerTitle: true,
               elevation: 0.0,
               bottomOpacity: 0.5,
@@ -216,20 +229,15 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
                   icon: Icon(_themeMode == ThemeMode.light ? Icons.dark_mode : Icons.wb_sunny_outlined,
                       color: kContentColorDarkTheme),
                   onPressed: () {
-                    MyApp
-                        .of(context)
-                        ?._themeMode == ThemeMode.light
+                    MyApp.of(context)?._themeMode == ThemeMode.light
                         ? MyApp.of(context)?.changeTheme(ThemeMode.dark)
                         : MyApp.of(context)?.changeTheme(ThemeMode.light);
                     setState(() {
-                      _themeMode = MyApp
-                          .of(context)
-                          ?._themeMode;
+                      _themeMode = MyApp.of(context)?._themeMode;
                     });
                   },
                 ),
               ],
             )));
   }
-
 }

@@ -24,6 +24,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
   Text emojis = const Text('');
   late Future _emojiFuture;
   final ScrollController _scrollController = ScrollController();
+  String selectedValue = "Smiley";
 
   @override
   void initState() {
@@ -158,63 +159,88 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
         showDialog(
             context: context,
             builder: (BuildContext context) {
-              return AlertDialog(
-                scrollable: true,
-                alignment: Alignment.center,
-                title: Stack(
-                  children: [
-                    Container(
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'Add Your Emoji',
-                          textAlign: TextAlign.center,
-                        )),
-                    Container(
-                        alignment: Alignment.centerRight, child: SizedBox(width: 45, height: 45, child: helpButton()))
-                  ],
-                ),
-                content: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Form(
-                      child: Column(
-                    children: <Widget>[
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width / 1.5,
-                          height: MediaQuery.of(context).size.height / 1.5,
-                          child: Scrollbar(
-                              thumbVisibility: true,
-                              controller: _scrollController,
-                              child: GridView.count(
-                                controller: _scrollController,
-                                crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
-                                padding: const EdgeInsets.all(1.0),
-                                children: List.generate(emojiList.length, (index) {
-                                  return Container(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: TextButton(
-                                      onPressed: () async {
-                                        loadingPopup();
-                                        onEmojiChanged(emojiList[index]);
-                                        await _fireStore
-                                            .collection('emojis')
-                                            .doc(widget.userId)
-                                            .set({'emoji': emojiList[index]}, SetOptions(merge: true));
-                                        await getEmojiData(0);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        emojiList[index],
-                                        style: const TextStyle(fontSize: 20, fontFamily: ''),
-                                      ),
-                                    ),
+              return StatefulBuilder(builder: (context, setState) {
+                List selectedList = emojiListMap[selectedValue];
+                return AlertDialog(
+                  scrollable: true,
+                  alignment: Alignment.center,
+                  title: Stack(
+                    children: [
+                      Container(
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: [
+                              const Text(
+                                'Add Your Emoji',
+                                textAlign: TextAlign.center,
+                              ),
+                              Container(
+                                height: 10,
+                              ),
+                              DropdownButton(
+                                value: selectedValue,
+                                items: emojiListNames.map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
                                   );
-                                }),
-                              )))
+                                }).toList(),
+                                onChanged: (Object? value) {
+                                  setState(() {
+                                    selectedValue = value as String;
+                                  });
+                                },
+                              )
+                            ],
+                          )),
+                      Container(
+                          alignment: Alignment.centerRight,
+                          child: SizedBox(width: 45, height: 45, child: helpButton())),
                     ],
-                  )),
-                ),
-              );
+                  ),
+                  content: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                        child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.5,
+                            height: MediaQuery.of(context).size.height / 1.5,
+                            child: Scrollbar(
+                                thumbVisibility: true,
+                                controller: _scrollController,
+                                child: GridView.count(
+                                  controller: _scrollController,
+                                  crossAxisCount: (MediaQuery.of(context).size.width / 70).round() - 1,
+                                  padding: const EdgeInsets.all(1.0),
+                                  children: List.generate(selectedList.length, (index) {
+                                    return Container(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: TextButton(
+                                        onPressed: () async {
+                                          loadingPopup();
+                                          onEmojiChanged(selectedList[index]);
+                                          await _fireStore
+                                              .collection('emojis')
+                                              .doc(widget.userId)
+                                              .set({'emoji': selectedList[index]}, SetOptions(merge: true));
+                                          await getEmojiData(0);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          selectedList[index],
+                                          style: const TextStyle(fontSize: 20, fontFamily: ''),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                )))
+                      ],
+                    )),
+                  ),
+                );
+              });
             });
       },
     );
