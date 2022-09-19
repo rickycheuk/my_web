@@ -74,163 +74,115 @@ class _DicePageState extends State<DicePage> with SingleTickerProviderStateMixin
     Color? textColor = Theme.of(context).textTheme.bodyText1?.color;
     return SingleChildScrollView(
         child: Container(
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
             alignment: Alignment.center,
             color: Colors.transparent,
-            padding: const EdgeInsets.all(20.0),
-            child: Column(children: [
-              Container(
-                width: min(MediaQuery.of(context).size.width, 500),
-                height: 75,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      kGradient1.withOpacity(0.8),
-                      kGradient2.withOpacity(0.8),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    stops: const [0.0, 1],
-                    tileMode: TileMode.clamp,
-                  ),
-                  border: Border.all(color: kGradient1, width: 3),
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.5),
-                      blurRadius: 3,
-                      offset: const Offset(1, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Container(
-                  alignment: Alignment.center,
-                  child: const Text(
-                    "Dice Roller",
-                    style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Container(
-                height: 20,
-              ),
-              Container(
-                  width: min(MediaQuery.of(context).size.width, 500),
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    color: textColor == kContentColorDarkTheme
-                        ? Colors.black.withOpacity(0.3)
-                        : Colors.white.withOpacity(0.3),
-                    // border: Border.all(color: kGradient1, width: 3),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 3,
-                        offset: const Offset(1, 3), // changes position of shadow
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                      width: min(MediaQuery.of(context).size.width, 500),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        color: textColor == kContentColorDarkTheme
+                            ? Colors.black.withOpacity(0.420)
+                            : Colors.white.withOpacity(0.420),
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 3,
+                            offset: const Offset(1, 3), // changes position of shadow
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      // Container(
-                      //   height: 30,
-                      // ),
-                      // Text(
-                      //   "Dice Roller",
-                      //   style: TextStyle(
-                      //     fontWeight: FontWeight.bold,
-                      //     color: textColor,
-                      //     fontSize: 36.0,
-                      //   ),
-                      // ),
-                      // Container(
-                      //   height: 30,
-                      // ),
-                      Text(
-                        answer,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: textColor,
-                          fontSize: 28.0,
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        transformAlignment: Alignment.center,
-                        margin: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            RotationTransition(
-                              turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
-                              child: Image(
-                                image: diceImage1,
-                                width: 120.0,
-                                height: 120.0,
-                              ),
-                            ),
-                            Container(
-                              width: 30,
-                            ),
-                            RotationTransition(
-                              turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
-                              child: Image(
-                                image: diceImage2,
-                                width: 120.0,
-                                height: 120.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                          alignment: Alignment.center,
-                          margin: const EdgeInsets.only(top: 30.0),
-                          child: Container(
-                            height: 60,
-                            width: 150,
-                            // margin: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              // border: Border.all(color: kGradient1, width: 3),
-                              color: _firstPress ? Theme.of(context).colorScheme.primary : Colors.grey,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.5),
-                                  blurRadius: 3,
-                                  offset: const Offset(1, 3), // changes position of shadow
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            transformAlignment: Alignment.center,
+                            margin: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 30.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                RotationTransition(
+                                  turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
+                                  child: Image(
+                                    image: diceImage1,
+                                    width: 120.0,
+                                    height: 120.0,
+                                  ),
+                                ),
+                                Container(
+                                  width: 30,
+                                ),
+                                RotationTransition(
+                                  turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
+                                  child: Image(
+                                    image: diceImage2,
+                                    width: 120.0,
+                                    height: 120.0,
+                                  ),
                                 ),
                               ],
                             ),
-                            child: TextButton.icon(
-                              onPressed: () async {
-                                if (_firstPress == true) {
-                                  _firstPress = false;
-                                  _controller.forward();
-                                  await HapticFeedback.lightImpact();
-                                  await diceChanger();
-                                }
-                              },
-                              icon: Icon(
-                                Icons.rotate_left_rounded,
-                                color: Theme.of(context).colorScheme.secondary,
-                                size: 24,
-                              ),
-                              label: Text('Roll',
-                                  style: TextStyle(
-                                      color: Theme.of(context).colorScheme.secondary,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20)),
+                          ),
+                          Text(
+                            answer,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
+                              fontSize: 28.0,
                             ),
-                          )),
-                    ],
-                  )),
-            ])));
+                          ),
+                          Container(
+                              alignment: Alignment.center,
+                              margin: const EdgeInsets.only(top: 30.0),
+                              child: Container(
+                                height: 60,
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: _firstPress ? Theme.of(context).colorScheme.primary : Colors.grey,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.5),
+                                      blurRadius: 3,
+                                      offset: const Offset(1, 3), // changes position of shadow
+                                    ),
+                                  ],
+                                ),
+                                child: TextButton.icon(
+                                  onPressed: () async {
+                                    if (_firstPress == true) {
+                                      _firstPress = false;
+                                      _controller.forward();
+                                      await HapticFeedback.lightImpact();
+                                      await diceChanger();
+                                    }
+                                  },
+                                  icon: Icon(
+                                    Icons.rotate_left_rounded,
+                                    color: Theme.of(context).colorScheme.secondary,
+                                    size: 24,
+                                  ),
+                                  label: Text('Roll',
+                                      style: TextStyle(
+                                          color: Theme.of(context).colorScheme.secondary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                ),
+                              )),
+                          Container(
+                            height: 10,
+                          ),
+                        ],
+                      )),
+                ])));
   }
 }
