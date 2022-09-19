@@ -7,7 +7,7 @@ import 'package:my_web/constants.dart';
 
 final _fireStore = FirebaseFirestore.instance;
 const title = 'Emoji Wall';
-const description = 'Add your emoji here ->';
+const description = 'Add your Emoji ->';
 
 class EmojiWallPage extends StatefulWidget {
   const EmojiWallPage({Key? key, required this.userId, this.waitTime = 1}) : super(key: key);
@@ -61,7 +61,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
     Color? textColor = Theme.of(context).textTheme.bodyText1?.color;
     return SingleChildScrollView(
         child: Container(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
             alignment: Alignment.center,
             color: Colors.transparent,
             child: Column(
@@ -69,67 +69,13 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: min(MediaQuery.of(context).size.width, 500),
-                  alignment: Alignment.center,
-                  height: 75,
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        kGradient1.withOpacity(0.8),
-                        kGradient2.withOpacity(0.8),
-                      ],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      stops: const [0.0, 1],
-                      tileMode: TileMode.clamp,
-                    ),
-                    border: Border.all(color: kGradient1, width: 3),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        blurRadius: 3,
-                        offset: const Offset(1, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Stack(children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: Column(
-                        children: const [
-                          Text(
-                            title,
-                            style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            description,
-                            style: TextStyle(color: Colors.white),
-                          )
-                        ],
-                      ),
-                    ),
-                    Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: SizedBox(width: 45, height: 45, child: addEmojiButton()),
-                      ),
-                    ])
-                  ]),
-                ),
-                Container(
-                  height: 20,
-                ),
-                Container(
                     width: min(MediaQuery.of(context).size.width, 500),
                     alignment: Alignment.topCenter,
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       color: textColor == kContentColorDarkTheme
-                          ? Colors.black.withOpacity(0.3)
-                          : Colors.white.withOpacity(0.3),
-                      // border: Border.all(color: kGradient1, width: 3),
+                          ? Colors.black.withOpacity(0.420)
+                          : Colors.white.withOpacity(0.420),
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       boxShadow: [
                         BoxShadow(
@@ -139,16 +85,20 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                         ),
                       ],
                     ),
-                    child: SingleChildScrollView(
-                        child: Container(
-                          constraints: const BoxConstraints(maxHeight: 390, minHeight: 0),
+                    height: 450,
+                    child: Column(
+                      children: [
+                        Expanded(
+                            child: SingleChildScrollView(
+                                child: Container(
                           alignment: Alignment.topCenter,
                           padding: const EdgeInsets.all(10.0),
                           child: FutureBuilder(
                             future: _emojiFuture,
                             builder: (context, snapshot) {
                               if (snapshot.connectionState == ConnectionState.waiting) {
-                                return const CircularProgressIndicator(backgroundColor: Colors.grey, color: kPrimaryColor);
+                                return const CircularProgressIndicator(
+                                    backgroundColor: Colors.grey, color: kPrimaryColor);
                               } else if (snapshot.hasError) {
                                 return const Center(
                                   child: Text("Error while loading Emojis. Please refresh."),
@@ -158,24 +108,52 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                               }
                             },
                           ),
-                    ))),
+                        ))),
+                        Divider(
+                          height: 10.0,
+                          thickness: 2.0,
+                          color: textColor?.withOpacity(0.420),
+                        ),
+                        Container(
+                          width: min(MediaQuery.of(context).size.width, 500),
+                          alignment: Alignment.center,
+                          height: 69,
+                          padding: const EdgeInsets.only(left: 10, right: 10),
+                          child: Stack(children: [
+                            Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  description,
+                                  style: TextStyle(fontSize: 18, color: textColor, fontWeight: FontWeight.bold),
+                                )),
+                            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                              Container(
+                                alignment: Alignment.centerRight,
+                                child: SizedBox(width: 45, height: 45, child: addEmojiButton(textColor: textColor)),
+                              ),
+                            ])
+                          ]),
+                        ),
+                      ],
+                    )),
               ],
             )));
   }
 
-  Widget addEmojiButton() {
+  Widget addEmojiButton({Color? textColor = Colors.white}) {
     return TextButton(
       child: Container(
           alignment: Alignment.center,
           child: Text(
             _currentEmoji,
-            style: const TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(color: textColor, fontSize: 20),
           )),
       style: ButtonStyle(
-          alignment: Alignment.center,
-          backgroundColor: MaterialStateProperty.all(kGradient1.withOpacity(0.7)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(60.0), side: const BorderSide(color: Colors.white, width: 3)))),
+        alignment: Alignment.center,
+        backgroundColor: MaterialStateProperty.all(kGradient1.withOpacity(0.69)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(69.0), side: BorderSide(color: textColor as Color, width: 3))),
+      ),
       onPressed: () {
         showDialog(
             context: context,
@@ -215,12 +193,14 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                     padding: const EdgeInsets.all(3.0),
                                     child: TextButton(
                                       onPressed: () async {
+                                        loadingPopup();
                                         onEmojiChanged(emojiList[index]);
                                         await _fireStore
                                             .collection('emojis')
                                             .doc(widget.userId)
                                             .set({'emoji': emojiList[index]}, SetOptions(merge: true));
                                         await getEmojiData(0);
+                                        Navigator.pop(context);
                                         Navigator.pop(context);
                                       },
                                       child: Text(
@@ -313,5 +293,33 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
             });
       },
     );
+  }
+
+  Future loadingPopup() {
+    return showDialog(
+        // The user CANNOT close this dialog  by pressing outsite it
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  // The loading indicator
+                  CircularProgressIndicator(
+                    color: kPrimaryColor,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  // Some text
+                  Text('Updating your Emoji...')
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
