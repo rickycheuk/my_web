@@ -55,6 +55,9 @@ dependencies:
   draggable_scrollbar: ^0.1.0
   instagram_public_api: ^0.2.3
   animated_background: ^2.0.0
+  insta_public_api: ^0.1.2
+  http: ^0.13.5
+  html: ^0.15.0
 
 
 flutter_icons:

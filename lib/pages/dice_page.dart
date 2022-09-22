@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_web/constants.dart';
+
+import '../utils/app_page_container.dart';
+import '../utils/button_widgets.dart';
 
 class DicePage extends StatefulWidget {
   const DicePage({Key? key}) : super(key: key);
@@ -72,117 +74,69 @@ class _DicePageState extends State<DicePage> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     Color? textColor = Theme.of(context).textTheme.bodyText1?.color;
-    return SingleChildScrollView(
-        child: Container(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            alignment: Alignment.center,
-            color: Colors.transparent,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                      width: min(MediaQuery.of(context).size.width, 500),
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        color: textColor == kContentColorDarkTheme
-                            ? Colors.black.withOpacity(0.420)
-                            : Colors.white.withOpacity(0.420),
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 3,
-                            offset: const Offset(1, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            alignment: Alignment.center,
-                            transformAlignment: Alignment.center,
-                            margin: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 30.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                RotationTransition(
-                                  turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
-                                  child: Image(
-                                    image: diceImage1,
-                                    width: 120.0,
-                                    height: 120.0,
-                                  ),
-                                ),
-                                Container(
-                                  width: 30,
-                                ),
-                                RotationTransition(
-                                  turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
-                                  child: Image(
-                                    image: diceImage2,
-                                    width: 120.0,
-                                    height: 120.0,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            answer,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: textColor,
-                              fontSize: 28.0,
-                            ),
-                          ),
-                          Container(
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.only(top: 30.0),
-                              child: Container(
-                                height: 60,
-                                width: 150,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: _firstPress ? Theme.of(context).colorScheme.primary : Colors.grey,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.5),
-                                      blurRadius: 3,
-                                      offset: const Offset(1, 3), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
-                                child: TextButton.icon(
-                                  onPressed: () async {
-                                    if (_firstPress == true) {
-                                      _firstPress = false;
-                                      _controller.forward();
-                                      await HapticFeedback.lightImpact();
-                                      await diceChanger();
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Icons.rotate_left_rounded,
-                                    color: Theme.of(context).colorScheme.secondary,
-                                    size: 24,
-                                  ),
-                                  label: Text('Roll',
-                                      style: TextStyle(
-                                          color: Theme.of(context).colorScheme.secondary,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18)),
-                                ),
-                              )),
-                          Container(
-                            height: 10,
-                          ),
-                        ],
-                      )),
-                ])));
+    final itemKey = GlobalKey();
+    return AppPageContainer(
+      key: itemKey,
+      children: [
+        Container(
+          alignment: Alignment.center,
+          transformAlignment: Alignment.center,
+          margin: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 30.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              RotationTransition(
+                turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
+                child: Image(
+                  image: diceImage1,
+                  width: 120.0,
+                  height: 120.0,
+                ),
+              ),
+              Container(
+                width: 30,
+              ),
+              RotationTransition(
+                turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
+                child: Image(
+                  image: diceImage2,
+                  width: 120.0,
+                  height: 120.0,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          answer,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: textColor,
+            fontSize: 28.0,
+          ),
+        ),
+        Container(
+          height: 30,
+        ),
+        iconTextButton(
+          buttonColor: _firstPress ? Theme.of(context).colorScheme.primary : Colors.grey,
+          icon: Icons.rotate_left_rounded,
+          textColor: Theme.of(context).colorScheme.secondary,
+          text: 'Roll',
+          onPressed: () async {
+            if (_firstPress == true) {
+              _firstPress = false;
+              _controller.forward();
+              await HapticFeedback.lightImpact();
+              await diceChanger();
+            }
+          },
+        ),
+        Container(
+          height: 10,
+        ),
+      ],
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:ui';
 
 import 'package:animated_background/animated_background.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -50,27 +51,24 @@ List preloadImages = [
 var _brightness = SchedulerBinding.instance.window.platformBrightness;
 bool isDarkMode = _brightness == Brightness.dark;
 
-Future<void> logEvent(String eventName) async {
-  await analytics.logEvent(name: eventName);
-}
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   for (var img in preloadImages) {
     await loadImage(AssetImage(img));
   }
+  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle());
+  // for (var emojiList in emojiListMap.values){
+  //   pb.addText(emojiList.join());
+  // }
+  pb.addText(smiley.join());
+  pb.build().layout(const ParagraphConstraints(width: 100));
   // Firebase init
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
   userId = userCredential.user?.uid as String;
-  await analytics.logEvent(
-    name: 'user_visit',
-    parameters: {
-      'user': userId,
-    },
-  );
   runApp(MyApp());
 }
 
@@ -153,6 +151,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
           ),
           icon: Icons.sentiment_satisfied_alt),
       Item(headerValue: 'Message Me', expandedValue: MessagePage(), icon: Icons.insert_comment_outlined),
+      // Item(headerValue: 'Insta', expandedValue: InstagramPage(), icon: My_web.instagram_1),
     ]);
 
     // Defining particles for animated background

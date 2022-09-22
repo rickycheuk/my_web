@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_web/constants.dart';
 
+import '../utils/app_page_container.dart';
+
 final _fireStore = FirebaseFirestore.instance;
 const title = 'Emoji Wall';
 const description = 'Add your Emoji ->';
@@ -59,86 +61,59 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
 
   @override
   Widget build(BuildContext context) {
-    Color? textColor = Theme.of(context).textTheme.bodyText1?.color;
-    return SingleChildScrollView(
-        child: Container(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-            alignment: Alignment.center,
-            color: Colors.transparent,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                    width: min(MediaQuery.of(context).size.width, 500),
-                    alignment: Alignment.topCenter,
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: BoxDecoration(
-                      color: textColor == kContentColorDarkTheme
-                          ? Colors.black.withOpacity(0.420)
-                          : Colors.white.withOpacity(0.420),
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 3,
-                          offset: const Offset(1, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    height: 450,
-                    child: Column(
-                      children: [
-                        Expanded(
-                            child: SingleChildScrollView(
-                                child: Container(
-                          alignment: Alignment.topCenter,
-                          padding: const EdgeInsets.all(10.0),
-                          child: FutureBuilder(
-                            future: _emojiFuture,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return const CircularProgressIndicator(
-                                    backgroundColor: Colors.grey, color: kPrimaryColor);
-                              } else if (snapshot.hasError) {
-                                return const Center(
-                                  child: Text("Error while loading Emojis. Please refresh."),
-                                );
-                              } else {
-                                return emojis;
-                              }
-                            },
-                          ),
-                        ))),
-                        Divider(
-                          height: 10.0,
-                          thickness: 2.0,
-                          color: textColor?.withOpacity(0.420),
-                        ),
-                        Container(
-                          width: min(MediaQuery.of(context).size.width, 500),
-                          alignment: Alignment.center,
-                          height: 69,
-                          padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: Stack(children: [
-                            Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  description,
-                                  style: TextStyle(fontSize: 18, color: textColor, fontWeight: FontWeight.bold),
-                                )),
-                            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                              Container(
-                                alignment: Alignment.centerRight,
-                                child: SizedBox(width: 45, height: 45, child: addEmojiButton(textColor: textColor)),
-                              ),
-                            ])
-                          ]),
-                        ),
-                      ],
-                    )),
-              ],
-            )));
+    Color textColor = Theme.of(context).textTheme.bodyText1?.color as Color;
+    final itemKey = GlobalKey();
+    return AppPageContainer(
+      key: itemKey,
+      children: [
+        SizedBox(
+            height: 350,
+            child: SingleChildScrollView(
+                child: Container(
+              alignment: Alignment.topCenter,
+              padding: const EdgeInsets.all(10.0),
+              child: FutureBuilder(
+                future: _emojiFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator(backgroundColor: Colors.grey, color: kPrimaryColor);
+                  } else if (snapshot.hasError) {
+                    return const Center(
+                      child: Text("Error while loading Emojis. Please refresh."),
+                    );
+                  } else {
+                    return emojis;
+                  }
+                },
+              ),
+            ))),
+        Divider(
+          height: 10.0,
+          thickness: 2.0,
+          color: textColor.withOpacity(0.420),
+        ),
+        Container(
+          width: min(MediaQuery.of(context).size.width, 500),
+          alignment: Alignment.center,
+          height: 69,
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: Stack(children: [
+            Container(
+                alignment: Alignment.center,
+                child: Text(
+                  description,
+                  style: TextStyle(fontSize: 18, color: textColor, fontWeight: FontWeight.bold),
+                )),
+            Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+              Container(
+                alignment: Alignment.centerRight,
+                child: SizedBox(width: 45, height: 45, child: addEmojiButton(textColor: textColor)),
+              ),
+            ])
+          ]),
+        ),
+      ],
+    );
   }
 
   Widget addEmojiButton({Color? textColor = Colors.white}) {
@@ -240,7 +215,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                                         },
                                         child: Text(
                                           selectedList[index],
-                                          style: const TextStyle(fontSize: 20, fontFamily: ''),
+                                          style: const TextStyle(fontSize: 20),
                                         ),
                                       ),
                                     );
@@ -320,7 +295,7 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
 
   Future loadingPopup() {
     return showDialog(
-        // The user CANNOT close this dialog  by pressing outsite it
+        // The user CANNOT close this dialog by pressing outside of it
         barrierDismissible: false,
         context: context,
         builder: (_) {
