@@ -16,7 +16,7 @@
       "source": "/build/app/**",
       "headers": [{
         "key": "Cache-Control",
-        "value": "public, max-age=0"
+        "value": "max-age=0"
       }]
     }]
   }

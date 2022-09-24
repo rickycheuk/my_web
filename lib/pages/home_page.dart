@@ -112,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     child: TextButton(
                       onPressed: () async {
                         await HapticFeedback.lightImpact();
-                        launchUrl(widget.links[index]);
+                        await launchUrl(Uri.parse(widget.links[index]));
                       },
                       child: Icon(
                         widget.icons[index],
