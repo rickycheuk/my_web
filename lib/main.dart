@@ -69,6 +69,12 @@ Future<void> main() async {
   );
   UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
   userId = userCredential.user?.uid as String;
+  await FirebaseAnalytics.instance.logEvent(
+    name: "id",
+    parameters: {
+      "userId": userId,
+    },
+  );
   runApp(MyApp());
 }
 
@@ -142,6 +148,7 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
       My_web.github_1,
       My_web.instagram_1
     ], appList: [
+      Item(headerValue: 'TicTacToe', expandedValue: SlideTacToePage(), icon: Icons.grid_3x3_rounded),
       Item(headerValue: 'Dice Roller', expandedValue: DicePage(), icon: My_web.dice_six),
       Item(
           headerValue: 'Emoji Wall',

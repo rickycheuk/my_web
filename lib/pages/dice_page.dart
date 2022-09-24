@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -95,7 +96,7 @@ class _DicePageState extends State<DicePage> with SingleTickerProviderStateMixin
                 ),
               ),
               Container(
-                width: 30,
+                width: 35,
               ),
               RotationTransition(
                 turns: Tween(begin: 0.0, end: 6.9).animate(_controller),
@@ -130,6 +131,9 @@ class _DicePageState extends State<DicePage> with SingleTickerProviderStateMixin
               _controller.forward();
               await HapticFeedback.lightImpact();
               await diceChanger();
+              await FirebaseAnalytics.instance.logEvent(
+                name: "rolled_dice_$answer",
+              );
             }
           },
         ),

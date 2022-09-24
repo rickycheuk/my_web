@@ -4,3 +4,4 @@ export 'dice_page.dart';
 export 'in_progress_page.dart';
 export 'instagram_page.dart';
 export 'message_page.dart';
+export 'slidetactoe_page.dart';

@@ -1,103 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
+    <!--
+      If you are serving your web app in a path other than the root, change the
+      href value below to reflect the base path you are serving from.
 
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
+      The path provided below has to start and end with a slash "/" in order for
+      it to work correctly.
 
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+      For more details:
+      * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
 
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="$FLUTTER_BASE_HREF">
+      This is a placeholder for base href that will be replaced by the value of
+      the `--base-href` argument provided to `flutter build`.
+    -->
+    <base href="$FLUTTER_BASE_HREF">
 
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Ricky Cheuk's personal website.">
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="Ricky Cheuk's personal website.">
 
-  <!-- iOS meta tags & icons -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Ricky Cheuk">
-  <link rel="apple-touch-icon" href="favicon.png">
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Ricky Cheuk">
+    <link rel="apple-touch-icon" href="favicon.png">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-  <title>Ricky Cheuk</title>
-  <link rel="manifest" href="manifest.json">
-  <style>
-    .loader {
-      font-size: 10px;
-      margin: 50px auto;
-      text-indent: -9999em;
-      width: 9em;
-      height: 9em;
-      border-radius: 50%;
-      background: #5da8ee;
-      background: -moz-linear-gradient(left, #5da8ee 10%, rgba(93,168,238, 0) 42%);
-      background: -webkit-linear-gradient(left, #5da8ee 10%, rgba(93,168,238, 0) 42%);
-      background: -o-linear-gradient(left, #5da8ee 10%, rgba(93,168,238, 0) 42%);
-      background: -ms-linear-gradient(left, #5da8ee 10%, rgba(93,168,238, 0) 42%);
-      background: linear-gradient(to right, #5da8ee 10%, rgba(93,168,238, 0) 42%);
-      position: relative;
-      -webkit-animation: load3 1.4s infinite linear;
-      animation: load3 1.4s infinite linear;
-      -webkit-transform: translateZ(0);
-      -ms-transform: translateZ(0);
-      transform: translateZ(0);
-    }
-    .loader:before {
-      width: 50%;
-      height: 50%;
-      background: #5da8ee;
-      border-radius: 100% 0 0 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      content: '';
-    }
-    .loader:after {
-      background: #000000;
-      width: 75%;
-      height: 75%;
-      border-radius: 50%;
-      content: '';
-      margin: auto;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-    }
-    @-webkit-keyframes load3 {
-      0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="favicon.png"/>
+    <title>Ricky Cheuk</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+      .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: auto;
+        margin-bottom: auto;
+        width: 50%;
       }
-      100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
+      .loader img{
+        font-size: 10px;
+        margin: 50px auto;
+        text-indent: -9999em;
+        width: 9em;
+        height: 9em;
+        background: #000000;
+        position: relative;
+        -webkit-animation: zoom-in-zoom-out 1.69s ease infinite;
+        animation: zoom-in-zoom-out 1.69s ease infinite;
       }
-    }
-    @keyframes load3 {
-      0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
+      @-webkit-keyframes zoom-in-zoom-out {
+        0% {
+          transform: scale(1, 1);
+        }
+        20% {
+          transform: scale(1.5, 1.5);
+        }
+        100% {
+          transform: scale(1, 1);
+        }
       }
-      100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
+      @keyframes zoom-in-zoom-out {
+        0% {
+          transform: scale(1, 1);
+        }
+        20% {
+          transform: scale(1.5, 1.5);
+        }
+        100% {
+          transform: scale(1, 1);
+        }
       }
-    }
-  </style>
+    </style>
 </head>
 <body style="background-color:Black;">
-  <div class="loader"></div>
-  <script src="main.dart.js" type="application/javascript"></script>
+<div class="loader">
+    <img src="./favicon.png" class="center">
+</div>
+<script src="main.dart.js" type="application/javascript"></script>
 </body>
 </html>
