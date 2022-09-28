@@ -38,6 +38,14 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
     String _emojis = '';
     QuerySnapshot querySnapshot = await _fireStore.collection('emojis').get();
     DocumentSnapshot userSnapshot = await _fireStore.collection('emojis').doc(widget.userId).get();
+
+    ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle());
+    // for (var emojiList in emojiListMap.values){
+    //   pb.addText(emojiList.join());
+    // }
+    pb.addText(smiley.join());
+    pb.build().layout(const ParagraphConstraints(width: 100));
+
     final List allData = querySnapshot.docs.map((doc) => doc.data()).toList();
     for (var d in allData) {
       _emojis += d['emoji'];
@@ -263,23 +271,23 @@ class _EmojiWallPageState extends State<EmojiWallPage> {
                               children: const [
                                 Text(
                                   'How does this work?',
-                                  style: TextStyle(fontSize: 17),
+                                  style: TextStyle(fontSize: 18),
                                 ),
                                 Text(
                                   '  - Simply tap and select an emoji',
-                                  style: TextStyle(fontSize: 13),
+                                  style: TextStyle(fontSize: 15),
                                 ),
                                 Text(
                                   '  - You will see your current emoji at bottom right',
-                                  style: TextStyle(fontSize: 13),
+                                  style: TextStyle(fontSize: 15),
                                 ),
                                 Text(
                                   '  - Picking a new emoji will replace your previous one',
-                                  style: TextStyle(fontSize: 13),
+                                  style: TextStyle(fontSize: 15),
                                 ),
                                 Text(
                                   '  - New emojis could take few seconds to update, try refreshing the page',
-                                  style: TextStyle(fontSize: 13),
+                                  style: TextStyle(fontSize: 15),
                                 ),
                               ],
                             ))

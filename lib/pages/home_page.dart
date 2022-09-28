@@ -2,10 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/utils/CustomExpansionPanelList.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
+import '../utils/my_web_icons.dart';
+
+Widget placeholderWidget = Container();
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -15,14 +19,14 @@ class HomePage extends StatefulWidget {
     required this.links,
     required this.websiteNames,
     required this.icons,
-    required this.appList,
+    required this.userId,
   }) : super(key: key);
   final String userName;
   final String description;
   final List links;
   final List websiteNames;
   final List icons;
-  final List<Item> appList;
+  final String userId;
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -30,9 +34,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final itemKey = GlobalKey();
+  List<Item> appList = [
+    Item(headerValue: 'TicTacToe', expandedValue: SlideTacToePage(userId: userId,), icon: Icons.grid_3x3_rounded),
+    Item(headerValue: 'Dice Roller', expandedValue: DicePage(), icon: My_web.dice_six),
+    Item(
+        headerValue: 'Emoji Wall',
+        expandedValue: EmojiWallPage(
+          userId: userId,
+        ),
+        icon: Icons.sentiment_satisfied_alt),
+    Item(headerValue: 'Message Me', expandedValue: MessagePage(), icon: Icons.insert_comment_outlined),
+    // Item(headerValue: 'Insta', expandedValue: InstagramPage(), icon: My_web.instagram_1),
+  ];
+  late List<Item> renderedAppList;
 
   @override
   void initState() {
+    setState(() {
+      renderedAppList = appList.map<Item>(
+        (Item value) {
+          return Item(headerValue: value.headerValue, expandedValue: placeholderWidget, icon: value.icon);
+        },
+      ).toList();
+    });
     super.initState();
   }
 
@@ -137,17 +161,22 @@ class _HomePageState extends State<HomePage> {
               CustomExpansionPanelList(
                 expansionCallback: (int index, bool isExpanded) {
                   setState(() {
-                    for (var item in widget.appList) {
+                    for (var item in renderedAppList) {
                       item.isExpanded = false;
                     }
-                    widget.appList[index].isExpanded = !isExpanded;
+                    renderedAppList[index].isExpanded = !isExpanded;
+
+                    if (renderedAppList[index].expandedValue == placeholderWidget &&
+                        renderedAppList[index].isExpanded) {
+                      renderedAppList[index].expandedValue = appList[index].expandedValue;
+                    }
                   });
                 },
                 key: itemKey,
                 color: Theme.of(context).colorScheme.primary,
                 screenWidth: min(width, 500),
                 radius: 10.0,
-                children: widget.appList.map<ExpansionPanel>((Item item) {
+                children: renderedAppList.map<ExpansionPanel>((Item item) {
                   return ExpansionPanel(
                     canTapOnHeader: true,
                     headerBuilder: (BuildContext context, bool isExpanded) {

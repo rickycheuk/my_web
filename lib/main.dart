@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:animated_background/animated_background.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,7 +34,6 @@ String webTitle = 'Ricky Cheuk';
 String description = '- Software Engineer -';
 String userName = 'Ricky Cheuk';
 String userId = '';
-int waitTime = 2;
 
 List preloadImages = [
   "assets/images/ricky.jpg",
@@ -57,12 +54,6 @@ Future<void> main() async {
   for (var img in preloadImages) {
     await loadImage(AssetImage(img));
   }
-  ParagraphBuilder pb = ParagraphBuilder(ParagraphStyle());
-  // for (var emojiList in emojiListMap.values){
-  //   pb.addText(emojiList.join());
-  // }
-  pb.addText(smiley.join());
-  pb.build().layout(const ParagraphConstraints(width: 100));
   // Firebase init
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -147,19 +138,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
       My_web.linkedin_1,
       My_web.github_1,
       My_web.instagram_1
-    ], appList: [
-      Item(headerValue: 'TicTacToe', expandedValue: SlideTacToePage(), icon: Icons.grid_3x3_rounded),
-      Item(headerValue: 'Dice Roller', expandedValue: DicePage(), icon: My_web.dice_six),
-      Item(
-          headerValue: 'Emoji Wall',
-          expandedValue: EmojiWallPage(
-            userId: userId,
-            waitTime: waitTime,
-          ),
-          icon: Icons.sentiment_satisfied_alt),
-      Item(headerValue: 'Message Me', expandedValue: MessagePage(), icon: Icons.insert_comment_outlined),
-      // Item(headerValue: 'Insta', expandedValue: InstagramPage(), icon: My_web.instagram_1),
-    ]);
+    ],
+    userId: userId);
 
     // Defining particles for animated background
     ParticleOptions particles = const ParticleOptions(
@@ -182,7 +162,8 @@ class _PageState extends State<Page> with TickerProviderStateMixin {
           body: AnimatedBackground(
             vsync: this,
             behaviour: RandomParticleBehaviour(options: particles),
-            child: Container(alignment: Alignment.center, child: homePage),
+            child:
+            Container(alignment: Alignment.center, child: homePage),
           ),
         ));
   }
