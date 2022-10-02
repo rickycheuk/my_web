@@ -55,11 +55,11 @@ class _MessagePageState extends State<MessagePage> {
         onPressed: () async {
           String sendMessage = emailController.text == "" ? "Message cannot be empty" : "Message sent";
           if (emailController.text != "") {
-            var uuid = Uuid();
+            var uuid = const Uuid();
             // send email
             await _fireStore
                 .collection('messages')
-                .doc('${userId}.${uuid.v4()}')
+                .doc('$userId.${uuid.v4()}')
                 .set({'message': emailController.text}, SetOptions(merge: true));
           }
           showDialog(

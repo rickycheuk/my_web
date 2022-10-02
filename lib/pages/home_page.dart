@@ -1,15 +1,25 @@
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_web/pages/all_pages.dart';
 import 'package:my_web/utils/CustomExpansionPanelList.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
+import '../models/game_model.dart';
 import '../utils/my_web_icons.dart';
 
+final _fireStore = FirebaseFirestore.instance;
 Widget placeholderWidget = Container();
+
+Stream<List<GameModel>> streamGameData() {
+  var ref = _fireStore.collection('tictactoe');
+
+  return ref.snapshots().map((list) => list.docs.map((doc) => GameModel.fromFirestore(doc)).toList());
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -35,15 +45,23 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final itemKey = GlobalKey();
   List<Item> appList = [
-    Item(headerValue: 'TicTacToe', expandedValue: SlideTacToePage(userId: userId,), icon: Icons.grid_3x3_rounded),
-    Item(headerValue: 'Dice Roller', expandedValue: DicePage(), icon: My_web.dice_six),
+    Item(
+        headerValue: 'TicTacToe',
+        expandedValue: StreamProvider<List<GameModel>>.value(
+            value: streamGameData(),
+            initialData: [],
+            child: SlideTacToePage(
+              userId: userId,
+            )),
+        icon: Icons.grid_3x3_rounded),
+    Item(headerValue: 'Dice Roller', expandedValue: const DicePage(), icon: My_web.dice_six),
     Item(
         headerValue: 'Emoji Wall',
         expandedValue: EmojiWallPage(
           userId: userId,
         ),
         icon: Icons.sentiment_satisfied_alt),
-    Item(headerValue: 'Message Me', expandedValue: MessagePage(), icon: Icons.insert_comment_outlined),
+    Item(headerValue: 'Message Me', expandedValue: const MessagePage(), icon: Icons.insert_comment_outlined),
     // Item(headerValue: 'Insta', expandedValue: InstagramPage(), icon: My_web.instagram_1),
   ];
   late List<Item> renderedAppList;

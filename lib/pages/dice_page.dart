@@ -33,7 +33,7 @@ class _DicePageState extends State<DicePage> with SingleTickerProviderStateMixin
     super.initState();
 
     _controller = AnimationController(
-      duration: Duration(seconds: 5),
+      duration: const Duration(seconds: 5),
       vsync: this,
     );
     setState(() {
